@@ -36,6 +36,7 @@ This document outlines the architectural approach for the paletteWOW application
 - **Stimulus (`palette_controller.js`)**:
   - Attached to the main generator `#index` view.
   - `keydown@window->palette#handleKeydown`: Listens for the Spacebar to trigger generation.
-  - `generate()`: Generates random hex codes.
+  - `generate()`: Generates random hex codes, calculates optimal text color (black vs white based on HSP brightness), and sets background colors.
   - `toggleLock(event)`: Locks/unlocks a specific color column by preventing its hex code from updating on next generation.
-  - Form submission logic to save the palette via Turbo when the user clicks "Save".
+  - `copyHex(event)`: Copies the clicked hex code to the user's clipboard.
+  - Form submission logic to save the palette via Turbo when the user clicks "Save" (TBD in Phase 4).
