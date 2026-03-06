@@ -1,35 +1,48 @@
 # paletteWOW
 
-An open-source color palette generator inspired by "Coolors" built with Ruby on Rails.
+![paletteWOW banner placeholder](https://via.placeholder.com/800x200.png?text=paletteWOW)
+
+A lightning-fast, sleek, and minimalist Ruby on Rails color palette generator inspired by Coolors. 
 
 ## Features
-- **Instant Generation**: Press the spacebar to randomly generate a 5-color palette.
-- **Locking Colors**: Click on individual colors to "lock" them, meaning subsequent generations will only change the unlocked colors.
-- **User Accounts**: Create an account, log in, and save custom palettes to your profile.
-- **Sleek UI**: Fast, responsive, minimalistic, black-and-white base aesthetic allowing the generated colors to pop.
+
+- **Spacebar Generation**: Instantly generate beautiful 5-color palettes using the `HSP` brightness model for optimal text contrast.
+- **Lock & Roll**: Click the "lock" icon on any color to hold it in place while you randomly generate the rest.
+- **Seamless Saving**: Create an account, log in, and save your favorite palettes directly to your dashboard.
+- **1-Click Copy**: Click on any hex code to instantly copy it to your clipboard.
+- **Minimalist Aesthetic**: Built entirely with utility-first Tailwind CSS.
 
 ## Tech Stack
-- **Framework**: Ruby on Rails 8+
-- **Database**: PostgreSQL
-- **Frontend**: Hotwire (Turbo/Stimulus) & Tailwind CSS
 
-## Setup Instructions
+- **Backend**: Ruby on Rails 8, PostgreSQL, Devise
+- **Frontend**: Hotwire (Turbo & Stimulus), Tailwind CSS
+- **Icons**: Heroicons (SVG)
 
-1. **Prerequisites**
-   - Ruby 3.4+
-   - Rails 8+
-   - PostgreSQL
+## Local Development Setup
 
-2. **Installation**
-   ```bash
-   git clone https://github.com/scwlkr/paletteWOW.git
-   cd paletteWOW
-   bundle install
-   rails db:setup
-   ```
+Ensure you have Ruby (check `.ruby-version`), PostgreSQL, and Node/Yarn installed.
 
-3. **Running the App**
-   ```bash
-   bin/dev
-   ```
-   Visit `http://localhost:3000` in your browser.
+```bash
+# 1. Clone the repo
+git clone https://github.com/scwlkr/paletteWOW.git
+cd paletteWOW
+
+# 2. Install dependencies
+bundle install
+
+# 3. Setup the database
+bin/rails db:setup
+
+# 4. Start the development server with Tailwind watchers
+bin/dev
+```
+
+Open `http://localhost:3000` in your browser.
+
+## Contributing
+
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get involved.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.

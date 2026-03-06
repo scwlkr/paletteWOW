@@ -2,7 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - Phase 4: Saving & Managing Palettes
+## [1.0.0] - Phase 5: Polish & Open Source Readiness
+- Finalized open-source files: `LICENSE.md` (MIT) and `CONTRIBUTING.md`.
+- Expanded `README.md` with comprehensive setup and feature documentation.
+- Project is fully ready for public display.
 - Created `DashboardController` and `app/views/dashboard/index.html.erb` to display user's saved palettes.
 - Implemented `PalettesController#create` API to receive hex codes and persist `Palette` and `Color` records.
 - Implemented `PalettesController#destroy` to allow palette deletion from the dashboard.
