@@ -4,20 +4,21 @@ This document outlines the architectural approach for the paletteWOW application
 
 ## 1. Data Models
 
-### User
-- Handles authentication (via Devise).
-- `has_many :palettes`
+### User (Placeholder)
+- **Relationships:** `has_many :palettes, dependent: :destroy`
+- **Attributes:** `email` (string), `name` (string)
 
 ### Palette
 - Represents a saved collection of 5 colors.
-- `belongs_to :user` (optional during guest generation, required for saving).
-- `has_many :colors, dependent: :destroy`
-- **Attributes**: `name` (string)
+- **Relationships:** 
+  - `belongs_to :user, optional: true` (allows guest generations)
+  - `has_many :colors, dependent: :destroy`
+- **Attributes:** `name` (string)
 
 ### Color
 - Represents an individual color within a palette.
-- `belongs_to :palette`
-- **Attributes**: `hex_code` (string), `position` (integer)
+- **Relationships:** `belongs_to :palette`
+- **Attributes:** `hex_code` (string), `position` (integer)
 
 ## 2. Controllers
 
