@@ -2,7 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - Phase 1: Core Data Models
+## [Unreleased] - Phase 2: User Authentication
+- Installed and configured `devise` for user sessions and registration.
+- Styled Login and Registration views using a minimalist Tailwind CSS approach.
+- Added global user navigation and flash messages to the application layout.
+
+## [0.0.2] - Phase 1: Core Data Models
 - Generated `User`, `Palette`, and `Color` models.
 - Established relationships: `User has_many :palettes`, `Palette belongs_to :user (optional)`, `Palette has_many :colors`, and `Color belongs_to :palette`.
 

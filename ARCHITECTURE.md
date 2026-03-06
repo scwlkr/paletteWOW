@@ -4,9 +4,10 @@ This document outlines the architectural approach for the paletteWOW application
 
 ## 1. Data Models
 
-### User (Placeholder)
+### User
+- Handles authentication via Devise (email and password).
 - **Relationships:** `has_many :palettes, dependent: :destroy`
-- **Attributes:** `email` (string), `name` (string)
+- **Attributes:** `email`, `encrypted_password`, and Devise default tracking/reset fields.
 
 ### Palette
 - Represents a saved collection of 5 colors.
