@@ -65,6 +65,33 @@ export default class extends Controller {
     })
   }
 
+  save() {
+    const hexCodes = this.hexCodeTargets.map(target => target.textContent.trim())
+
+    // Get CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+
+    fetch('/palettes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
+      },
+      body: JSON.stringify({ hex_codes: hexCodes })
+    })
+      .then(response => {
+        if (response.ok) {
+          window.location.href = '/dashboard' // Redirect to dashboard on success
+        } else {
+          alert("Failed to save palette. Please try again.")
+        }
+      })
+      .catch(error => {
+        console.error('Error saving palette:', error)
+        alert("An error occurred while saving.")
+      })
+  }
+
   // --- Utility functions ---
 
   generateRandomHex() {

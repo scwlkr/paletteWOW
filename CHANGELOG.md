@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - Phase 3: Generator Engine & Frontend
+## [Unreleased] - Phase 4: Saving & Managing Palettes
+- Created `DashboardController` and `app/views/dashboard/index.html.erb` to display user's saved palettes.
+- Implemented `PalettesController#create` API to receive hex codes and persist `Palette` and `Color` records.
+- Implemented `PalettesController#destroy` to allow palette deletion from the dashboard.
+- Updated `palette_controller.js` to dispatch a fetch POST to `/palettes` when saving.
+- Added Dashboard navigation link to the authenticated layout.
+
+## [0.0.4] - Phase 3: Generator Engine & Frontend
 - Created `PalettesController` and mapped root route to `palettes#index`.
 - Built the fullscreen, responsive 5-column generator UI using Tailwind CSS.
 - Implemented `palette_controller.js` (Stimulus) to handle spacebar generation, hex code randomization, color locking, and click-to-copy functionality.

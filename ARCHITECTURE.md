@@ -25,9 +25,11 @@ This document outlines the architectural approach for the paletteWOW application
 
 - `PalettesController`:
   - `index`: Renders the main generator view. Guest and logged-in users can use the generator here.
-  - `create`: Saves the current active palette to the logged-in user's account.
-  - `show`/`edit`/`update`/`destroy`: Manage saved palettes.
-- `DashboardController` (or user-scoped `PalettesController`): Displays the user's saved palettes.
+  - `create`: API endpoint; saves the current active palette (array of hex codes) to the logged-in user's account. Returns JSON success/error.
+  - `show`: (Placeholder/TBD) Could display a single palette link.
+  - `destroy`: Deletes a specific palette and redirect back to dashboard.
+- `DashboardController`: 
+  - `index`: Restricted to authenticated users. Fetches and displays the user's saved palettes and associated colors in a grid.
 
 ## 3. Frontend & Stimulus Approach
 

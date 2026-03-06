@@ -1,0 +1,36 @@
+<div class="w-full">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-4xl font-black tracking-tight">My Palettes</h1>
+    <%= link_to "Generate New", root_path, class: "bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-neutral-800 transition" %>
+  </div>
+
+  <% if @palettes.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% @palettes.each do |palette| %>
+        <div class="border border-neutral-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+          <div class="flex h-32 w-full">
+            <% palette.colors.order(:position).each do |color| %>
+              <div class="flex-1 h-full" style="background-color: <%= color.hex_code %>;"></div>
+            <% end %>
+          </div>
+          
+          <div class="p-4 flex justify-between items-center bg-white">
+            <div>
+              <h3 class="font-bold text-lg"><%= palette.name.presence || "Untitled Palette" %></h3>
+              <p class="text-xs text-neutral-500"><%= palette.created_at.strftime("%B %d, %Y") %></p>
+            </div>
+            <%= button_to palette_path(palette), method: :delete, class: "text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition cursor-pointer", form: { data: { turbo_confirm: "Are you sure you want to delete this palette?" } } do %>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-20 bg-neutral-50 rounded-2xl border border-neutral-200 border-dashed">
+      <h3 class="text-xl font-medium text-neutral-600 mb-2">You haven't saved any palettes yet.</h3>
+      <p class="text-neutral-500 mb-6">Head over to the generator and start creating!</p>
+      <%= link_to "Start Generating", root_path, class: "bg-black text-white px-6 py-3 rounded-full font-medium hover:bg-neutral-800 transition shadow-sm" %>
+    </div>
+  <% end %>
+</div>
