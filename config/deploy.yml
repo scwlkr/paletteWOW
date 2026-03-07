@@ -27,6 +27,8 @@ env:
   secret:
     - RAILS_MASTER_KEY
     - PALETTE_WOW_DATABASE_PASSWORD
+    - GOOGLE_CLIENT_ID
+    - GOOGLE_CLIENT_SECRET
   clear:
     DB_HOST: palette_wow-db
     SOLID_QUEUE_IN_PUMA: true
