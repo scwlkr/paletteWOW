@@ -13,7 +13,7 @@
           Save Palette
         </button>
       <% else %>
-        <%= link_to "Login to Save", new_user_session_path, class: "bg-white text-black border border-neutral-200 px-6 py-2 rounded-full font-medium hover:bg-neutral-50 transition shadow-sm" %>
+        <%= button_to "Login to Save", '/auth/google_oauth2', method: :post, data: { turbo: false }, class: "bg-white text-black border border-neutral-200 px-6 py-2 rounded-full font-medium hover:bg-neutral-50 transition shadow-sm" %>
       <% end %>
     </div>
   </div>

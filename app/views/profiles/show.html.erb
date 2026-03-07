@@ -1,0 +1,17 @@
+<div class="max-w-2xl mx-auto mt-16 w-full">
+  <div class="bg-white border border-neutral-200 rounded-2xl p-8 mb-8 text-center shadow-sm">
+    <% if current_user.avatar_url.present? %>
+      <div class="mb-6 flex justify-center">
+        <%= image_tag current_user.avatar_url, alt: current_user.full_name, class: "w-24 h-24 rounded-full border border-neutral-200" %>
+      </div>
+    <% end %>
+
+    <h1 class="text-3xl font-black tracking-tight mb-2"><%= current_user.full_name %></h1>
+    <p class="text-neutral-500 font-medium mb-8"><%= current_user.email %></p>
+
+    <div class="flex flex-col items-center gap-4">
+      <%= button_to "Sign Out", sign_out_path, method: :delete, class: "w-48 bg-black text-white px-6 py-3 rounded-md font-medium hover:bg-neutral-800 transition shadow-sm" %>
+      <%= link_to "Back to Dashboard", dashboard_path, class: "text-sm text-neutral-500 hover:text-black transition" %>
+    </div>
+  </div>
+</div>
