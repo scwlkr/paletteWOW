@@ -165,6 +165,5 @@ kamal deploy
 
 If you ever change a secret in Bitwarden or add a new environment variable to the `env:` block in `deploy.yml`, you must push those before deploying:
 ```bash
-kamal env push
 kamal deploy
 ```
