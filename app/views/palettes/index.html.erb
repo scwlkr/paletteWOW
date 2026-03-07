@@ -1,16 +1,16 @@
 <div class="fixed inset-0 pt-16" data-controller="palette" data-action="keydown@window->palette#handleKeydown">
-  <!-- Top Bar: Actions -->
-  <div class="absolute top-16 left-0 right-0 z-10 flex justify-between items-center px-8 py-4 pointer-events-none">
-    <p class="text-sm font-semibold tracking-widest uppercase bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-neutral-200 pointer-events-auto">
+  
+  <!-- Top Bar: Actions (Desktop Only) -->
+  <div class="hidden md:flex absolute top-16 left-0 right-0 z-10 justify-between items-center px-8 py-4 pointer-events-none">
+    <p class="text-sm font-semibold tracking-widest bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-neutral-200 pointer-events-auto shadow-sm uppercase">
       Press <kbd class="px-2 py-1 bg-neutral-100 rounded text-xs font-mono ml-1">Spacebar</kbd> to generate
     </p>
 
     <div class="pointer-events-auto flex items-center space-x-4">
       <% if user_signed_in? %>
         <button data-action="click->palette#save" class="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-neutral-800 transition shadow-lg flex items-center gap-2">
-          <!-- Save Icon -->
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
-          Save Palette
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+          <span>Save Palette</span>
         </button>
       <% else %>
         <%= button_to "Sign in to Save", '/auth/google_oauth2', method: :post, data: { turbo: false }, class: "bg-white text-black border border-neutral-200 px-6 py-2 rounded-full font-medium hover:bg-neutral-50 transition shadow-sm" %>
@@ -19,26 +19,59 @@
   </div>
 
   <!-- Generators -->
-  <div class="flex flex-col md:flex-row h-full w-full">
+  <div class="flex flex-col md:flex-row h-full w-full pb-[72px] md:pb-0">
     <!-- Multiply by 5 columns -->
     <% 5.times do |i| %>
       <div 
-        class="flex-1 flex flex-col justify-end items-center pb-24 md:pb-32 transition-colors duration-200 group relative"
+        class="flex-1 flex flex-row md:flex-col justify-between items-center px-8 md:px-0 py-0 md:pb-32 transition-colors duration-200 group relative shadow-none"
         data-palette-target="column"
         data-locked="false"
       >
-        <!-- Color Info -->
-        <div class="flex flex-col items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 md:opacity-100 mb-8 z-10">
-          <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wider uppercase cursor-pointer hover:scale-110 transition-transform" data-palette-target="hexCode" data-action="click->palette#copyHex">#FFFFFF</h2>
-          
-          <button data-action="click->palette#toggleLock" class="p-3 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm border border-black/10 transition-colors">
-             <!-- Unlocked Icon (default) -->
-             <svg data-palette-target="unlockedIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
-             <!-- Locked Icon (hidden initially) -->
-             <svg data-palette-target="lockedIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        <!-- Hex Code (Left) -->
+        <div class="flex-1 flex justify-start items-center h-full z-10 md:mb-8 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+          <h2 class="text-[17px] md:text-2xl font-bold tracking-widest uppercase cursor-pointer opacity-70 hover:opacity-100 active:opacity-50 transition-opacity font-sans" data-palette-target="hexCode" data-action="click->palette#copyHex">FFFFFF</h2>
+        </div>
+        
+        <!-- Lock Button (Right) -->
+        <div class="flex-1 flex justify-end items-center h-full z-10 md:mb-8 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+          <button data-action="click->palette#toggleLock" class="p-2 transition-opacity active:scale-95 opacity-50 hover:opacity-100 group-[&[data-locked=true]]:opacity-100">
+             <!-- Unlocked Icon (Solid opacity lock to match reference) -->
+             <svg data-palette-target="unlockedIcon" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M12 2C9.243 2 7 4.243 7 7v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7zm4 10.723V20h-2v-2.277a1.993 1.993 0 0 1 .567-3.677A2.001 2.001 0 0 1 14 16a1.99 1.99 0 0 1-1 1.723z"></path></svg>
+             <!-- Locked Icon -->
+             <svg data-palette-target="lockedIcon" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6 hidden"><path d="M12 2C9.243 2 7 4.243 7 7v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7zm4 10.723V20h-2v-2.277a1.993 1.993 0 0 1 .567-3.677A2.001 2.001 0 0 1 14 16a1.99 1.99 0 0 1-1 1.723z"></path></svg>
           </button>
         </div>
       </div>
     <% end %>
+  </div>
+
+  <!-- Mobile Fixed Action Bar (Bottom) -->
+  <div class="fixed bottom-0 left-0 right-0 md:hidden z-20 bg-white h-[72px] flex items-center justify-between px-6 border-t border-neutral-100 shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
+    
+    <!-- Left Tools: Undo / Redo -->
+    <div class="flex items-center space-x-6 text-neutral-800">
+      <button class="active:opacity-50 transition-opacity">
+        <svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path></svg>
+      </button>
+      <button class="active:opacity-50 transition-opacity text-neutral-300">
+        <svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path></svg>
+      </button>
+    </div>
+
+    <!-- Center: Generate Text Button -->
+    <button data-action="click->palette#generate" class="text-lg font-medium tracking-wide active:opacity-50 transition-opacity -ml-4">
+      Generate
+    </button>
+    
+    <!-- Right Tools: Options / Menu -->
+    <div class="flex items-center space-x-7 text-neutral-800">
+      <button class="active:opacity-50 transition-opacity">
+        <svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+      </button>
+      <button class="active:opacity-50 transition-opacity">
+        <svg fill="currentColor" viewBox="0 0 24 24" class="w-7 h-7"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg>
+      </button>
+    </div>
+    
   </div>
 </div>

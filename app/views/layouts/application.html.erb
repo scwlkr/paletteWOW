@@ -28,13 +28,13 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex items-center space-x-2">
-            <%= image_tag "logo.png", class: "h-8 w-8 object-contain" %>
+            <%= image_tag "logo.png", class: "h-8 w-8 object-contain", width: 32, height: 32 %>
             <%= link_to "paletteWOW", root_path, class: "text-2xl font-black tracking-tighter hover:text-neutral-600 transition-colors" %>
           </div>
           <div class="flex items-center space-x-6">
             <% if user_signed_in? %>
               <%= link_to "Dashboard", dashboard_path, class: "text-sm font-medium hover:text-neutral-500 transition-colors" %>
-              <%= link_to current_user.email, profile_path, class: "text-sm font-medium text-neutral-500 hover:text-black transition-colors" %>
+              <%= link_to current_user.email, profile_path, class: "text-sm font-medium text-neutral-500 hover:text-black transition-colors hidden sm:block" %>
               <%= button_to "Log out", sign_out_path, method: :delete, class: "text-sm font-medium hover:text-neutral-500 transition-colors bg-transparent border-none cursor-pointer" %>
             <% else %>
               <%= button_to "Sign in", '/auth/google_oauth2', method: :post, data: { turbo: false }, class: "text-sm font-medium border border-black rounded-md px-4 py-2 hover:bg-black hover:text-white transition-colors" %>
