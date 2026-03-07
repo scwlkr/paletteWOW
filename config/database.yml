@@ -90,6 +90,7 @@ production:
     database: palette_wow_production
     username: palette_wow
     password: <%= ENV["PALETTE_WOW_DATABASE_PASSWORD"] %>
+    host: <%= ENV.fetch("DB_HOST", "localhost") %>
   cache:
     <<: *primary_production
     database: palette_wow_production_cache
