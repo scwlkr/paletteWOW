@@ -17,10 +17,10 @@ All notable changes to this project will be documented in this file.
 - Built the fullscreen, responsive 5-column generator UI using Tailwind CSS.
 - Implemented `palette_controller.js` (Stimulus) to handle spacebar generation, hex code randomization, color locking, and click-to-copy functionality.
 
-## [0.0.3] - Phase 2: User Authentication
-- Installed and configured `devise` for user sessions and registration.
-- Styled Login and Registration views using a minimalist Tailwind CSS approach.
-- Added global user navigation and flash messages to the application layout.
+## [0.0.3] - Phase 2: User Authentication (Google OAuth)
+- Transitioned to a strictly "Google-only" authentication system (Passwordless/Social-Only).
+- Configured `omniauth` and `omniauth-google-oauth2` for a lightweight setup without Devise.
+- Styled Google Sign-In and profile views using minimalist Tailwind CSS.
 
 ## [0.0.2] - Phase 1: Core Data Models
 - Generated `User`, `Palette`, and `Color` models.

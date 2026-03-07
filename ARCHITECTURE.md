@@ -5,9 +5,9 @@ This document outlines the architectural approach for the paletteWOW application
 ## 1. Data Models
 
 ### User
-- Handles authentication via Devise (email and password).
+- Handles authentication via Google OAuth exclusively (Passwordless/Social-Only).
 - **Relationships:** `has_many :palettes, dependent: :destroy`
-- **Attributes:** `email`, `encrypted_password`, and Devise default tracking/reset fields.
+- **Attributes:** `email`, `full_name`, `uid`, `provider`, and `avatar_url`.
 
 ### Palette
 - Represents a saved collection of 5 colors.
