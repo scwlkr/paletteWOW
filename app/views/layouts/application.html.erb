@@ -24,7 +24,7 @@
   </head>
 
   <body class="bg-white text-neutral-900 font-sans antialiased min-h-screen flex flex-col">
-    <nav class="border-b border-neutral-200">
+    <nav class="border-b border-neutral-200 relative z-50 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
@@ -36,7 +36,7 @@
               <%= link_to current_user.email, profile_path, class: "text-sm font-medium text-neutral-500 hover:text-black transition-colors" %>
               <%= button_to "Log out", sign_out_path, method: :delete, class: "text-sm font-medium hover:text-neutral-500 transition-colors bg-transparent border-none cursor-pointer" %>
             <% else %>
-              <%= button_to "Sign in with Google", '/auth/google_oauth2', method: :post, data: { turbo: false }, class: "text-sm font-medium border border-black rounded-md px-4 py-2 hover:bg-black hover:text-white transition-colors" %>
+              <%= button_to "Sign in", '/auth/google_oauth2', method: :post, data: { turbo: false }, class: "text-sm font-medium border border-black rounded-md px-4 py-2 hover:bg-black hover:text-white transition-colors" %>
             <% end %>
           </div>
         </div>
@@ -54,8 +54,14 @@
       </div>
     <% end %>
 
-    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
+    <main class="flex-grow w-full py-8 flex flex-col">
       <%= yield %>
     </main>
+
+    <footer class="mt-auto border-t border-neutral-200 py-6">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center">
+        <%= link_to "Privacy Policy", privacy_path, class: "text-xs text-neutral-400 hover:text-neutral-600 transition-colors" %>
+      </div>
+    </footer>
   </body>
 </html>
