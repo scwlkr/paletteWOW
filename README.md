@@ -1,6 +1,6 @@
 # paletteWOW
 
-![paletteWOW banner placeholder](https://via.placeholder.com/800x200.png?text=paletteWOW)
+![paletteWOW banner](./palettewow-sqaure-banner.png)
 
 A lightning-fast, sleek, and minimalist Ruby on Rails color palette generator inspired by Coolors. 
 

@@ -15,7 +15,7 @@
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <!-- <link rel="icon" href="/icon.svg" type="image/svg+xml"> -->
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
@@ -27,7 +27,8 @@
     <nav class="border-b border-neutral-200 relative z-50 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-          <div class="flex items-center">
+          <div class="flex items-center space-x-2">
+            <%= image_tag "logo.png", class: "h-8 w-8 object-contain" %>
             <%= link_to "paletteWOW", root_path, class: "text-2xl font-black tracking-tighter hover:text-neutral-600 transition-colors" %>
           </div>
           <div class="flex items-center space-x-6">
