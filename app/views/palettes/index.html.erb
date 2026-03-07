@@ -23,23 +23,36 @@
     <!-- Multiply by 5 columns -->
     <% 5.times do |i| %>
       <div 
-        class="flex-1 flex flex-row md:flex-col justify-between items-center px-8 md:px-0 py-0 md:pb-32 transition-colors duration-200 group relative shadow-none"
+        class="flex-1 flex flex-row md:flex-col justify-between md:justify-end items-center px-8 md:px-0 py-0 md:pb-[15%] transition-colors duration-200 group relative shadow-none"
         data-palette-target="column"
         data-locked="false"
       >
-        <!-- Hex Code (Left) -->
-        <div class="flex-1 flex justify-start items-center h-full z-10 md:mb-8 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
-          <h2 class="text-[17px] md:text-2xl font-bold tracking-widest uppercase cursor-pointer opacity-70 hover:opacity-100 active:opacity-50 transition-opacity font-sans" data-palette-target="hexCode" data-action="click->palette#copyHex">FFFFFF</h2>
+        <!-- Center Tools (Lock, etc) - Right aligned on mobile, absolute center on desktop -->
+        <div class="flex-none order-2 md:order-none flex justify-end md:justify-center items-center md:absolute md:inset-0 z-10 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 md:pointer-events-none">
+          <div class="flex flex-col md:gap-4 items-center md:pointer-events-auto">
+             
+             <!-- Desktop Tool Placeholders -->
+             <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Remove color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
+             <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="View shades"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg></button>
+             <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Save color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg></button>
+             <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Drag"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg></button>
+             <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Copy hex" data-action="click->palette#copyHex"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></button>
+
+             <button data-action="click->palette#toggleLock" class="p-2 transition-opacity active:scale-95 opacity-50 hover:opacity-100 group-[&[data-locked=true]]:opacity-100">
+                <!-- Unlocked Icon -->
+                <svg data-palette-target="unlockedIcon" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M12 2C9.243 2 7 4.243 7 7v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7zm4 10.723V20h-2v-2.277a1.993 1.993 0 0 1 .567-3.677A2.001 2.001 0 0 1 14 16a1.99 1.99 0 0 1-1 1.723z"></path></svg>
+                <!-- Locked Icon -->
+                <svg data-palette-target="lockedIcon" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6 hidden"><path d="M12 2C9.243 2 7 4.243 7 7v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7zm4 10.723V20h-2v-2.277a1.993 1.993 0 0 1 .567-3.677A2.001 2.001 0 0 1 14 16a1.99 1.99 0 0 1-1 1.723z"></path></svg>
+             </button>
+          </div>
         </div>
         
-        <!-- Lock Button (Right) -->
-        <div class="flex-1 flex justify-end items-center h-full z-10 md:mb-8 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
-          <button data-action="click->palette#toggleLock" class="p-2 transition-opacity active:scale-95 opacity-50 hover:opacity-100 group-[&[data-locked=true]]:opacity-100">
-             <!-- Unlocked Icon (Solid opacity lock to match reference) -->
-             <svg data-palette-target="unlockedIcon" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M12 2C9.243 2 7 4.243 7 7v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7zm4 10.723V20h-2v-2.277a1.993 1.993 0 0 1 .567-3.677A2.001 2.001 0 0 1 14 16a1.99 1.99 0 0 1-1 1.723z"></path></svg>
-             <!-- Locked Icon -->
-             <svg data-palette-target="lockedIcon" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6 hidden"><path d="M12 2C9.243 2 7 4.243 7 7v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7zm4 10.723V20h-2v-2.277a1.993 1.993 0 0 1 .567-3.677A2.001 2.001 0 0 1 14 16a1.99 1.99 0 0 1-1 1.723z"></path></svg>
-          </button>
+        <!-- Hex Code (Left on mobile, bottom on desktop) -->
+        <div class="flex-none order-1 md:order-none flex justify-start md:justify-center items-center h-full md:h-auto z-10 md:w-full transition-opacity duration-300">
+           <div class="flex flex-col md:items-center text-left md:text-center mt-0 md:mt-4">
+             <h2 class="text-[17px] md:text-2xl font-bold tracking-widest uppercase cursor-pointer opacity-70 hover:opacity-100 active:opacity-50 transition-opacity font-sans" data-palette-target="hexCode" data-action="click->palette#copyHex">FFFFFF</h2>
+             <span class="hidden md:block text-[11px] font-medium opacity-50 capitalize tracking-widest mt-1 mix-blend-color-burn">Color Name</span>
+           </div>
         </div>
       </div>
     <% end %>
