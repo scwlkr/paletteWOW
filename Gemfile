@@ -61,4 +61,5 @@ group :development do
   gem "web-console"
 end
 
-gem "devise", "~> 5.0"
+gem "omniauth", "~> 2.1"
+gem "omniauth-google-oauth2"

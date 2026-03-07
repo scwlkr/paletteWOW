@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
   get "dashboard", to: "dashboard#index", as: :dashboard
   resources :palettes, only: [:index, :create, :show, :destroy]
-  devise_for :users
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # OmniAuth Google Routes
+  get 'auth/:provider/callback', to: 'sessions#create'
+  post 'auth/:provider/callback', to: 'sessions#create'
+  get 'auth/failure', to: 'sessions#failure'
+  delete 'sign_out', to: 'sessions#destroy', as: :sign_out
+  get 'sign_out', to: 'sessions#destroy' # graceful fallback for some links
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
