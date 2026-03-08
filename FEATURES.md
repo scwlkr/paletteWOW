@@ -15,7 +15,7 @@ This document serves as the high-level roadmap for all core features required to
 - [X] **View Shades/Tints:** Toggle a view to see lighter and darker variations of a specific color, allowing the user to select one to replace the current base color (24 shades per color, 12 lighter and 12 darker, hexcode should appear when hovering over the shade/tint). 
 
 ## Phase 3: Advanced Generation Methods (The "Free Pro" Features)
-- [X] **Method Selector:** A dropdown/modal to change how colors are generated based on color theory.
+- [X] **Method Selector:** A settings icon that opens a dropdown/modal to change how colors are generated based on color theory.
 - [X] **Auto (Default):** Completely random colors that look good together.
 - [X] **Monochromatic:** Variations of a single base hue.
 - [X] **Analogous:** Colors adjacent to each other on the color wheel.
