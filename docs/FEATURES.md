@@ -40,6 +40,6 @@ This document serves as the high-level roadmap for all core features required to
 - [X] **Naming:** Ability to give custom names to saved palettes.
 
 ## Phase 6: UI/UX & Polish
-- [ ] **Color Names:** Automatically map HEX codes to human-readable color names (e.g., "Twilight Indigo", "Powder Blue").
-- [X] **Responsive Design:** Ensure the column layout converts cleanly to horizontal rows on mobile devices.
-- [ ] **Minimalist Aesthetic:** Stick strictly to a black, white, and gray UI to ensure the generated colors are the center of attention.
+- [ ] **Color Names:** Automatically map HEX codes to human-readable color names, and replace the place holder text in the color column with the color name (e.g., "Twilight Indigo", "Powder Blue").
+- [ ] **Responsive Design:** Ensure the column layout converts cleanly to horizontal rows on mobile devices. Ensure all desktop functionality is accessible and functional on mobile devices. this should be working, but want to just verify useability. 
+- [ ] **Minimalist Aesthetic:** Stick strictly to a black, white, and gray UI to ensure the generated colors are the center of attention. Select a functional google fonts font to use globally on the site, make the font a lesser known font but still simple and not overwhelming. 
