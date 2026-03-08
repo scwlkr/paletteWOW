@@ -1,4 +1,4 @@
-<div class="fixed inset-0 pt-16 flex flex-col" data-controller="palette" data-action="keydown@window->palette#handleKeydown" <%= "data-palette-initial-colors-value=\"#{CGI.escapeHTML(@colors.to_json)}\"".html_safe if defined?(@colors) && @colors.present? %>>
+<div class="fixed inset-0 pt-16 flex flex-col" data-controller="palette" data-palette-logo-url-value="<%= image_path('logo.png') %>" data-action="keydown@window->palette#handleKeydown" <%= "data-palette-initial-colors-value=\"#{CGI.escapeHTML(@colors.to_json)}\"".html_safe if defined?(@colors) && @colors.present? %>>
   
   <!-- Top Bar: Actions (Desktop Only) -->
   <div class="hidden md:flex h-16 w-full bg-white border-b border-neutral-200 px-6 items-center justify-between shrink-0 z-10">
@@ -228,26 +228,8 @@
           <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">Tailwind<br>Config</span>
         </button>
 
-      </div>
-    </div>
   </div>
 
-</div>
-
-<!-- Hidden Canvas Render Container used by html2canvas to render full logo + palette -->
-<div id="html2canvas-capture-container" class="fixed top-[-9999px] left-[-9999px] w-[1200px] h-[800px] bg-white flex flex-col" style="transform: scale(1);">
-  <div class="flex-none h-24 flex items-center justify-between px-12 border-b-2 border-neutral-100 bg-white">
-    <div class="flex items-center space-x-3">
-      <%= image_tag "logo.png", class: "h-12 w-12 object-contain" %>
-      <span class="text-4xl font-black tracking-tighter text-black m-0 leading-none" style="margin-top: 5px;">paletteWOW</span>
-    </div>
-    <div class="text-xl font-bold tracking-widest text-neutral-400 uppercase" data-palette-target="exportTitle">
-      Palette WOW
-    </div>
-  </div>
-  <div class="flex-1 flex" data-palette-target="exportColumnsContainer">
-    <!-- Columns injected via JS -->
-  </div>
 </div>
 
 <!-- Template for New Column -->

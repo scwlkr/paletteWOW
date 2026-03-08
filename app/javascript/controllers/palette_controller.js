@@ -11,7 +11,8 @@ export default class extends Controller {
   ]
   static values = {
     method: { type: String, default: 'auto' },
-    initialColors: { type: Array, default: [] }
+    initialColors: { type: Array, default: [] },
+    logoUrl: { type: String, default: '' }
   }
 
   connect() {
@@ -427,48 +428,73 @@ export default class extends Controller {
 
   // --- Export Generators ---
 
-  setupExportContainer() {
-    const exportContainer = this.exportColumnsContainerTarget
-    exportContainer.innerHTML = '' // Clear previous
+  async generateCanvas() {
+    const canvas = document.createElement('canvas')
+    canvas.width = 1200
+    canvas.height = 800
+    const ctx = canvas.getContext('2d')
 
-    const currentHexes = this.columnTargets.map(col => this.getHexFromColumn(col))
+    // Fill white background
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(0, 0, 1200, 800)
 
-    currentHexes.forEach(hex => {
-      const isLight = this.isLightColor(hex)
-      const textColor = isLight ? '#000000' : '#FFFFFF'
+    // Draw header border
+    ctx.fillStyle = '#f5f5f5'
+    ctx.fillRect(0, 94, 1200, 2)
 
-      const colDiv = document.createElement('div')
-      colDiv.className = 'flex-1 flex items-end justify-center pb-12'
-      colDiv.style.backgroundColor = hex
-      colDiv.style.color = textColor
+    // Draw header text
+    ctx.fillStyle = '#000000'
+    ctx.font = '900 36px sans-serif'
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    // 48 (padding) + 48 (logo) + 12 (gap) = 108
+    ctx.fillText('paletteWOW', 108, 48)
 
-      const hexSpan = document.createElement('span')
-      hexSpan.className = 'text-2xl font-bold tracking-widest font-sans uppercase'
-      hexSpan.textContent = hex.replace('#', '')
+    ctx.fillStyle = '#a3a3a3'
+    ctx.font = 'bold 20px sans-serif'
+    ctx.textAlign = 'right'
+    ctx.fillText('PALETTE WOW', 1152, 48)
 
-      colDiv.appendChild(hexSpan)
-      exportContainer.appendChild(colDiv)
+    // Load and draw logo if URL is present
+    if (this.logoUrlValue) {
+      try {
+        const img = new Image()
+        img.crossOrigin = 'Anonymous'
+        await new Promise((resolve, reject) => {
+          img.onload = resolve
+          img.onerror = reject
+          img.src = this.logoUrlValue
+        })
+        ctx.drawImage(img, 48, 24, 48, 48)
+      } catch (e) {
+        console.warn('Failed to load logo for export', e)
+      }
+    }
+
+    // Draw columns
+    const hexes = this.columnTargets.map(col => this.getHexFromColumn(col))
+    const colWidth = 1200 / hexes.length
+
+    hexes.forEach((hex, i) => {
+      // Column background
+      ctx.fillStyle = hex
+      ctx.fillRect(i * colWidth, 96, colWidth, 704)
+
+      // Hex text
+      ctx.fillStyle = this.isLightColor(hex) ? '#000000' : '#ffffff'
+      ctx.font = 'bold 24px sans-serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'bottom'
+      ctx.fillText(hex.replace('#', ''), i * colWidth + (colWidth / 2), 752)
     })
 
-    return document.getElementById('html2canvas-capture-container')
+    return canvas
   }
 
   async exportImage(event) {
     event.currentTarget.blur()
-
-    const container = this.setupExportContainer()
-    const originalDisplay = container.style.display
-    container.style.display = 'flex' // Ensure it's rendered visually
-
     try {
-      const canvas = await html2canvas(container, {
-        scale: 2, // High DPI
-        useCORS: true,
-        backgroundColor: '#ffffff',
-        width: 1200,
-        height: 800
-      })
-
+      const canvas = await this.generateCanvas()
       const image = canvas.toDataURL("image/png")
       const link = document.createElement('a')
       link.href = image
@@ -478,28 +504,16 @@ export default class extends Controller {
       console.error("Export PNG failed:", err)
       alert("Failed to export PNG.")
     } finally {
-      container.style.display = originalDisplay
       this.closeExportModal()
     }
   }
 
   async exportPdf(event) {
     event.currentTarget.blur()
-
-    const container = this.setupExportContainer()
-    const originalDisplay = container.style.display
-    container.style.display = 'flex'
-
     try {
-      const canvas = await html2canvas(container, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-        width: 1200,
-        height: 800
-      })
-
+      const canvas = await this.generateCanvas()
       const image = canvas.toDataURL("image/png")
+
       // A4 Landscape is roughly 297x210mm
       const { jsPDF } = window.jspdf
       const pdf = new jsPDF({
@@ -514,7 +528,6 @@ export default class extends Controller {
       console.error("Export PDF failed:", err)
       alert("Failed to export PDF.")
     } finally {
-      container.style.display = originalDisplay
       this.closeExportModal()
     }
   }
