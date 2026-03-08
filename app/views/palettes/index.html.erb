@@ -1,33 +1,63 @@
-<div class="fixed inset-0 pt-16" data-controller="palette" data-action="keydown@window->palette#handleKeydown">
+<div class="fixed inset-0 pt-16 flex flex-col" data-controller="palette" data-action="keydown@window->palette#handleKeydown">
   
   <!-- Top Bar: Actions (Desktop Only) -->
-  <div class="hidden md:flex absolute top-16 left-0 right-0 z-10 justify-between items-center px-8 py-4 pointer-events-none">
-    <div class="flex items-center space-x-4 pointer-events-auto bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-neutral-200 shadow-sm">
-      <button data-action="click->palette#undo" class="p-1 text-neutral-800 hover:text-black opacity-50 hover:opacity-100 transition-opacity" title="Undo (Cmd+Z)">
-        <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path></svg>
-      </button>
-      <p class="text-sm font-semibold tracking-widest uppercase border-x border-neutral-200 px-4">
-        Press <kbd class="px-2 py-1 bg-neutral-100 rounded text-xs font-mono ml-1">Spacebar</kbd> to generate
+  <div class="hidden md:flex h-14 w-full bg-white border-b border-neutral-200 px-6 items-center justify-between shrink-0 z-10">
+    <!-- Left: Undo / Redo / Spacebar Info -->
+    <div class="flex items-center space-x-4">
+      <p class="text-[12px] font-medium tracking-widest text-neutral-400 flex items-center">
+        Press <strong class="text-neutral-900 mx-1.5">Spacebar</strong> to generate 
       </p>
-      <button data-action="click->palette#redo" class="p-1 text-neutral-800 hover:text-black opacity-50 hover:opacity-100 transition-opacity" title="Redo (Cmd+Shift+Z)">
-        <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path></svg>
-      </button>
+
+      <div class="h-4 w-px bg-neutral-200"></div>
+
+      <div class="flex items-center space-x-1">
+        <button data-action="click->palette#undo" class="p-1.5 text-neutral-400 hover:text-black transition-colors rounded hover:bg-neutral-100" title="Undo (Cmd+Z)">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" /></svg>
+        </button>
+        <button data-action="click->palette#redo" class="p-1.5 text-neutral-400 hover:text-black transition-colors rounded hover:bg-neutral-100" title="Redo (Cmd+Shift+Z)">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3" /></svg>
+        </button>
+      </div>
+
+      <div class="h-4 w-px bg-neutral-200"></div>
+
+      <select data-action="change->palette#changeMethod" data-palette-target="methodSelect" class="appearance-none bg-transparent border-none text-[12px] font-bold tracking-widest uppercase text-black cursor-pointer outline-none focus:ring-0 p-0 m-0 leading-none h-auto">
+        <option value="auto">Auto</option>
+        <option value="monochromatic">Monochromatic</option>
+        <option value="analogous">Analogous</option>
+        <option value="complementary">Complementary</option>
+        <option value="split_complementary">Split Complementary</option>
+        <option value="triadic">Triadic</option>
+        <option value="tetradic">Tetradic</option>
+        <option value="square">Square</option>
+      </select>
     </div>
 
-    <div class="pointer-events-auto flex items-center space-x-4">
+    <!-- Right: Actions -->
+    <div class="flex items-center space-x-3">
+      <button class="flex items-center space-x-2 text-[11px] font-bold tracking-widest uppercase text-black px-3 py-2 rounded hover:bg-neutral-100 transition-colors">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
+        <span>Export</span>
+      </button>
+
+      <div class="h-4 w-px bg-neutral-200"></div>
+
       <% if user_signed_in? %>
-        <button data-action="click->palette#save" class="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-neutral-800 transition shadow-lg flex items-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
-          <span>Save Palette</span>
+        <button data-action="click->palette#save" class="flex items-center space-x-2 text-[11px] font-bold tracking-widest uppercase text-black px-3 py-2 rounded transition-colors bg-neutral-100 hover:bg-neutral-200 shadow-sm">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" /></svg>
+          <span>Save</span>
         </button>
       <% else %>
-        <%= button_to "Sign in to Save", '/auth/google_oauth2', method: :post, data: { turbo: false }, class: "bg-white text-black border border-neutral-200 px-6 py-2 rounded-full font-medium hover:bg-neutral-50 transition shadow-sm" %>
+        <%= button_to '/auth/google_oauth2', method: :post, data: { turbo: false }, class: "flex items-center space-x-2 text-[11px] font-bold tracking-widest uppercase text-black px-3 py-2 rounded transition-colors bg-white border border-neutral-200 shadow-sm hover:border-neutral-300 hover:bg-neutral-50 cursor-pointer" do %>
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" /></svg>
+          <span>Save</span>
+        <% end %>
       <% end %>
     </div>
   </div>
 
   <!-- Generators -->
-  <div class="flex flex-col md:flex-row h-full w-full pb-[72px] md:pb-0" data-palette-target="container">
+  <div class="flex flex-col md:flex-row flex-1 w-full pb-[72px] md:pb-0 relative" data-palette-target="container">
     <!-- Multiply by 5 columns -->
     <% 5.times do |i| %>
       <div 
@@ -36,7 +66,7 @@
         data-locked="false"
       >
         <!-- Center Tools (Lock, etc) - Right aligned on mobile, absolute center on desktop -->
-        <div class="flex-none order-2 md:order-none flex justify-end md:justify-center items-center md:absolute md:inset-0 z-20 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 md:pointer-events-none md:-translate-y-4">
+        <div class="flex-none order-2 md:order-none flex justify-end md:justify-center items-center md:absolute md:inset-0 z-20 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 md:pointer-events-none md:-translate-y-12">
           <div class="flex flex-col md:gap-2 items-center md:pointer-events-auto">
              
              <!-- Desktop Tool Placeholders -->
@@ -57,7 +87,7 @@
         </div>
         
         <!-- Hex Code (Left on mobile, bottom on desktop) -->
-        <div class="flex-none order-1 md:order-none flex justify-start md:justify-center items-center h-full md:h-auto z-10 md:w-full transition-opacity duration-300 pointer-events-none md:pointer-events-auto">
+        <div class="flex-none order-1 md:order-none flex justify-start md:justify-center items-center h-full md:h-auto z-10 md:w-full transition-opacity duration-300 pointer-events-none md:pointer-events-auto mt-auto md:absolute md:bottom-[15%]">
            <!-- Mobile drag handle and delete icons -->
            <div class="flex flex-col gap-3 mr-4 md:hidden pointer-events-auto">
              <button data-action="click->palette#addColumn" class="p-1 opacity-50 active:opacity-100 transition-opacity" title="Add color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg></button>
@@ -104,9 +134,21 @@
     </div>
 
     <!-- Center: Generate Text Button -->
-    <button data-action="click->palette#generate" class="text-lg font-medium tracking-wide active:opacity-50 transition-opacity -ml-4">
-      Generate
-    </button>
+    <div class="flex flex-col items-center -ml-4">
+      <button data-action="click->palette#generate" class="text-lg font-medium tracking-wide active:opacity-50 transition-opacity">
+        Generate
+      </button>
+      <select data-action="change->palette#changeMethod" data-palette-target="methodSelect" class="appearance-none bg-transparent border-none text-[10px] font-semibold tracking-widest uppercase text-neutral-400 cursor-pointer outline-none focus:ring-0 text-center p-0 m-0 leading-none">
+        <option value="auto">Auto</option>
+        <option value="monochromatic">Monochromatic</option>
+        <option value="analogous">Analogous</option>
+        <option value="complementary">Complementary</option>
+        <option value="split_complementary">Split Comp</option>
+        <option value="triadic">Triadic</option>
+        <option value="tetradic">Tetradic</option>
+        <option value="square">Square</option>
+      </select>
+    </div>
     
     <!-- Right Tools: Options / Menu -->
     <div class="flex items-center space-x-7 text-neutral-800">
@@ -129,7 +171,7 @@
     data-locked="false"
   >
     <!-- Center Tools (Lock, etc) -->
-    <div class="flex-none order-2 md:order-none flex justify-end md:justify-center items-center md:absolute md:inset-0 z-20 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 md:pointer-events-none md:-translate-y-4">
+    <div class="flex-none order-2 md:order-none flex justify-end md:justify-center items-center md:absolute md:inset-0 z-20 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 md:pointer-events-none md:-translate-y-12">
       <div class="flex flex-col md:gap-2 items-center md:pointer-events-auto">
          <!-- Desktop Tool Placeholders -->
          <button data-action="click->palette#addColumn" class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Add color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg></button>
@@ -149,7 +191,7 @@
     </div>
     
     <!-- Hex Code -->
-    <div class="flex-none order-1 md:order-none flex justify-start md:justify-center items-center h-full md:h-auto z-10 md:w-full transition-opacity duration-300 pointer-events-none md:pointer-events-auto">
+    <div class="flex-none order-1 md:order-none flex justify-start md:justify-center items-center h-full md:h-auto z-10 md:w-full transition-opacity duration-300 pointer-events-none md:pointer-events-auto mt-auto md:absolute md:bottom-[15%]">
        <div class="flex flex-col gap-3 mr-4 md:hidden pointer-events-auto">
          <button data-action="click->palette#addColumn" class="p-1 opacity-50 active:opacity-100 transition-opacity" title="Add color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg></button>
          <button data-action="click->palette#removeColumn" class="p-1 opacity-50 active:opacity-100 transition-opacity" title="Remove color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>

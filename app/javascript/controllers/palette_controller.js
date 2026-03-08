@@ -3,7 +3,8 @@ import Sortable from "sortablejs"
 import chroma from "chroma-js"
 
 export default class extends Controller {
-  static targets = ["container", "column", "hexCode", "unlockedIcon", "lockedIcon", "shadesModal", "shadesContainer"]
+  static targets = ["container", "column", "hexCode", "unlockedIcon", "lockedIcon", "shadesModal", "shadesContainer", "methodSelect"]
+  static values = { method: { type: String, default: 'auto' } }
 
   connect() {
     this.history = []
@@ -46,16 +47,61 @@ export default class extends Controller {
     }
   }
 
+  changeMethod(event) {
+    this.methodValue = event.target.value
+  }
+
+  methodValueChanged() {
+    if (this.hasMethodSelectTarget) {
+      this.methodSelectTargets.forEach(select => {
+        select.value = this.methodValue
+      })
+    }
+  }
+
   generate() {
     const paletteCols = []
+    const unlockedColumns = []
+    const lockedColumns = []
+
+    this.columnTargets.forEach((column) => {
+      if (column.dataset.locked === 'true') {
+        lockedColumns.push(column)
+      } else {
+        unlockedColumns.push(column)
+      }
+    })
+
+    if (unlockedColumns.length === 0) {
+      this.saveCurrentStateToSnapshot()
+      return
+    }
+
+    const hasLocked = lockedColumns.length > 0
+    let baseHex = hasLocked ? this.getHexFromColumn(lockedColumns[0]) : this.generateRandomHex()
+
+    let newColors = []
+    if (this.methodValue === 'auto') {
+      for (let i = 0; i < unlockedColumns.length; i++) {
+        newColors.push(this.generateRandomHex())
+      }
+    } else {
+      newColors = this.generateColorsForMethod(baseHex, unlockedColumns.length, this.methodValue, !hasLocked)
+      if (!hasLocked && unlockedColumns.length > 0) {
+        newColors[0] = baseHex
+      }
+    }
+
+    let nextColorIndex = 0
 
     this.columnTargets.forEach((column) => {
       const isLocked = column.dataset.locked === 'true'
       let hex = this.getHexFromColumn(column)
-      const textColor = column.style.color
 
       if (!isLocked) {
-        hex = this.generateRandomHex()
+        hex = newColors[nextColorIndex].toUpperCase()
+        nextColorIndex++
+
         const isLight = this.isLightColor(hex)
 
         column.style.backgroundColor = hex
@@ -297,6 +343,64 @@ export default class extends Controller {
   }
 
   // --- Utility functions ---
+
+  generateColorsForMethod(baseHex, requiredCount, method, includeBaseAsFirst) {
+    const baseColor = chroma(baseHex)
+    let baseH = baseColor.get('hsl.h')
+    let baseS = baseColor.get('hsl.s')
+    let baseL = baseColor.get('hsl.l')
+
+    if (isNaN(baseH)) baseH = Math.random() * 360
+    if (isNaN(baseS)) baseS = Math.random()
+
+    let hues = [baseH]
+    switch (method) {
+      case 'monochromatic':
+        hues = [baseH]
+        break
+      case 'analogous':
+        hues = [baseH, (baseH + 30) % 360, (baseH + 60) % 360, (baseH - 30 + 360) % 360, (baseH - 60 + 360) % 360]
+        break
+      case 'complementary':
+        hues = [baseH, (baseH + 180) % 360]
+        break
+      case 'split_complementary':
+        hues = [baseH, (baseH + 150) % 360, (baseH + 210) % 360]
+        break
+      case 'triadic':
+        hues = [baseH, (baseH + 120) % 360, (baseH + 240) % 360]
+        break
+      case 'tetradic':
+      case 'square':
+        hues = [baseH, (baseH + 90) % 360, (baseH + 180) % 360, (baseH + 270) % 360]
+        break
+      default:
+        hues = [baseH]
+    }
+
+    const newColors = []
+    let hueIndex = includeBaseAsFirst ? 0 : (hues.length > 1 ? 1 : 0)
+
+    for (let i = 0; i < requiredCount; i++) {
+      const currentHue = hues[hueIndex % hues.length]
+
+      let s = baseS
+      let l = baseL
+
+      if (method === 'monochromatic') {
+        s = Math.min(1, Math.max(0, baseS + (Math.random() * 0.6 - 0.3)))
+        l = Math.min(0.9, Math.max(0.1, Math.random() * 0.8 + 0.1))
+      } else {
+        s = Math.min(1, Math.max(0, baseS + (Math.random() * 0.3 - 0.15)))
+        l = Math.min(0.85, Math.max(0.15, baseL + (Math.random() * 0.4 - 0.2)))
+      }
+
+      newColors.push(chroma.hsl(currentHue, s, l).hex())
+      hueIndex++
+    }
+
+    return newColors
+  }
 
   getHexFromColumn(column) {
     const span = column.querySelector('[data-palette-target="hexCode"] span.inline-block')
