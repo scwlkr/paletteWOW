@@ -1,9 +1,4 @@
 <div class="fixed inset-0 pt-16" data-controller="palette" data-action="keydown@window->palette#handleKeydown">
-  <style>
-    [data-palette-target="column"]:last-child .add-color-zone {
-      display: none !important;
-    }
-  </style>
   
   <!-- Top Bar: Actions (Desktop Only) -->
   <div class="hidden md:flex absolute top-16 left-0 right-0 z-10 justify-between items-center px-8 py-4 pointer-events-none">
@@ -45,6 +40,7 @@
           <div class="flex flex-col md:gap-4 items-center md:pointer-events-auto">
              
              <!-- Desktop Tool Placeholders -->
+             <button data-action="click->palette#addColumn" class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Add color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg></button>
              <button data-action="click->palette#removeColumn" class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Remove color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
              <button data-action="click->palette#viewShades" class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="View shades"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg></button>
              <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Save color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg></button>
@@ -64,7 +60,8 @@
         <div class="flex-none order-1 md:order-none flex justify-start md:justify-center items-center h-full md:h-auto z-10 md:w-full transition-opacity duration-300 pointer-events-none md:pointer-events-auto">
            <!-- Mobile drag handle and delete icons -->
            <div class="flex flex-col gap-3 mr-4 md:hidden pointer-events-auto">
-             <button data-action="click->palette#removeColumn" class="p-1 opacity-50 active:opacity-100 transition-opacity"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
+             <button data-action="click->palette#addColumn" class="p-1 opacity-50 active:opacity-100 transition-opacity" title="Add color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg></button>
+             <button data-action="click->palette#removeColumn" class="p-1 opacity-50 active:opacity-100 transition-opacity" title="Remove color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
              <div class="p-1 opacity-50 active:opacity-100 transition-opacity cursor-grab active:cursor-grabbing js-drag-handle"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg></div>
            </div>
            
@@ -77,27 +74,7 @@
            </div>
         </div>
 
-        <!-- Add Color Divider Zone (Desktop) -->
-        <div class="add-color-zone hidden md:flex absolute z-30 opacity-0 hover:opacity-100 transition-opacity top-0 bottom-0 pointer-events-auto items-center justify-center" style="right: 0; width: 6rem; transform: translateX(50%);">
-          <button 
-            data-action="click->palette#addColumn"
-            class="pointer-events-auto w-10 h-10 hover:w-12 hover:h-12 bg-white text-black border border-neutral-200 rounded-full shadow hover:shadow-lg transition-all flex items-center justify-center !duration-200"
-            title="Add Color"
-          >
-            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
-          </button>
-        </div>
 
-        <!-- Add Color Divider Zone (Mobile) -->
-        <div class="add-color-zone md:hidden flex absolute z-30 top-auto left-0 right-0 pointer-events-auto items-center justify-center" style="bottom: 0; height: 4rem; transform: translateY(50%);">
-          <button 
-            data-action="click->palette#addColumn"
-            class="pointer-events-auto w-10 h-10 hover:w-12 hover:h-12 bg-white text-black border border-neutral-200 rounded-full shadow hover:shadow-lg transition-all flex items-center justify-center !duration-200"
-            title="Add Color"
-          >
-            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
-          </button>
-        </div>
 
         <!-- Shades Overlay -->
         <div data-palette-target="shadesModal" class="absolute inset-0 z-40 hidden flex-col opacity-0 transition-opacity duration-300 pointer-events-auto">
@@ -155,6 +132,7 @@
     <div class="flex-none order-2 md:order-none flex justify-end md:justify-center items-center md:absolute md:inset-0 z-10 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 md:pointer-events-none">
       <div class="flex flex-col md:gap-4 items-center md:pointer-events-auto">
          <!-- Desktop Tool Placeholders -->
+         <button data-action="click->palette#addColumn" class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Add color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg></button>
          <button data-action="click->palette#removeColumn" class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Remove color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
          <button data-action="click->palette#viewShades" class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="View shades"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg></button>
          <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Save color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg></button>
@@ -173,7 +151,8 @@
     <!-- Hex Code -->
     <div class="flex-none order-1 md:order-none flex justify-start md:justify-center items-center h-full md:h-auto z-10 md:w-full transition-opacity duration-300 pointer-events-none md:pointer-events-auto">
        <div class="flex flex-col gap-3 mr-4 md:hidden pointer-events-auto">
-         <button data-action="click->palette#removeColumn" class="p-1 opacity-50 active:opacity-100 transition-opacity"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
+         <button data-action="click->palette#addColumn" class="p-1 opacity-50 active:opacity-100 transition-opacity" title="Add color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg></button>
+         <button data-action="click->palette#removeColumn" class="p-1 opacity-50 active:opacity-100 transition-opacity" title="Remove color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
          <div class="p-1 opacity-50 active:opacity-100 transition-opacity cursor-grab active:cursor-grabbing js-drag-handle"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg></div>
        </div>
        
@@ -186,27 +165,7 @@
        </div>
     </div>
 
-    <!-- Add Color Divider Zone (Desktop) -->
-    <div class="add-color-zone hidden md:flex absolute z-30 opacity-0 hover:opacity-100 transition-opacity top-0 bottom-0 pointer-events-auto items-center justify-center" style="right: 0; width: 6rem; transform: translateX(50%);">
-      <button 
-        data-action="click->palette#addColumn"
-        class="pointer-events-auto w-10 h-10 hover:w-12 hover:h-12 bg-white text-black border border-neutral-200 rounded-full shadow hover:shadow-lg transition-all flex items-center justify-center !duration-200"
-        title="Add Color"
-      >
-        <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
-      </button>
-    </div>
 
-    <!-- Add Color Divider Zone (Mobile) -->
-    <div class="add-color-zone md:hidden flex absolute z-30 top-auto left-0 right-0 pointer-events-auto items-center justify-center" style="bottom: 0; height: 4rem; transform: translateY(50%);">
-      <button 
-        data-action="click->palette#addColumn"
-        class="pointer-events-auto w-10 h-10 hover:w-12 hover:h-12 bg-white text-black border border-neutral-200 rounded-full shadow hover:shadow-lg transition-all flex items-center justify-center !duration-200"
-        title="Add Color"
-      >
-        <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
-      </button>
-    </div>
 
     <!-- Shades Overlay -->
     <div data-palette-target="shadesModal" class="absolute inset-0 z-40 hidden flex-col opacity-0 transition-opacity duration-300 pointer-events-auto">

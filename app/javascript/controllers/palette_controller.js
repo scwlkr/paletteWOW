@@ -196,10 +196,13 @@ export default class extends Controller {
   }
 
   copyHex(event) {
-    const hexContainer = event.currentTarget
-    // Attempt to extract hex string securely
-    const span = hexContainer.querySelector('span.inline-block')
-    const hex = span ? span.textContent.trim() : hexContainer.textContent.trim().split(' ')[0]
+    const column = event.currentTarget.closest('[data-palette-target="column"]')
+    if (!column) return
+
+    const hexContainer = column.querySelector('[data-palette-target="hexCode"]')
+    if (!hexContainer) return
+
+    const hex = this.getHexFromColumn(column)
 
     navigator.clipboard.writeText(hex).then(() => {
       hexContainer.classList.add('copied')
