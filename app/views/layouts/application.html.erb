@@ -42,6 +42,9 @@
               <%= link_to current_user.email, profile_path, class: "text-sm font-medium text-neutral-500 hover:text-black transition-colors hidden sm:block" %>
               <%= button_to "Log out", sign_out_path, method: :delete, class: "text-sm font-medium hover:text-neutral-500 transition-colors bg-transparent border-none cursor-pointer" %>
             <% else %>
+              <% if Rails.env.development? %>
+                <%= link_to "(Dev) Dashboard", dashboard_path, class: "text-sm font-medium text-blue-500 hover:text-blue-700 transition-colors" %>
+              <% end %>
               <%= button_to "Sign in", '/auth/google_oauth2', method: :post, data: { turbo: false }, class: "text-sm font-medium border border-black rounded-md px-4 py-2 hover:bg-black hover:text-white transition-colors" %>
             <% end %>
           </div>

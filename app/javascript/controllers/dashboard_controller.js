@@ -10,11 +10,38 @@ export default class extends Controller {
     getSavedPalettes() {
         try {
             const stored = localStorage.getItem('saved_palettes')
-            return stored ? JSON.parse(stored) : []
+            let palettes = stored ? JSON.parse(stored) : []
+
+            // Auto inject mocks for local dev if empty
+            if (palettes.length === 0 && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+                palettes = this.getMockPalettes()
+                this.savePalettes(palettes)
+            }
+
+            return palettes
         } catch (e) {
             console.error("Error reading from localStorage", e)
             return []
         }
+    }
+
+    getMockPalettes() {
+        const ms = 86400000;
+        const now = Date.now();
+        return [
+            { id: "m1", name: "Midnight City", colors: ["#141E30", "#243B55", "#4A6FA5", "#166D3B", "#000000"], created_at: new Date(now - ms * 1).toISOString() },
+            { id: "m2", name: "Cyber Sunset", colors: ["#FF007F", "#FF7700", "#FFCC00", "#00FFCC", "#111111"], created_at: new Date(now - ms * 2).toISOString() },
+            { id: "m3", name: "Desert Sand", colors: ["#D4A373", "#CCD5AE", "#E9EDC9", "#FEFAE0", "#FAEDCD"], created_at: new Date(now - ms * 3).toISOString() },
+            { id: "m4", name: "Ocean Depth", colors: ["#03071E", "#370617", "#6A040F", "#9D0208", "#D00000"], created_at: new Date(now - ms * 4).toISOString() },
+            { id: "m5", name: "Lavender Dream", colors: ["#CDB4DB", "#FFC8DD", "#FFAFCC", "#BDE0FE", "#A2D2FF"], created_at: new Date(now - ms * 5).toISOString() },
+            { id: "m6", name: "Forest Canopy", colors: ["#2D6A4F", "#40916C", "#52B788", "#74C69D", "#95D5B2"], created_at: new Date(now - ms * 6).toISOString() },
+            { id: "m7", name: "Neon Nights", colors: ["#00F5FF", "#00BFFF", "#0000FF", "#8A2BE2", "#FF00FF"], created_at: new Date(now - ms * 7).toISOString() },
+            { id: "m8", name: "Autumn Leaves", colors: ["#821301", "#A12513", "#C03F21", "#DF5F31", "#FFA260"], created_at: new Date(now - ms * 8).toISOString() },
+            { id: "m9", name: "Monochrome Dark", colors: ["#212529", "#343A40", "#495057", "#6C757D", "#ADB5BD"], created_at: new Date(now - ms * 9).toISOString() },
+            { id: "m10", name: "Vaporwave", colors: ["#FF71CE", "#01CDFE", "#05FFA1", "#B967FF", "#FFFB96"], created_at: new Date(now - ms * 10).toISOString() },
+            { id: "m11", name: "Coffee Shop", colors: ["#3E2723", "#4E342E", "#5D4037", "#6D4C41", "#795548"], created_at: new Date(now - ms * 11).toISOString() },
+            { id: "m12", name: "Minty Fresh", colors: ["#004B23", "#006400", "#007200", "#008000", "#38B000"], created_at: new Date(now - ms * 12).toISOString() }
+        ]
     }
 
     savePalettes(palettes) {
