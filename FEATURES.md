@@ -3,16 +3,16 @@
 This document serves as the high-level roadmap for all core features required to make paletteWOW a fully functional, free, and open-source alternative to Coolors.
 
 ## Phase 1: Core Generation & Keyboard Controls
-- [-] **Spacebar Generation:** Pressing the spacebar randomly generates a new palette.
-- [-] **Lock Mechanism:** Click a padlock icon to lock a color; subsequent spacebar presses only change unlocked colors. lock icon should be locked when color is locked and unlocked when color is unlocked.
-- [-] **Undo/Redo:** Ability to step back and forth through previously generated palettes in the current session.
+- [X] **Spacebar Generation:** Pressing the spacebar randomly generates a new palette.
+- [X] **Lock Mechanism:** Click a padlock icon to lock a color; subsequent spacebar presses only change unlocked colors. lock icon should be locked when color is locked and unlocked when color is unlocked.
+- [X] **Undo/Redo:** Ability to step back and forth through previously generated palettes in the current session.
 
 ## Phase 2: Color Column Manipulation
 - [ ] **Copy Hex:** Click to instantly copy the color's HEX code to the clipboard.
 - [ ] **Drag & Drop Reordering:** Drag columns left or right to rearrange the palette.
 - [ ] **Remove Color:** Delete a specific color column from the palette.
-- [ ] **Add Color:** Click a `+` icon between columns to inject a new color (supporting palettes larger or smaller than the default 5)(maximum of 10 colors).
-- [ ] **View Shades/Tints:** Toggle a view to see lighter and darker variations of a specific color, allowing the user to select one to replace the current base color.
+- [ ] **Add Color:** Click a `+` icon between columns (icon appears when hovering over the space between columns) to inject a new color (supporting palettes larger or smaller than the default 5)(maximum of 10 colors)(minimum of 2 colors).
+- [ ] **View Shades/Tints:** Toggle a view to see lighter and darker variations of a specific color, allowing the user to select one to replace the current base color (24 shades per color, 12 lighter and 12 darker, hexcode should appear when hovering over the shade/tint). 
 
 ## Phase 3: Advanced Generation Methods (The "Free Pro" Features)
 - [ ] **Method Selector:** A dropdown/modal to change how colors are generated based on color theory.
@@ -22,6 +22,8 @@ This document serves as the high-level roadmap for all core features required to
 - [ ] **Complementary:** Colors opposite each other on the color wheel.
 - [ ] **Split Complementary:** A base color and the two colors adjacent to its complement.
 - [ ] **Triadic:** Three colors evenly spaced around the color wheel.
+- [ ]  **Tetradic:** Four colors evenly spaced around the color wheel.
+- [ ] **Square:** Four colors evenly spaced around the color wheel, with two sets of complementary colors.
 
 ## Phase 4: Exporting & Sharing
 - [ ] **URL Sharing:** Generate a unique URL containing the HEX codes (e.g., `palettewow.xyz/1a1a1a-ffffff-ff0000`) that automatically loads the palette when visited.

@@ -1,4 +1,9 @@
 <div class="fixed inset-0 pt-16" data-controller="palette" data-action="keydown@window->palette#handleKeydown">
+  <style>
+    [data-palette-target="column"]:last-child .add-color-zone {
+      display: none !important;
+    }
+  </style>
   
   <!-- Top Bar: Actions (Desktop Only) -->
   <div class="hidden md:flex absolute top-16 left-0 right-0 z-10 justify-between items-center px-8 py-4 pointer-events-none">
@@ -27,7 +32,7 @@
   </div>
 
   <!-- Generators -->
-  <div class="flex flex-col md:flex-row h-full w-full pb-[72px] md:pb-0">
+  <div class="flex flex-col md:flex-row h-full w-full pb-[72px] md:pb-0" data-palette-target="container">
     <!-- Multiply by 5 columns -->
     <% 5.times do |i| %>
       <div 
@@ -40,11 +45,11 @@
           <div class="flex flex-col md:gap-4 items-center md:pointer-events-auto">
              
              <!-- Desktop Tool Placeholders -->
-             <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Remove color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
-             <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="View shades"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg></button>
+             <button data-action="click->palette#removeColumn" class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Remove color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
+             <button data-action="click->palette#viewShades" class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="View shades"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg></button>
              <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Save color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg></button>
-             <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Drag"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg></button>
-             <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Copy hex" data-action="click->palette#copyHex"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></button>
+             <div class="hidden md:flex p-1 opacity-50 hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing js-drag-handle" title="Drag"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg></div>
+             <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Copy hex" data-action="click->palette#copyHex"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></button>
 
              <button data-action="click->palette#toggleLock" class="p-2 transition-opacity active:scale-95 opacity-50 hover:opacity-100 group-[&[data-locked=true]]:opacity-100">
                 <!-- Unlocked Icon -->
@@ -56,11 +61,53 @@
         </div>
         
         <!-- Hex Code (Left on mobile, bottom on desktop) -->
-        <div class="flex-none order-1 md:order-none flex justify-start md:justify-center items-center h-full md:h-auto z-10 md:w-full transition-opacity duration-300">
-           <div class="flex flex-col md:items-center text-left md:text-center mt-0 md:mt-4">
-             <h2 class="text-[17px] md:text-2xl font-bold tracking-widest uppercase cursor-pointer opacity-70 hover:opacity-100 active:opacity-50 transition-opacity font-sans" data-palette-target="hexCode" data-action="click->palette#copyHex">FFFFFF</h2>
+        <div class="flex-none order-1 md:order-none flex justify-start md:justify-center items-center h-full md:h-auto z-10 md:w-full transition-opacity duration-300 pointer-events-none md:pointer-events-auto">
+           <!-- Mobile drag handle and delete icons -->
+           <div class="flex flex-col gap-3 mr-4 md:hidden pointer-events-auto">
+             <button data-action="click->palette#removeColumn" class="p-1 opacity-50 active:opacity-100 transition-opacity"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
+             <div class="p-1 opacity-50 active:opacity-100 transition-opacity cursor-grab active:cursor-grabbing js-drag-handle"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg></div>
+           </div>
+           
+           <div class="flex flex-col md:items-center text-left md:text-center mt-0 md:mt-4 pointer-events-auto">
+             <h2 class="text-[17px] md:text-2xl font-bold tracking-widest uppercase cursor-pointer opacity-70 hover:opacity-100 active:opacity-50 transition-opacity font-sans relative group/hex" data-palette-target="hexCode" data-action="click->palette#copyHex">
+               <span class="inline-block">FFFFFF</span>
+               <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded shadow opacity-0 group-[.copied]/hex:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Copied!</span>
+             </h2>
              <span class="hidden md:block text-[11px] font-medium opacity-50 capitalize tracking-widest mt-1 mix-blend-color-burn">Color Name</span>
            </div>
+        </div>
+
+        <!-- Add Color Divider Zone (Desktop) -->
+        <div class="add-color-zone hidden md:flex absolute z-30 opacity-0 hover:opacity-100 transition-opacity top-0 bottom-0 pointer-events-auto items-center justify-center" style="right: 0; width: 6rem; transform: translateX(50%);">
+          <button 
+            data-action="click->palette#addColumn"
+            class="pointer-events-auto w-10 h-10 hover:w-12 hover:h-12 bg-white text-black border border-neutral-200 rounded-full shadow hover:shadow-lg transition-all flex items-center justify-center !duration-200"
+            title="Add Color"
+          >
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
+          </button>
+        </div>
+
+        <!-- Add Color Divider Zone (Mobile) -->
+        <div class="add-color-zone md:hidden flex absolute z-30 top-auto left-0 right-0 pointer-events-auto items-center justify-center" style="bottom: 0; height: 4rem; transform: translateY(50%);">
+          <button 
+            data-action="click->palette#addColumn"
+            class="pointer-events-auto w-10 h-10 hover:w-12 hover:h-12 bg-white text-black border border-neutral-200 rounded-full shadow hover:shadow-lg transition-all flex items-center justify-center !duration-200"
+            title="Add Color"
+          >
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
+          </button>
+        </div>
+
+        <!-- Shades Overlay -->
+        <div data-palette-target="shadesModal" class="absolute inset-0 z-40 hidden flex-col opacity-0 transition-opacity duration-300 pointer-events-auto">
+          <button data-action="click->palette#closeShades" class="absolute top-2 right-2 text-white p-2 hover:scale-110 transition-transform drop-shadow-md z-50 opacity-80 hover:opacity-100 flex items-center justify-center bg-black/20 rounded-full backdrop-blur-sm shadow-sm md:top-4 md:right-4">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 lg:w-4 lg:h-4"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+          </button>
+          
+          <div data-palette-target="shadesContainer" class="flex-1 flex flex-col w-full h-full">
+            <!-- Swatches will be injected here -->
+          </div>
         </div>
       </div>
     <% end %>
@@ -96,3 +143,79 @@
     
   </div>
 </div>
+
+<!-- Template for New Column -->
+<template id="column-template">
+  <div 
+    class="flex-1 flex flex-row md:flex-col justify-between md:justify-end items-center px-8 md:px-0 py-0 md:pb-[15%] transition-colors duration-200 group relative shadow-none"
+    data-palette-target="column"
+    data-locked="false"
+  >
+    <!-- Center Tools (Lock, etc) -->
+    <div class="flex-none order-2 md:order-none flex justify-end md:justify-center items-center md:absolute md:inset-0 z-10 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 md:pointer-events-none">
+      <div class="flex flex-col md:gap-4 items-center md:pointer-events-auto">
+         <!-- Desktop Tool Placeholders -->
+         <button data-action="click->palette#removeColumn" class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Remove color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
+         <button data-action="click->palette#viewShades" class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="View shades"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg></button>
+         <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Save color"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg></button>
+         <div class="hidden md:flex p-1 opacity-50 hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing js-drag-handle" title="Drag"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg></div>
+         <button class="hidden md:block p-1 opacity-50 hover:opacity-100 transition-opacity" title="Copy hex" data-action="click->palette#copyHex"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></button>
+
+         <button data-action="click->palette#toggleLock" class="p-2 transition-opacity active:scale-95 opacity-50 hover:opacity-100 group-[&[data-locked=true]]:opacity-100">
+            <!-- Unlocked Icon -->
+            <svg data-palette-target="unlockedIcon" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M18 1.5c2.9 0 5.25 2.35 5.25 5.25v3.75a.75.75 0 0 1-1.5 0V6.75a3.75 3.75 0 1 0-7.5 0v3a3 3 0 0 1 3 3v6.75a3 3 0 0 1-3 3H3.75a3 3 0 0 1-3-3v-6.75a3 3 0 0 1 3-3h9v-3c0-2.9 2.35-5.25 5.25-5.25Z"></path></svg>
+            <!-- Locked Icon -->
+            <svg data-palette-target="lockedIcon" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6 hidden"><path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.25 8.25v-3a3.25 3.25 0 1 0-6.5 0v3h6.5Z" clip-rule="evenodd"></path></svg>
+         </button>
+      </div>
+    </div>
+    
+    <!-- Hex Code -->
+    <div class="flex-none order-1 md:order-none flex justify-start md:justify-center items-center h-full md:h-auto z-10 md:w-full transition-opacity duration-300 pointer-events-none md:pointer-events-auto">
+       <div class="flex flex-col gap-3 mr-4 md:hidden pointer-events-auto">
+         <button data-action="click->palette#removeColumn" class="p-1 opacity-50 active:opacity-100 transition-opacity"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
+         <div class="p-1 opacity-50 active:opacity-100 transition-opacity cursor-grab active:cursor-grabbing js-drag-handle"><svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg></div>
+       </div>
+       
+       <div class="flex flex-col md:items-center text-left md:text-center mt-0 md:mt-4 pointer-events-auto">
+         <h2 class="text-[17px] md:text-2xl font-bold tracking-widest uppercase cursor-pointer opacity-70 hover:opacity-100 active:opacity-50 transition-opacity font-sans relative group/hex" data-palette-target="hexCode" data-action="click->palette#copyHex">
+           <span class="inline-block">FFFFFF</span>
+           <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded shadow opacity-0 group-[.copied]/hex:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Copied!</span>
+         </h2>
+         <span class="hidden md:block text-[11px] font-medium opacity-50 capitalize tracking-widest mt-1 mix-blend-color-burn">Color Name</span>
+       </div>
+    </div>
+
+    <!-- Add Color Divider Zone (Desktop) -->
+    <div class="add-color-zone hidden md:flex absolute z-30 opacity-0 hover:opacity-100 transition-opacity top-0 bottom-0 pointer-events-auto items-center justify-center" style="right: 0; width: 6rem; transform: translateX(50%);">
+      <button 
+        data-action="click->palette#addColumn"
+        class="pointer-events-auto w-10 h-10 hover:w-12 hover:h-12 bg-white text-black border border-neutral-200 rounded-full shadow hover:shadow-lg transition-all flex items-center justify-center !duration-200"
+        title="Add Color"
+      >
+        <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
+      </button>
+    </div>
+
+    <!-- Add Color Divider Zone (Mobile) -->
+    <div class="add-color-zone md:hidden flex absolute z-30 top-auto left-0 right-0 pointer-events-auto items-center justify-center" style="bottom: 0; height: 4rem; transform: translateY(50%);">
+      <button 
+        data-action="click->palette#addColumn"
+        class="pointer-events-auto w-10 h-10 hover:w-12 hover:h-12 bg-white text-black border border-neutral-200 rounded-full shadow hover:shadow-lg transition-all flex items-center justify-center !duration-200"
+        title="Add Color"
+      >
+        <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 pointer-events-none"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
+      </button>
+    </div>
+
+    <!-- Shades Overlay -->
+    <div data-palette-target="shadesModal" class="absolute inset-0 z-40 hidden flex-col opacity-0 transition-opacity duration-300 pointer-events-auto">
+      <button data-action="click->palette#closeShades" class="absolute top-2 right-2 text-white p-2 hover:scale-110 transition-transform drop-shadow-md z-50 opacity-80 hover:opacity-100 flex items-center justify-center bg-black/20 rounded-full backdrop-blur-sm shadow-sm md:top-4 md:right-4">
+        <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 lg:w-4 lg:h-4"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+      </button>
+      
+      <div data-palette-target="shadesContainer" class="flex-1 flex flex-col w-full h-full">
+      </div>
+    </div>
+  </div>
+</template>
