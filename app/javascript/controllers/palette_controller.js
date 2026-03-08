@@ -1,10 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 import chroma from "chroma-js"
+import ntc from "ntc"
 
 export default class extends Controller {
   static targets = [
-    "container", "column", "hexCode", "unlockedIcon", "lockedIcon",
+    "container", "column", "hexCode", "colorName", "unlockedIcon", "lockedIcon",
     "shadesModal", "shadesContainer", "methodSelect",
     "exportModal", "exportBackdrop", "exportContent",
     "exportColumnsContainer", "exportTitle"
@@ -52,6 +53,7 @@ export default class extends Controller {
 
         column.style.backgroundColor = hex
         this.setHexInColumn(column, hex)
+        this.setColorNameInColumn(column, hex)
         column.style.color = computedTextColor
 
         paletteCols.push({
@@ -153,6 +155,7 @@ export default class extends Controller {
 
         column.style.backgroundColor = hex
         this.setHexInColumn(column, hex)
+        this.setColorNameInColumn(column, hex)
 
         const computedTextColor = isLight ? '#000000' : '#FFFFFF'
         column.style.color = computedTextColor
@@ -220,6 +223,7 @@ export default class extends Controller {
 
         column.style.backgroundColor = colState.hex
         this.setHexInColumn(column, colState.hex)
+        this.setColorNameInColumn(column, colState.hex)
         column.style.color = colState.textColor
 
         column.dataset.locked = colState.locked
@@ -254,6 +258,7 @@ export default class extends Controller {
     newColumn.style.backgroundColor = newHex
     newColumn.style.color = isLight ? '#000000' : '#FFFFFF'
     this.setHexInColumn(newColumn, newHex)
+    this.setColorNameInColumn(newColumn, newHex)
 
     setTimeout(() => this.saveCurrentStateToSnapshot(), 10)
   }
@@ -429,6 +434,7 @@ export default class extends Controller {
     column.style.backgroundColor = hex
     column.style.color = isLight ? '#000000' : '#FFFFFF'
     this.setHexInColumn(column, hex)
+    this.setColorNameInColumn(column, hex)
 
     this.saveCurrentStateToSnapshot()
     this.closeShades({ currentTarget: shadeBtn })
@@ -713,6 +719,14 @@ export default class extends Controller {
     } else {
       const hexNode = column.querySelector('[data-palette-target="hexCode"]')
       if (hexNode) hexNode.textContent = hex
+    }
+  }
+
+  setColorNameInColumn(column, hex) {
+    const nameNode = column.querySelector('[data-palette-target="colorName"]')
+    if (nameNode) {
+      const match = ntc.name(hex)
+      nameNode.textContent = match ? match[1] : ''
     }
   }
 
