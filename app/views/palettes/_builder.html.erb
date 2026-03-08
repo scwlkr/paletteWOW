@@ -48,13 +48,13 @@
       <div class="h-5 w-px bg-neutral-200"></div>
 
       <% if user_signed_in? %>
-        <button data-action="click->palette#save" class="flex items-center space-x-2 text-[12px] font-bold tracking-widest uppercase text-black px-4 py-2.5 rounded transition-colors bg-white hover:bg-neutral-50 border border-neutral-300 shadow-sm cursor-pointer hover:border-neutral-400">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" /></svg>
+        <button data-action="click->palette#save" class="flex items-center space-x-2 text-[12px] font-bold tracking-widest uppercase text-black px-4 py-2.5 rounded transition-colors bg-white hover:bg-neutral-50 border border-neutral-300 shadow-sm cursor-pointer hover:border-neutral-400 group">
+          <svg fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4 shrink-0 text-red-100 group-hover:text-red-500 transition-colors stroke-red-500 stroke-2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
           <span>Save</span>
         </button>
       <% else %>
         <%= button_to '/auth/google_oauth2', method: :post, data: { turbo: false }, class: "flex items-center space-x-2 text-[12px] font-bold tracking-widest uppercase text-black px-4 py-2.5 rounded transition-colors bg-white hover:bg-neutral-50 border border-neutral-300 shadow-sm cursor-pointer hover:border-neutral-400" do %>
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" /></svg>
+          <svg fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4 shrink-0 text-red-100 group-hover:text-red-500 transition-colors stroke-red-500 stroke-2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
           <span>Save</span>
         <% end %>
       <% end %>

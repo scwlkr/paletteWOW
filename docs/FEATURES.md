@@ -34,10 +34,10 @@ This document serves as the high-level roadmap for all core features required to
 - [X] **Export to SVG:** Download an SVG representation of the palette.(should be a square with the colors in it)
 
 ## Phase 5: User Accounts & Library
-- [ ] **Google OAuth Login:** Quick, passwordless sign-in.
-- [ ] **Save Palettes:** Logged-in users can click a "Save" heart icon to add the active palette to their personal library.
-- [ ] **Palette Dashboard:** A dedicated view for users to see, organize, and delete their saved palettes.
-- [ ] **Naming:** Ability to give custom names to saved palettes.
+- [X] **Google OAuth Login:** Quick, passwordless sign-in.
+- [X] **Save Palettes:** Logged-in users can click a "Save" icon to add the active palette to their personal library.
+- [X] **Palette Dashboard:** A dedicated view for users to see, organize, and delete their saved palettes.
+- [X] **Naming:** Ability to give custom names to saved palettes.
 
 ## Phase 6: UI/UX & Polish
 - [ ] **Color Names:** Automatically map HEX codes to human-readable color names (e.g., "Twilight Indigo", "Powder Blue").

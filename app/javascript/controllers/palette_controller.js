@@ -305,29 +305,53 @@ export default class extends Controller {
     })
   }
 
-  save() {
-    const hexCodes = this.columnTargets.map(col => this.getHexFromColumn(col))
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+  save(event) {
+    if (event) event.currentTarget.blur()
 
-    fetch('/palettes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': csrfToken
-      },
-      body: JSON.stringify({ hex_codes: hexCodes })
-    })
-      .then(response => {
-        if (response.ok) {
-          window.location.href = '/dashboard'
-        } else {
-          alert("Failed to save palette. Please try again.")
-        }
-      })
-      .catch(error => {
-        console.error('Error saving palette:', error)
-        alert("An error occurred while saving.")
-      })
+    const hexCodes = this.columnTargets.map(col => this.getHexFromColumn(col))
+
+    // Get existing palettes or initialize empty array
+    let savedPalettes = []
+    try {
+      const stored = localStorage.getItem('saved_palettes')
+      if (stored) {
+        savedPalettes = JSON.parse(stored)
+      }
+    } catch (e) {
+      console.error("Error reading localStorage", e)
+    }
+
+    // Create new palette object
+    const newPalette = {
+      id: Date.now().toString(),
+      name: `Palette #${Math.floor(Math.random() * 9000) + 1000}`,
+      colors: hexCodes,
+      created_at: new Date().toISOString()
+    }
+
+    // Prepend to array (newest first)
+    savedPalettes.unshift(newPalette)
+
+    // Save back to localStorage
+    try {
+      localStorage.setItem('saved_palettes', JSON.stringify(savedPalettes))
+
+      // Provide visual feedback
+      const btn = event.currentTarget
+      const originalText = btn.querySelector('span').innerText
+      const svg = btn.querySelector('svg')
+
+      btn.querySelector('span').innerText = "Saved!"
+      svg.classList.replace('text-red-100', 'text-red-500')
+
+      setTimeout(() => {
+        btn.querySelector('span').innerText = originalText
+        svg.classList.replace('text-red-500', 'text-red-100')
+      }, 2000)
+    } catch (e) {
+      console.error("Error saving to localStorage", e)
+      alert("Failed to save palette to local storage. Your browser may be blocking it or storage is full.")
+    }
   }
 
   viewShades(event) {
