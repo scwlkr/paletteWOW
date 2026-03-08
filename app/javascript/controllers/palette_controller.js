@@ -4,10 +4,27 @@ export default class extends Controller {
   static targets = ["column", "hexCode", "unlockedIcon", "lockedIcon"]
 
   connect() {
+    this.history = []
+    this.pointer = -1
     this.generate()
   }
 
   handleKeydown(event) {
+    // Cmd+Z or Ctrl+Z for Undo
+    if ((event.metaKey || event.ctrlKey) && !event.shiftKey && event.key === 'z') {
+      event.preventDefault()
+      this.undo()
+      return
+    }
+
+    // Cmd+Shift+Z, or Ctrl+Y for Redo
+    if (((event.metaKey || event.ctrlKey) && event.shiftKey && event.key === 'z') ||
+      ((event.metaKey || event.ctrlKey) && event.key === 'y')) {
+      event.preventDefault()
+      this.redo()
+      return
+    }
+
     if (event.code === "Space") {
       event.preventDefault() // Prevent scrolling down
       this.generate()
@@ -15,11 +32,15 @@ export default class extends Controller {
   }
 
   generate() {
+    const paletteCols = []
+
     this.columnTargets.forEach((column, index) => {
       const isLocked = column.dataset.locked === 'true'
+      let hex = this.hexCodeTargets[index].textContent.trim()
+      const textColor = column.style.color
 
       if (!isLocked) {
-        const hex = this.generateRandomHex()
+        hex = this.generateRandomHex()
         const isLight = this.isLightColor(hex)
 
         // Update column background
@@ -29,12 +50,56 @@ export default class extends Controller {
         this.hexCodeTargets[index].textContent = hex
 
         // Adjust text color based on background brightness
-        const textColor = isLight ? '#000000' : '#FFFFFF'
-        column.style.color = textColor
-
-        // We also want to adjust the icon container border/bg slightly if needed,
-        // but simple inheritance `currentColor` works for strokes.
+        const computedTextColor = isLight ? '#000000' : '#FFFFFF'
+        column.style.color = computedTextColor
       }
+
+      paletteCols.push({
+        hex: hex,
+        locked: isLocked,
+        textColor: column.style.color
+      })
+    })
+
+    this.saveSnapshot(paletteCols)
+  }
+
+  saveSnapshot(paletteCols) {
+    // If we've gone back in time, cut off the future
+    if (this.pointer < this.history.length - 1) {
+      this.history = this.history.slice(0, this.pointer + 1)
+    }
+
+    this.history.push(paletteCols)
+    this.pointer++
+  }
+
+  undo() {
+    if (this.pointer > 0) {
+      this.pointer--
+      this.applySnapshot(this.history[this.pointer])
+    }
+  }
+
+  redo() {
+    if (this.pointer < this.history.length - 1) {
+      this.pointer++
+      this.applySnapshot(this.history[this.pointer])
+    }
+  }
+
+  applySnapshot(paletteCols) {
+    this.columnTargets.forEach((column, index) => {
+      const colState = paletteCols[index]
+
+      column.style.backgroundColor = colState.hex
+      this.hexCodeTargets[index].textContent = colState.hex
+      column.style.color = colState.textColor
+
+      column.dataset.locked = colState.locked
+
+      this.unlockedIconTargets[index].classList.toggle('hidden', colState.locked)
+      this.lockedIconTargets[index].classList.toggle('hidden', !colState.locked)
     })
   }
 

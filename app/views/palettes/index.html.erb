@@ -2,9 +2,17 @@
   
   <!-- Top Bar: Actions (Desktop Only) -->
   <div class="hidden md:flex absolute top-16 left-0 right-0 z-10 justify-between items-center px-8 py-4 pointer-events-none">
-    <p class="text-sm font-semibold tracking-widest bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-neutral-200 pointer-events-auto shadow-sm uppercase">
-      Press <kbd class="px-2 py-1 bg-neutral-100 rounded text-xs font-mono ml-1">Spacebar</kbd> to generate
-    </p>
+    <div class="flex items-center space-x-4 pointer-events-auto bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-neutral-200 shadow-sm">
+      <button data-action="click->palette#undo" class="p-1 text-neutral-800 hover:text-black opacity-50 hover:opacity-100 transition-opacity" title="Undo (Cmd+Z)">
+        <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path></svg>
+      </button>
+      <p class="text-sm font-semibold tracking-widest uppercase border-x border-neutral-200 px-4">
+        Press <kbd class="px-2 py-1 bg-neutral-100 rounded text-xs font-mono ml-1">Spacebar</kbd> to generate
+      </p>
+      <button data-action="click->palette#redo" class="p-1 text-neutral-800 hover:text-black opacity-50 hover:opacity-100 transition-opacity" title="Redo (Cmd+Shift+Z)">
+        <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path></svg>
+      </button>
+    </div>
 
     <div class="pointer-events-auto flex items-center space-x-4">
       <% if user_signed_in? %>
@@ -40,7 +48,7 @@
 
              <button data-action="click->palette#toggleLock" class="p-2 transition-opacity active:scale-95 opacity-50 hover:opacity-100 group-[&[data-locked=true]]:opacity-100">
                 <!-- Unlocked Icon -->
-                <svg data-palette-target="unlockedIcon" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M12 2C9.243 2 7 4.243 7 7v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7zm4 10.723V20h-2v-2.277a1.993 1.993 0 0 1 .567-3.677A2.001 2.001 0 0 1 14 16a1.99 1.99 0 0 1-1 1.723z"></path></svg>
+                <svg data-palette-target="unlockedIcon" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M12 2C9.243 2 7 4.243 7 7v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7c0-1.579-1.28-3-2.859-3C14.717 4 13.5 5.286 13.5 7v3h-2V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7zm4 10.723V20h-2v-2.277a1.993 1.993 0 0 1 .567-3.677A2.001 2.001 0 0 1 14 16a1.99 1.99 0 0 1-1 1.723z"></path></svg>
                 <!-- Locked Icon -->
                 <svg data-palette-target="lockedIcon" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6 hidden"><path d="M12 2C9.243 2 7 4.243 7 7v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7zm4 10.723V20h-2v-2.277a1.993 1.993 0 0 1 .567-3.677A2.001 2.001 0 0 1 14 16a1.99 1.99 0 0 1-1 1.723z"></path></svg>
              </button>
@@ -63,10 +71,10 @@
     
     <!-- Left Tools: Undo / Redo -->
     <div class="flex items-center space-x-6 text-neutral-800">
-      <button class="active:opacity-50 transition-opacity">
+      <button data-action="click->palette#undo" class="active:opacity-50 transition-opacity">
         <svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path></svg>
       </button>
-      <button class="active:opacity-50 transition-opacity text-neutral-300">
+      <button data-action="click->palette#redo" class="active:opacity-50 transition-opacity">
         <svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path></svg>
       </button>
     </div>
