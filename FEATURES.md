@@ -3,15 +3,15 @@
 This document serves as the high-level roadmap for all core features required to make paletteWOW a fully functional, free, and open-source alternative to Coolors.
 
 ## Phase 1: Core Generation & Keyboard Controls
-- [ ] **Spacebar Generation:** Pressing the spacebar randomly generates a new palette.
-- [ ] **Lock Mechanism:** Click a padlock icon to lock a color; subsequent spacebar presses only change unlocked colors. lock icon should be locked when color is locked and unlocked when color is unlocked.
-- [ ] **Undo/Redo:** Ability to step back and forth through previously generated palettes in the current session.
+- [-] **Spacebar Generation:** Pressing the spacebar randomly generates a new palette.
+- [-] **Lock Mechanism:** Click a padlock icon to lock a color; subsequent spacebar presses only change unlocked colors. lock icon should be locked when color is locked and unlocked when color is unlocked.
+- [-] **Undo/Redo:** Ability to step back and forth through previously generated palettes in the current session.
 
 ## Phase 2: Color Column Manipulation
 - [ ] **Copy Hex:** Click to instantly copy the color's HEX code to the clipboard.
 - [ ] **Drag & Drop Reordering:** Drag columns left or right to rearrange the palette.
 - [ ] **Remove Color:** Delete a specific color column from the palette.
-- [ ] **Add Color:** Click a `+` icon between columns to inject a new color (supporting palettes larger or smaller than the default 5).
+- [ ] **Add Color:** Click a `+` icon between columns to inject a new color (supporting palettes larger or smaller than the default 5)(maximum of 10 colors).
 - [ ] **View Shades/Tints:** Toggle a view to see lighter and darker variations of a specific color, allowing the user to select one to replace the current base color.
 
 ## Phase 3: Advanced Generation Methods (The "Free Pro" Features)
