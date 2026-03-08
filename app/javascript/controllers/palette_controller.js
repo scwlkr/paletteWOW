@@ -348,6 +348,27 @@ export default class extends Controller {
         btn.querySelector('span').innerText = originalText
         svg.classList.replace('text-red-500', 'text-red-100')
       }, 2000)
+
+      // Show global toast notification
+      const toast = document.createElement('div')
+      toast.className = 'fixed top-0 left-0 right-0 z-[100] bg-black text-white px-4 py-3 text-center text-sm font-medium transition-transform duration-300 -translate-y-full'
+      toast.innerText = 'Your palette is now saved in your dashboard'
+      document.body.appendChild(toast)
+
+      // Trigger slide down animation
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          toast.classList.remove('-translate-y-full')
+          toast.classList.add('translate-y-0')
+        })
+      })
+
+      // Slide up and remove after 3 seconds
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0')
+        toast.classList.add('-translate-y-full')
+        setTimeout(() => toast.remove(), 300)
+      }, 3000)
     } catch (e) {
       console.error("Error saving to localStorage", e)
       alert("Failed to save palette to local storage. Your browser may be blocking it or storage is full.")
