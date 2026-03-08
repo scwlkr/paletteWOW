@@ -1,5 +1,5 @@
 class PalettesController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy]
+  before_action :authenticate_user!, only: [ :create, :destroy ]
 
   def index
   end
@@ -10,7 +10,7 @@ class PalettesController < ApplicationController
 
     if hex_codes.present? && hex_codes.is_a?(Array)
       palette = current_user.palettes.create!(name: "Palette ##{rand(1000..9999)}")
-      
+
       hex_codes.each_with_index do |hex, index|
         palette.colors.create!(hex_code: hex, position: index)
       end

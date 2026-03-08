@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def create
-    user = User.from_omniauth(request.env['omniauth.auth'])
+    user = User.from_omniauth(request.env["omniauth.auth"])
     if user.valid?
       session[:user_id] = user.id
       redirect_to dashboard_path, notice: "Signed in successfully via Google!"
