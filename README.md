@@ -1,6 +1,6 @@
 # paletteWOW
 
-![paletteWOW banner](./palettewow-sqaure-banner.png)
+![paletteWOW banner](assets/brand/banner-square.png)
 
 A lightning-fast, sleek, and minimalist Ruby on Rails color palette generator inspired by Coolors. 
 
