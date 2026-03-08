@@ -12,6 +12,13 @@ All notable changes to this project will be documented in this file.
 - Updated `palette_controller.js` to dispatch a fetch POST to `/palettes` when saving.
 - Added Dashboard navigation link to the authenticated layout.
 
+## [0.0.5] - Phase 3: Advanced Generation Methods
+- Implemented `chroma-js` to support 8 color theory generation methods (Auto, Monochromatic, Analogous, Complementary, Split Complementary, Triadic, Tetradic, Square).
+- Added generation Method Selector dropdown to the UI.
+- Upgraded the floating desktop toolbar into a clean, permanent `h-16` header for better layout organization and to prevent tool overlap.
+- Replaced text-based buttons with SVG icons (Undo, Redo, Export) and standardized active button padding.
+- Adjusted column tool icons vertical alignment to prevent overlap with hex codes.
+
 ## [0.0.4] - Phase 3: Generator Engine & Frontend
 - Created `PalettesController` and mapped root route to `palettes#index`.
 - Built the fullscreen, responsive 5-column generator UI using Tailwind CSS.
