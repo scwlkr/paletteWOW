@@ -1,17 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 import chroma from "chroma-js"
-import html2canvas from "html2canvas"
-import { jsPDF } from "jspdf"
 
 export default class extends Controller {
   static targets = [
-    "container", "column", "hexCode", "unlockedIcon", "lockedIcon", 
+    "container", "column", "hexCode", "unlockedIcon", "lockedIcon",
     "shadesModal", "shadesContainer", "methodSelect",
     "exportModal", "exportBackdrop", "exportContent",
     "exportColumnsContainer", "exportTitle"
   ]
-  static values = { 
+  static values = {
     method: { type: String, default: 'auto' },
     initialColors: { type: Array, default: [] }
   }
@@ -33,7 +31,7 @@ export default class extends Controller {
 
   loadInitialColors() {
     const paletteCols = []
-    
+
     // Clear existing columns except 2 templates if needed
     while (this.columnTargets.length < this.initialColorsValue.length) {
       const template = document.getElementById('column-template')
@@ -42,7 +40,7 @@ export default class extends Controller {
     while (this.columnTargets.length > this.initialColorsValue.length) {
       this.columnTargets[this.columnTargets.length - 1].remove()
     }
-    
+
     setTimeout(() => {
       this.initialColorsValue.forEach((hex, index) => {
         const column = this.columnTargets[index]
@@ -399,13 +397,13 @@ export default class extends Controller {
     const content = this.exportContentTarget
 
     modal.classList.remove('hidden')
-    
+
     // Force a reflow
     void modal.offsetWidth
 
     backdrop.classList.remove('opacity-0')
     backdrop.classList.add('opacity-100')
-    
+
     content.classList.remove('opacity-0', 'scale-95')
     content.classList.add('opacity-100', 'scale-100')
   }
@@ -418,7 +416,7 @@ export default class extends Controller {
 
     backdrop.classList.remove('opacity-100')
     backdrop.classList.add('opacity-0')
-    
+
     content.classList.remove('opacity-100', 'scale-100')
     content.classList.add('opacity-0', 'scale-95')
 
@@ -434,20 +432,20 @@ export default class extends Controller {
     exportContainer.innerHTML = '' // Clear previous
 
     const currentHexes = this.columnTargets.map(col => this.getHexFromColumn(col))
-    
+
     currentHexes.forEach(hex => {
       const isLight = this.isLightColor(hex)
       const textColor = isLight ? '#000000' : '#FFFFFF'
-      
+
       const colDiv = document.createElement('div')
       colDiv.className = 'flex-1 flex items-end justify-center pb-12'
       colDiv.style.backgroundColor = hex
       colDiv.style.color = textColor
-      
+
       const hexSpan = document.createElement('span')
       hexSpan.className = 'text-2xl font-bold tracking-widest font-sans uppercase'
       hexSpan.textContent = hex.replace('#', '')
-      
+
       colDiv.appendChild(hexSpan)
       exportContainer.appendChild(colDiv)
     })
@@ -457,11 +455,11 @@ export default class extends Controller {
 
   async exportImage(event) {
     event.currentTarget.blur()
-    
+
     const container = this.setupExportContainer()
     const originalDisplay = container.style.display
     container.style.display = 'flex' // Ensure it's rendered visually
-    
+
     try {
       const canvas = await html2canvas(container, {
         scale: 2, // High DPI
@@ -487,11 +485,11 @@ export default class extends Controller {
 
   async exportPdf(event) {
     event.currentTarget.blur()
-    
+
     const container = this.setupExportContainer()
     const originalDisplay = container.style.display
     container.style.display = 'flex'
-    
+
     try {
       const canvas = await html2canvas(container, {
         scale: 2,
@@ -503,12 +501,13 @@ export default class extends Controller {
 
       const image = canvas.toDataURL("image/png")
       // A4 Landscape is roughly 297x210mm
+      const { jsPDF } = window.jspdf
       const pdf = new jsPDF({
         orientation: 'landscape',
         unit: 'mm',
         format: [300, 200]
       })
-      
+
       pdf.addImage(image, 'PNG', 0, 0, 300, 200)
       pdf.save(`paletteWOW-${Date.now()}.pdf`)
     } catch (err) {
@@ -524,7 +523,7 @@ export default class extends Controller {
     event.currentTarget.blur()
     const hexes = this.columnTargets.map(col => this.getHexFromColumn(col).replace('#', ''))
     const url = `${window.location.origin}/${hexes.join('-')}`
-    
+
     navigator.clipboard.writeText(url).then(() => {
       alert("URL copied to clipboard!")
     })
@@ -534,14 +533,14 @@ export default class extends Controller {
     event.currentTarget.blur()
     const hexes = this.columnTargets.map(col => this.getHexFromColumn(col))
     const width = hexes.length * 100
-    
+
     let rects = ''
     hexes.forEach((hex, i) => {
       rects += `<rect x="${i * 100}" y="0" width="100" height="500" fill="${hex}"/>\n`
     })
 
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="500" viewBox="0 0 ${width} 500">\n${rects}</svg>`
-    
+
     navigator.clipboard.writeText(svg).then(() => {
       alert("SVG copied to clipboard!")
     })
@@ -550,13 +549,13 @@ export default class extends Controller {
   copyCss(event) {
     event.currentTarget.blur()
     const hexes = this.columnTargets.map(col => this.getHexFromColumn(col))
-    
+
     let css = ':root {\n'
     hexes.forEach((hex, i) => {
       css += `  --color-${i + 1}: ${hex};\n`
     })
     css += '}'
-    
+
     navigator.clipboard.writeText(css).then(() => {
       alert("CSS copied to clipboard!")
     })
@@ -565,13 +564,13 @@ export default class extends Controller {
   copyTailwind(event) {
     event.currentTarget.blur()
     const hexes = this.columnTargets.map(col => this.getHexFromColumn(col))
-    
+
     let tw = '{\n  colors: {\n'
     hexes.forEach((hex, i) => {
       tw += `    'color-${i + 1}': '${hex}',\n`
     })
     tw += '  }\n}'
-    
+
     navigator.clipboard.writeText(tw).then(() => {
       alert("Tailwind config copied to clipboard!")
     })

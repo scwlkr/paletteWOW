@@ -1,4 +1,4 @@
-<div class="fixed inset-0 pt-16 flex flex-col" data-controller="palette" data-action="keydown@window->palette#handleKeydown" data-palette-initial-colors-value="<%= @colors.to_json if defined?(@colors) && @colors.present? %>">
+<div class="fixed inset-0 pt-16 flex flex-col" data-controller="palette" data-action="keydown@window->palette#handleKeydown" <%= "data-palette-initial-colors-value=\"#{CGI.escapeHTML(@colors.to_json)}\"".html_safe if defined?(@colors) && @colors.present? %>>
   
   <!-- Top Bar: Actions (Desktop Only) -->
   <div class="hidden md:flex h-16 w-full bg-white border-b border-neutral-200 px-6 items-center justify-between shrink-0 z-10">
