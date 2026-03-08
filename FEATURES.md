@@ -27,11 +27,11 @@ This document serves as the high-level roadmap for all core features required to
 
 ## Phase 4: Exporting & Sharing
 - [ ] **URL Sharing:** Generate a unique URL containing the HEX codes (e.g., `palettewow.xyz/1a1a1a-ffffff-ff0000`) that automatically loads the palette when visited.
-- [ ] **Export to Image:** Download the palette as a `.png` file with the colors and hex codes displayed.
+- [ ] **Export to Image:** Download the palette as a `.png` file with the colors and hex codes displayed. ()
 - [ ] **Export to PDF:** Download a structured `.pdf` document of the palette.
 - [ ] **Export to Code (CSS):** Copy standard CSS variables (e.g., `--color-1: #1a1a1a;`).
 - [ ] **Export to Tailwind:** Copy a Tailwind config object extending the theme colors.
-- [ ] **Export to SVG:** Download an SVG representation of the palette.
+- [ ] **Export to SVG:** Download an SVG representation of the palette.(should be a square with the colors in it)
 
 ## Phase 5: User Accounts & Library
 - [ ] **Google OAuth Login:** Quick, passwordless sign-in.
@@ -41,5 +41,5 @@ This document serves as the high-level roadmap for all core features required to
 
 ## Phase 6: UI/UX & Polish
 - [ ] **Color Names:** Automatically map HEX codes to human-readable color names (e.g., "Twilight Indigo", "Powder Blue").
-- [ ] **Responsive Design:** Ensure the column layout converts cleanly to horizontal rows on mobile devices.
+- [X] **Responsive Design:** Ensure the column layout converts cleanly to horizontal rows on mobile devices.
 - [ ] **Minimalist Aesthetic:** Stick strictly to a black, white, and gray UI to ensure the generated colors are the center of attention.
