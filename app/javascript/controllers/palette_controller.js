@@ -429,10 +429,15 @@ export default class extends Controller {
   // --- Export Generators ---
 
   async generateCanvas() {
+    // Use scale multiplier for higher resolution/sharpness
+    const scale = 2
     const canvas = document.createElement('canvas')
-    canvas.width = 1200
-    canvas.height = 800
+    canvas.width = 1200 * scale
+    canvas.height = 800 * scale
     const ctx = canvas.getContext('2d')
+
+    // Scale all native drawing operations up by multiplier
+    ctx.scale(scale, scale)
 
     // Fill white background
     ctx.fillStyle = '#ffffff'
@@ -485,7 +490,7 @@ export default class extends Controller {
       ctx.font = 'bold 24px sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'bottom'
-      ctx.fillText(hex.replace('#', ''), i * colWidth + (colWidth / 2), 752)
+      ctx.fillText(hex.toUpperCase(), i * colWidth + (colWidth / 2), 752)
     })
 
     return canvas

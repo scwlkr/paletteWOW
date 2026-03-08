@@ -2,9 +2,9 @@ Rails.application.routes.draw do
   get "privacy", to: "pages#privacy"
   get "profile", to: "profiles#show", as: :profile
   get "dashboard", to: "dashboard#index", as: :dashboard
-  
+
   resources :palettes, only: [ :index, :create, :destroy ]
-  
+
   # OmniAuth Google Routes
   get "auth/:provider/callback", to: "sessions#create"
   post "auth/:provider/callback", to: "sessions#create"
