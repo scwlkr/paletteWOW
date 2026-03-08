@@ -26,12 +26,12 @@ This document serves as the high-level roadmap for all core features required to
 - [X] **Square:** Four colors evenly spaced around the color wheel, with two sets of complementary colors.
 
 ## Phase 4: Exporting & Sharing
-- [ ] **URL Sharing:** Generate a unique URL containing the HEX codes (e.g., `palettewow.xyz/1a1a1a-ffffff-ff0000`) that automatically loads the palette when visited.
-- [ ] **Export to Image:** Download the palette as a `.png` file with the colors and hex codes displayed. ()
-- [ ] **Export to PDF:** Download a structured `.pdf` document of the palette.
-- [ ] **Export to Code (CSS):** Copy standard CSS variables (e.g., `--color-1: #1a1a1a;`).
-- [ ] **Export to Tailwind:** Copy a Tailwind config object extending the theme colors.
-- [ ] **Export to SVG:** Download an SVG representation of the palette.(should be a square with the colors in it)
+- [X] **URL Sharing:** Generate a unique URL containing the HEX codes (e.g., `palettewow.xyz/1a1a1a-ffffff-ff0000`) that automatically loads the palette when visited.
+- [X] **Export to Image:** Download the palette as a `.png` file with the colors and hex codes displayed. ()
+- [X] **Export to PDF:** Download a structured `.pdf` document of the palette.
+- [X] **Export to Code (CSS):** Copy standard CSS variables (e.g., `--color-1: #1a1a1a;`).
+- [X] **Export to Tailwind:** Copy a Tailwind config object extending the theme colors.
+- [X] **Export to SVG:** Download an SVG representation of the palette.(should be a square with the colors in it)
 
 ## Phase 5: User Accounts & Library
 - [ ] **Google OAuth Login:** Quick, passwordless sign-in.

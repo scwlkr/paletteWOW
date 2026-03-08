@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   get "privacy", to: "pages#privacy"
   get "profile", to: "profiles#show", as: :profile
   get "dashboard", to: "dashboard#index", as: :dashboard
-  resources :palettes, only: [ :index, :create, :show, :destroy ]
+  
+  resources :palettes, only: [ :index, :create, :destroy ]
+  
   # OmniAuth Google Routes
   get "auth/:provider/callback", to: "sessions#create"
   post "auth/:provider/callback", to: "sessions#create"
@@ -20,4 +22,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "palettes#index"
+
+  # Catch-all for shared palettes, allowing 2 to 10 hex codes separated by hyphens (e.g. 1a1a1a-ffffff)
+  get "/:colors", to: "palettes#show", constraints: { colors: /([a-fA-F0-9]{6}-){1,9}[a-fA-F0-9]{6}/ }, as: :shared_palette
 end
