@@ -129,24 +129,34 @@
     <div class="h-[72px] flex items-center justify-between px-6">
       
       <!-- Left Tools: Undo / Redo -->
-      <div class="flex items-center space-x-6 text-neutral-800">
-        <button data-action="click->palette#undo" class="active:opacity-50 transition-opacity">
-          <svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path></svg>
+      <div class="flex items-center space-x-3 sm:space-x-5 text-neutral-800">
+        <button data-action="click->palette#undo" class="p-1 text-neutral-600 active:opacity-50 transition-opacity" title="Undo">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" /></svg>
         </button>
-        <button data-action="click->palette#redo" class="active:opacity-50 transition-opacity">
-          <svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path></svg>
+        <button data-action="click->palette#redo" class="p-1 text-neutral-600 active:opacity-50 transition-opacity" title="Redo">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3" /></svg>
         </button>
       </div>
 
-      <!-- Center: Generate Text Button & Method Selector -->
+      <!-- Center: Generate Text Button & Save -->
       <div class="absolute left-1/2 -translate-x-1/2 flex flex-row items-center">
-        <button data-action="click->palette#generate" class="text-lg font-medium tracking-wide active:opacity-50 transition-opacity">
+        <button data-action="click->palette#generate" class="text-base sm:text-lg font-bold tracking-wide active:opacity-50 transition-colors border border-neutral-300 bg-white hover:bg-neutral-50 rounded-md px-4 sm:px-6 py-2 shadow-sm">
           Generate
         </button>
       </div>
     
       <!-- Right Tools: Options / Menu -->
-      <div class="flex items-center space-x-6 text-neutral-800">
+      <div class="flex items-center space-x-3 sm:space-x-5 text-neutral-800">
+        <% if user_signed_in? %>
+          <button data-action="click->palette#save" class="p-1 active:opacity-50 transition-opacity group flex items-center justify-center">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-7 h-7 text-white group-hover:text-black transition-colors stroke-neutral-900 stroke-2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+        <% else %>
+          <%= button_to '/auth/google_oauth2', method: :post, data: { turbo: false }, class: "p-1 active:opacity-50 transition-opacity group flex items-center justify-center bg-transparent border-none cursor-pointer text-white hover:text-black transition-colors stroke-neutral-900 stroke-2" do %>
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-7 h-7"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <% end %>
+        <% end %>
+
         <div class="relative flex items-center group cursor-pointer active:opacity-50 transition-opacity" title="Generation Method">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
           <select data-action="change->palette#changeMethod" data-palette-target="methodSelect" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
