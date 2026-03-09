@@ -315,7 +315,8 @@ export default class extends Controller {
 
     const hexCodes = this.columnTargets.map(col => this.getHexFromColumn(col))
     const btn = event.currentTarget
-    const originalText = btn.querySelector('span').innerText
+    const span = btn.querySelector('span')
+    const originalText = span ? span.innerText : null
     const svg = btn.querySelector('svg')
 
     fetch('/palettes', {
@@ -334,12 +335,16 @@ export default class extends Controller {
     })
       .then(response => {
         if (response.ok) {
-          btn.querySelector('span').innerText = "Saved!"
-          svg.classList.replace('text-red-100', 'text-red-500')
+          if (span) span.innerText = "Saved!"
+          if (svg) svg.classList.replace('text-red-100', 'text-red-500')
+          if (svg && svg.classList.contains('text-white')) svg.classList.replace('text-white', 'text-red-500')
+          if (svg && svg.classList.contains('text-neutral-300')) svg.classList.replace('text-neutral-300', 'text-red-500')
 
           setTimeout(() => {
-            btn.querySelector('span').innerText = originalText
-            svg.classList.replace('text-red-500', 'text-red-100')
+            if (span && originalText) span.innerText = originalText
+            if (svg) svg.classList.replace('text-red-500', 'text-red-100')
+            if (svg) svg.classList.replace('text-red-500', 'text-white')
+            if (svg) svg.classList.replace('text-red-500', 'text-neutral-300')
           }, 2000)
 
           const toast = document.createElement('div')
