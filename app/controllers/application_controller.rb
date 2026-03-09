@@ -10,7 +10,15 @@ class ApplicationController < ActionController::Base
   private
 
   def current_user
-    @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
+    if session[:user_id]
+      @current_user ||= User.find_by(id: session[:user_id])
+    elsif Rails.env.development?
+      @current_user ||= User.find_or_create_by(email: 'dev@palettewow.local') do |u|
+        u.full_name = 'Local Developer'
+        u.provider = 'developer'
+        u.uid = '12345'
+      end
+    end
   end
 
   def user_signed_in?
@@ -18,8 +26,6 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    return if Rails.env.development?
-
     unless user_signed_in?
       redirect_to root_path, alert: "Please sign in to access this page."
     end
