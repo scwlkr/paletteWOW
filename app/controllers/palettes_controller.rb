@@ -1,12 +1,12 @@
 class PalettesController < ApplicationController
   def index
+    load_saved_patterns
   end
 
   def show
     @hex_codes = params[:colors].split("-").map { |hex| "\##{hex}" }
-
-    # We create a structured response for the stimulus JSON if needed
     @colors = @hex_codes
+    load_saved_patterns
   end
 
   def create
@@ -44,6 +44,14 @@ class PalettesController < ApplicationController
   end
 
   private
+
+  def load_saved_patterns
+    if current_user
+      @saved_hex_patterns = current_user.palettes.pluck(:hex_codes).map { |codes| codes.map { |h| h.delete('#').upcase }.join('-') }
+    else
+      @saved_hex_patterns = []
+    end
+  end
 
   def palette_params
     params.require(:palette).permit(:name, hex_codes: [])

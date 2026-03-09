@@ -2,38 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.0.0] - Phase 5: Polish & Open Source Readiness
-- Finalized open-source files: `LICENSE.md` (MIT) and `CONTRIBUTING.md`.
-- Expanded `README.md` with comprehensive setup and feature documentation.
-- Project is fully ready for public display.
-- Created `DashboardController` and `app/views/dashboard/index.html.erb` to display user's saved palettes.
-- Implemented `PalettesController#create` API to receive hex codes and persist `Palette` and `Color` records.
-- Implemented `PalettesController#destroy` to allow palette deletion from the dashboard.
-- Updated `palette_controller.js` to dispatch a fetch POST to `/palettes` when saving.
-- Added Dashboard navigation link to the authenticated layout.
+## [6.0.0] - Phase 6: UI/UX & Polish
+- Automatically map HEX codes to human-readable color names in the UI.
+- Implemented responsive design logic: column layout gracefully converts to horizontal rows on mobile.
+- Refined minimalist aesthetic using functional Google Fonts and strict black/white/gray bounding UI.
+- Comprehensive documentation overhaul (`FEATURES.md`, `ARCHITECTURE.md`, `FRONTEND_LOGIC.md`, etc.).
 
-## [0.0.5] - Phase 3: Advanced Generation Methods
-- Implemented `chroma-js` to support 8 color theory generation methods (Auto, Monochromatic, Analogous, Complementary, Split Complementary, Triadic, Tetradic, Square).
-- Added generation Method Selector dropdown to the UI.
-- Upgraded the floating desktop toolbar into a clean, permanent `h-16` header for better layout organization and to prevent tool overlap.
-- Replaced text-based buttons with SVG icons (Undo, Redo, Export) and standardized active button padding.
-- Adjusted column tool icons vertical alignment to prevent overlap with hex codes.
+## [5.0.0] - Phase 5: User Accounts & Library
+- Restructured `DashboardController` and views to display users' saved palettes.
+- Implemented `PalettesController#create` API to persist `Palette` records using PostgreSQL array optimization.
+- Allowed users to assign custom names to palettes.
+- Implemented `destroy` to allow palette deletion from the dashboard.
 
-## [0.0.4] - Phase 3: Generator Engine & Frontend
-- Created `PalettesController` and mapped root route to `palettes#index`.
-- Built the fullscreen, responsive 5-column generator UI using Tailwind CSS.
-- Implemented `palette_controller.js` (Stimulus) to handle spacebar generation, hex code randomization, color locking, and click-to-copy functionality.
+## [4.0.0] - Phase 4: Exporting & Sharing
+- Encapsulated active palettes dynamically into the URL for instant sharing.
+- Added client-side export functionality utilizing `html2canvas` and `jsPDF`.
+- Supported exports for PNG, PDF, and SVG.
+- Supported code exports for raw CSS Variables and Tailwind CSS config objects.
 
-## [0.0.3] - Phase 2: User Authentication (Google OAuth)
-- Transitioned to a strictly "Google-only" authentication system (Passwordless/Social-Only).
-- Configured `omniauth` and `omniauth-google-oauth2` for a lightweight setup without Devise.
-- Styled Google Sign-In and profile views using minimalist Tailwind CSS.
+## [3.0.0] - Phase 3: Advanced Generation Methods
+- Integrated `chroma-js` to handle 8 distinct color theory generation models.
+- Added Method Selector dropdown to switch between Auto, Monochromatic, Analogous, Complementary, Split Complementary, Triadic, Tetradic, and Square.
+- Upgraded floating toolbars into a clean, permanent `h-16` application header.
+- Replaced basic text buttons with SVG Heroicons.
 
-## [0.0.2] - Phase 1: Core Data Models
-- Generated `User`, `Palette`, and `Color` models.
-- Established relationships: `User has_many :palettes`, `Palette belongs_to :user (optional)`, `Palette has_many :colors`, and `Color belongs_to :palette`.
+## [2.0.0] - Phase 2: Color Column Manipulation & Authentication
+- Added UI functionality to copy hex codes, drag/drop reorder, and remove/add colors dynamically.
+- Implemented shade/tint viewing toggle.
+- Transitioned authentication strictly to Google OAuth (Passwordless).
+- Scaled `User` and `Palette` data models.
 
-## [0.0.1] - Initial Setup
+## [1.0.0] - Phase 1: Core Generation & Keyboard Controls
+- Established fullscreen 5-column generator UI via Tailwind CSS.
+- Attached `palette_controller.js` to handle spacebar press generation and hex code randomization.
+- Added color lock mechanism.
+- Created local session Undo/Redo tracking using dual-stack memory implementation.
 - Initialized Ruby on Rails 8 application with PostgreSQL.
-- Configured Tailwind CSS for frontend styling.
-- Created placeholder `README.md`, `ARCHITECTURE.md`, and `CHANGELOG.md`.

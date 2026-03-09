@@ -13,7 +13,8 @@ export default class extends Controller {
   static values = {
     method: { type: String, default: 'auto' },
     initialColors: { type: Array, default: [] },
-    logoUrl: { type: String, default: '' }
+    logoUrl: { type: String, default: '' },
+    savedPatterns: { type: Array, default: [] }
   }
 
   connect() {
@@ -29,6 +30,7 @@ export default class extends Controller {
     } else {
       this.generate()
     }
+    this.updateSaveButtonState()
   }
 
   loadInitialColors() {
@@ -169,6 +171,7 @@ export default class extends Controller {
     })
 
     this.saveSnapshot(paletteCols)
+    this.updateSaveButtonState()
   }
 
   saveCurrentStateToSnapshot() {
@@ -180,6 +183,7 @@ export default class extends Controller {
       }
     })
     this.saveSnapshot(paletteCols)
+    this.updateSaveButtonState()
   }
 
   saveSnapshot(paletteCols) {
@@ -235,6 +239,7 @@ export default class extends Controller {
           locked.classList.toggle('hidden', !colState.locked)
         }
       })
+      this.updateSaveButtonState()
     }, 0)
   }
 
@@ -335,22 +340,22 @@ export default class extends Controller {
     })
       .then(response => {
         if (response.ok) {
-          if (span) span.innerText = "Saved!"
-          if (svg) svg.classList.replace('text-red-100', 'text-red-500')
-          if (svg && svg.classList.contains('text-white')) svg.classList.replace('text-white', 'text-red-500')
-          if (svg && svg.classList.contains('text-neutral-300')) svg.classList.replace('text-neutral-300', 'text-red-500')
-
-          setTimeout(() => {
-            if (span && originalText) span.innerText = originalText
-            if (svg) svg.classList.replace('text-red-500', 'text-red-100')
-            if (svg) svg.classList.replace('text-red-500', 'text-white')
-            if (svg) svg.classList.replace('text-red-500', 'text-neutral-300')
-          }, 2000)
+          const currentPattern = hexCodes.map(h => h.replace('#', '').toUpperCase()).join('-')
+          const patterns = this.savedPatternsValue
+          if (!patterns.includes(currentPattern)) {
+            this.savedPatternsValue = [...patterns, currentPattern]
+          }
+          this.updateSaveButtonState()
 
           const toast = document.createElement('div')
           toast.className = 'fixed top-0 left-0 right-0 z-[100] bg-black text-white px-4 py-3 text-center text-sm font-medium transition-transform duration-300 -translate-y-full'
           toast.innerText = 'Your palette is now saved in your dashboard'
           document.body.appendChild(toast)
+
+          // Clear any existing reset timeout since it was manually changed
+          if (this.resetSaveButtonTimeout) {
+            clearTimeout(this.resetSaveButtonTimeout)
+          }
 
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
@@ -374,6 +379,35 @@ export default class extends Controller {
         console.error("Error saving palette", err)
         alert("Network error: Failed to save palette.")
       })
+  }
+
+  updateSaveButtonState() {
+    const currentPattern = this.columnTargets.map(col => this.getHexFromColumn(col).replace('#', '').toUpperCase()).join('-')
+    const isSaved = this.savedPatternsValue.includes(currentPattern)
+
+    const saveBtns = document.querySelectorAll('[data-action="click->palette#save"]')
+    saveBtns.forEach(btn => {
+      const span = btn.querySelector('span')
+      const svg = btn.querySelector('svg')
+
+      if (isSaved) {
+        if (span) span.innerText = "Saved!"
+        if (svg) {
+          svg.classList.replace('text-neutral-300', 'text-red-500')
+          svg.classList.replace('text-white', 'text-red-500')
+        }
+      } else {
+        if (span) span.innerText = "Save"
+        if (svg && svg.classList.contains('text-red-500')) {
+          svg.classList.remove('text-red-500', 'text-red-100')
+          if (btn.classList.contains('group') && btn.innerText.includes('Save')) {
+            svg.classList.add('text-neutral-300')
+          } else {
+            svg.classList.add('text-white')
+          }
+        }
+      }
+    })
   }
 
   viewShades(event) {

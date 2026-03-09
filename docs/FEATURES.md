@@ -1,45 +1,36 @@
-# paletteWOW - Core Features Roadmap 🎨
+# paletteWOW - Current Capabilities 🎨
 
-This document serves as the high-level roadmap for all core features required to make paletteWOW a fully functional, free, and open-source alternative to Coolors.
+paletteWOW is a fully functional, free, and open-source alternative to Coolors. Below is a comprehensive list of our current capabilities, broken down by category.
 
-## Phase 1: Core Generation & Keyboard Controls
-- [X] **Spacebar Generation:** Pressing the spacebar randomly generates a new palette.
-- [X] **Lock Mechanism:** Click a padlock icon to lock a color; subsequent spacebar presses only change unlocked colors. lock icon should be locked when color is locked and unlocked when color is unlocked.
-- [X] **Undo/Redo:** Ability to step back and forth through previously generated palettes in the current session.
+## Core Logic
+- **Spacebar Generation:** Press the spacebar to instantly generate a completely new palette.
+- **Lock & Roll (Color Locking):** Click the padlock icon on any color to lock it in place. Subsequent generations will only change the unlocked columns.
+- **Drag & Drop Reordering:** Rearrange the palette by dragging color columns horizontally.
+- **Add / Remove Colors:** Hover between columns to add a new color (max 10), or delete an existing color to shrink the palette (min 2).
+- **Undo / Redo Stack:** Seamlessly step backward and forward through your previously generated palettes within the active session without refreshing the page.
 
-## Phase 2: Color Column Manipulation
-- [X] **Copy Hex:** Click to instantly copy the color's HEX code to the clipboard.
-- [X] **Drag & Drop Reordering:** Drag columns left or right to rearrange the palette.
-- [X] **Remove Color:** Delete a specific color column from the palette.
-- [X] **Add Color:** Click a `+` icon between columns (icon appears when hovering over the space between columns) to inject a new color (supporting palettes larger or smaller than the default 5)(maximum of 10 colors)(minimum of 2 colors).
-- [X] **View Shades/Tints:** Toggle a view to see lighter and darker variations of a specific color, allowing the user to select one to replace the current base color (24 shades per color, 12 lighter and 12 darker, hexcode should appear when hovering over the shade/tint). 
+## Advanced Generation (Color Theory)
+Powered by `chroma-js`, paletteWOW supports 8 advanced color theory techniques accessible via the Method Selector dropdown:
+- **Auto:** Completely random, aesthetically pleasing combinations.
+- **Monochromatic:** Variations of a single base hue.
+- **Analogous:** Colors adjacent to each other on the color wheel.
+- **Complementary:** Colors opposite each other on the color wheel.
+- **Split Complementary:** A base color combined with the two colors adjacent to its complement.
+- **Triadic:** Three colors evenly spaced around the color wheel.
+- **Tetradic:** Four colors evenly spaced around the color wheel.
+- **Square:** Four colors evenly spaced around the color wheel, specifically utilizing two sets of complementary colors.
 
-## Phase 3: Advanced Generation Methods (The "Free Pro" Features)
-- [X] **Method Selector:** A settings icon that opens a dropdown/modal to change how colors are generated based on color theory.
-- [X] **Auto (Default):** Completely random colors that look good together.
-- [X] **Monochromatic:** Variations of a single base hue.
-- [X] **Analogous:** Colors adjacent to each other on the color wheel.
-- [X] **Complementary:** Colors opposite each other on the color wheel.
-- [X] **Split Complementary:** A base color and the two colors adjacent to its complement.
-- [X] **Triadic:** Three colors evenly spaced around the color wheel.
-- [X] **Tetradic:** Four colors evenly spaced around the color wheel.
-- [X] **Square:** Four colors evenly spaced around the color wheel, with two sets of complementary colors.
+## Export Engine & Sharing
+- **1-Click Copy Hex:** Click any color's HEX code to instantly copy it to your clipboard.
+- **URL Sharing:** Palettes are encapsulated in the URL (e.g., `palettewow.xyz/1a1a1a-ffffff-ff0000`). Share the link to instantly load the exact palette.
+- **Export to Image (PNG):** Render and download a beautifully formatted PNG of the palette and hex codes entirely on the client-side.
+- **Export to PDF:** Download a structured, printable PDF document of the palette.
+- **Export to Code (CSS):** Copy a block of standard CSS variables (e.g., `--color-1: #1a1a1a;`).
+- **Export to Tailwind:** Copy a ready-to-use Tailwind config object that extends your theme colors.
+- **Export to SVG:** Download an SVG representation of the palette.
 
-## Phase 4: Exporting & Sharing
-- [X] **URL Sharing:** Generate a unique URL containing the HEX codes (e.g., `palettewow.xyz/1a1a1a-ffffff-ff0000`) that automatically loads the palette when visited.
-- [X] **Export to Image:** Download the palette as a `.png` file with the colors and hex codes displayed. ()
-- [X] **Export to PDF:** Download a structured `.pdf` document of the palette.
-- [X] **Export to Code (CSS):** Copy standard CSS variables (e.g., `--color-1: #1a1a1a;`).
-- [X] **Export to Tailwind:** Copy a Tailwind config object extending the theme colors.
-- [X] **Export to SVG:** Download an SVG representation of the palette.(should be a square with the colors in it)
-
-## Phase 5: User Accounts & Library
-- [X] **Google OAuth Login:** Quick, passwordless sign-in.
-- [X] **Save Palettes:** Logged-in users can click a "Save" icon to add the active palette to their personal library.
-- [X] **Palette Dashboard:** A dedicated view for users to see, organize, and delete their saved palettes.
-- [X] **Naming:** Ability to give custom names to saved palettes.
-
-## Phase 6: UI/UX & Polish
-- [ ] **Color Names:** Automatically map HEX codes to human-readable color names, and replace the place holder text in the color column with the color name (e.g., "Twilight Indigo", "Powder Blue").
-- [ ] **Responsive Design:** Ensure the column layout converts cleanly to horizontal rows on mobile devices. Ensure all desktop functionality is accessible and functional on mobile devices. this should be working, but want to just verify useability. 
-- [ ] **Minimalist Aesthetic:** Stick strictly to a black, white, and gray UI to ensure the generated colors are the center of attention. Select a functional google fonts font to use globally on the site, make the font a lesser known font but still simple and not overwhelming. 
+## Dashboards & Libraries
+- **Google OAuth Login:** Quick, passwordless, social-only sign-in functionality.
+- **Save Palettes:** Logged-in users can save their active color palette to their personal library.
+- **Palette Dashboard:** A dedicated, persistent view for users to view, organize, and delete their saved palettes.
+- **Custom Naming:** Assign custom names to your saved palettes for easy reference.

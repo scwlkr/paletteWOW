@@ -1,26 +1,25 @@
 # Contributing to paletteWOW
 
-First off, thank you for considering contributing to paletteWOW! It's people like you that make paletteWOW such a great tool for the community.
+We welcome contributions from the community to help make paletteWOW the best open-source palette generator available!
 
-## How to Contribute
+## Code Style & Standards
 
-1. **Fork the repository** on GitHub.
-2. **Clone the project** to your own machine.
-3. **Branch off** of `main` to create a feature branch (`git checkout -b feature/my-awesome-feature`).
-4. **Commit your changes** with a clear and concise message.
-5. **Push to your fork** and submit a Pull Request.
+- **Backend:** We adhere to standard Ruby conventions. Ensure you run standard formatters before submitting a PR.
+- **Frontend:** Always use utility-first logic via Tailwind CSS. Do not write custom CSS unless absolutely necessary (and if so, contain it in the main Tailwind input file). Keep DOM interactions confined strictly to Stimulus controllers.
+- **Minimalism:** Features should only be proposed if they strictly adhere to our core aesthetic: fast, minimal, and entirely focused on the colors.
 
-## Local Setup
+## Submitting a Pull Request (PR)
 
-Ensure you have Ruby (latest version specified in `.ruby-version`), PostgreSQL, and Node/Yarn installed.
+1. **Fork the Repository** and clone your fork locally.
+2. **Create a Feature Branch:** `git checkout -b feature/your-feature-name`
+3. **Commit your Changes:** Write clear, concise commit messages.
+4. **Push to your Fork:** `git push origin feature/your-feature-name`
+5. **Open a PR:** Go to the main repository and open a Pull Request. Describe exactly what changes you made and provide screenshots if the UI was affected.
 
-1. `bundle install`
-2. `bin/rails db:setup`
-3. `bin/dev` to run the development server with Tailwind CSS compilation.
+## Reporting Bugs
 
-## Code Style
-
-- We follow standard Ruby conventions (Rubocop configurations pending).
-- The frontend is built with purely functional Tailwind CSS and Hotwire (importmap/Stimulus). Please refrain from introducing complex JavaScript frameworks like React into the core codebase as we want to keep the application lightweight.
-
-Thank you!
+To report a bug, please create a GitHub Issue providing as much context as possible:
+- Steps to reproduce the bug.
+- Expected behavior vs. actual behavior.
+- Screenshots or screen recordings if applicable.
+- Your OS and Browser versions.
