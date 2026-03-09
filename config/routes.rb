@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get "profile", to: "profiles#show", as: :profile
   get "dashboard", to: "dashboard#index", as: :dashboard
 
-  resources :palettes, only: [ :index, :show ]
+  resources :palettes, only: [ :index, :show, :create, :update, :destroy ]
 
   # OmniAuth Google Routes
   get "auth/:provider/callback", to: "sessions#create"

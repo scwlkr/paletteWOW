@@ -314,70 +314,61 @@ export default class extends Controller {
     if (event) event.currentTarget.blur()
 
     const hexCodes = this.columnTargets.map(col => this.getHexFromColumn(col))
+    const btn = event.currentTarget
+    const originalText = btn.querySelector('span').innerText
+    const svg = btn.querySelector('svg')
 
-    // Get existing palettes or initialize empty array
-    let savedPalettes = []
-    try {
-      const stored = localStorage.getItem('saved_palettes')
-      if (stored) {
-        savedPalettes = JSON.parse(stored)
-      }
-    } catch (e) {
-      console.error("Error reading localStorage", e)
-    }
-
-    // Create new palette object
-    const newPalette = {
-      id: Date.now().toString(),
-      name: `Palette #${Math.floor(Math.random() * 9000) + 1000}`,
-      colors: hexCodes,
-      created_at: new Date().toISOString()
-    }
-
-    // Prepend to array (newest first)
-    savedPalettes.unshift(newPalette)
-
-    // Save back to localStorage
-    try {
-      localStorage.setItem('saved_palettes', JSON.stringify(savedPalettes))
-
-      // Provide visual feedback
-      const btn = event.currentTarget
-      const originalText = btn.querySelector('span').innerText
-      const svg = btn.querySelector('svg')
-
-      btn.querySelector('span').innerText = "Saved!"
-      svg.classList.replace('text-red-100', 'text-red-500')
-
-      setTimeout(() => {
-        btn.querySelector('span').innerText = originalText
-        svg.classList.replace('text-red-500', 'text-red-100')
-      }, 2000)
-
-      // Show global toast notification
-      const toast = document.createElement('div')
-      toast.className = 'fixed top-0 left-0 right-0 z-[100] bg-black text-white px-4 py-3 text-center text-sm font-medium transition-transform duration-300 -translate-y-full'
-      toast.innerText = 'Your palette is now saved in your dashboard'
-      document.body.appendChild(toast)
-
-      // Trigger slide down animation
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          toast.classList.remove('-translate-y-full')
-          toast.classList.add('translate-y-0')
-        })
+    fetch('/palettes', {
+      method: 'POST',
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        palette: {
+          name: `Palette #${Math.floor(Math.random() * 9000) + 1000}`,
+          hex_codes: hexCodes
+        }
       })
+    })
+      .then(response => {
+        if (response.ok) {
+          btn.querySelector('span').innerText = "Saved!"
+          svg.classList.replace('text-red-100', 'text-red-500')
 
-      // Slide up and remove after 3 seconds
-      setTimeout(() => {
-        toast.classList.remove('translate-y-0')
-        toast.classList.add('-translate-y-full')
-        setTimeout(() => toast.remove(), 300)
-      }, 3000)
-    } catch (e) {
-      console.error("Error saving to localStorage", e)
-      alert("Failed to save palette to local storage. Your browser may be blocking it or storage is full.")
-    }
+          setTimeout(() => {
+            btn.querySelector('span').innerText = originalText
+            svg.classList.replace('text-red-500', 'text-red-100')
+          }, 2000)
+
+          const toast = document.createElement('div')
+          toast.className = 'fixed top-0 left-0 right-0 z-[100] bg-black text-white px-4 py-3 text-center text-sm font-medium transition-transform duration-300 -translate-y-full'
+          toast.innerText = 'Your palette is now saved in your dashboard'
+          document.body.appendChild(toast)
+
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              toast.classList.remove('-translate-y-full')
+              toast.classList.add('translate-y-0')
+            })
+          })
+
+          setTimeout(() => {
+            toast.classList.remove('translate-y-0')
+            toast.classList.add('-translate-y-full')
+            setTimeout(() => toast.remove(), 300)
+          }, 3000)
+        } else if (response.status === 401) {
+          alert("Please sign in to save palettes.")
+        } else {
+          alert("Failed to save palette.")
+        }
+      })
+      .catch(err => {
+        console.error("Error saving palette", err)
+        alert("Network error: Failed to save palette.")
+      })
   }
 
   viewShades(event) {

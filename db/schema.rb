@@ -10,21 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_07_191229) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_09_001829) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
-  create_table "colors", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "hex_code"
-    t.bigint "palette_id", null: false
-    t.integer "position"
-    t.datetime "updated_at", null: false
-    t.index ["palette_id"], name: "index_colors_on_palette_id"
-  end
-
   create_table "palettes", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "hex_codes", default: [], array: true
     t.string "name"
     t.datetime "updated_at", null: false
     t.bigint "user_id"
@@ -43,6 +35,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_07_191229) do
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
   end
 
-  add_foreign_key "colors", "palettes"
   add_foreign_key "palettes", "users"
 end

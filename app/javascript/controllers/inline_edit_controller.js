@@ -27,7 +27,24 @@ export default class extends Controller {
         }
 
         this.textTarget.textContent = newName
-        this.updateLocalStorage(this.idValue, newName)
+
+        fetch(`/palettes/${this.idValue}`, {
+            method: 'PATCH',
+            headers: {
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ palette: { name: newName } })
+        }).then(response => {
+            if (!response.ok) {
+                alert("Failed to update name.")
+                this.cancel()
+            }
+        }).catch(err => {
+            console.error("Error:", err)
+            this.cancel()
+        })
 
         this.formTarget.classList.add("hidden")
         this.displayTarget.classList.remove("hidden")
@@ -37,22 +54,5 @@ export default class extends Controller {
         this.inputTarget.value = this.textTarget.textContent
         this.formTarget.classList.add("hidden")
         this.displayTarget.classList.remove("hidden")
-    }
-
-    updateLocalStorage(id, newName) {
-        try {
-            const stored = localStorage.getItem('saved_palettes')
-            if (!stored) return
-
-            const palettes = JSON.parse(stored)
-            const index = palettes.findIndex(p => p.id === id)
-
-            if (index !== -1) {
-                palettes[index].name = newName
-                localStorage.setItem('saved_palettes', JSON.stringify(palettes))
-            }
-        } catch (e) {
-            console.error("Error updating palette name in localStorage", e)
-        }
     }
 }
