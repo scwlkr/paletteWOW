@@ -36,3 +36,10 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Ignore agent skills
+.agent/
+.agents/
+contubernium_state.json
+.DS_Store
+
