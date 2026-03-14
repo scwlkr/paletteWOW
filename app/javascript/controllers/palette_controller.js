@@ -13,7 +13,6 @@ export default class extends Controller {
   static values = {
     method: { type: String, default: 'auto' },
     initialColors: { type: Array, default: [] },
-    logoUrl: { type: String, default: '' },
     savedPatterns: { type: Array, default: [] }
   }
 
@@ -554,34 +553,33 @@ export default class extends Controller {
     ctx.fillStyle = '#f5f5f5'
     ctx.fillRect(0, 94, 1200, 2)
 
-    // Draw header text
-    ctx.fillStyle = '#000000'
-    ctx.font = '900 36px sans-serif'
+    // Draw header text (Logo)
     ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
-    // 48 (padding) + 48 (logo) + 12 (gap) = 108
-    ctx.fillText('paletteWOW', 108, 48)
+    ctx.font = 'bold 36px sans-serif'
+    
+    // 1. Draw "palette" in black
+    ctx.fillStyle = '#000000'
+    ctx.fillText('palette', 48, 48)
+    
+    // 2. Measure "palette" width to position "WOW"
+    const paletteWidth = ctx.measureText('palette').width
+    
+    // 3. Draw "WOW" with gradient
+    const wowText = 'WOW'
+    const wowWidth = ctx.measureText(wowText).width
+    const gradient = ctx.createLinearGradient(48 + paletteWidth, 0, 48 + paletteWidth + wowWidth, 0)
+    gradient.addColorStop(0, '#4F46E5')
+    gradient.addColorStop(1, '#EC4899')
+    ctx.fillStyle = gradient
+    ctx.font = '900 36px sans-serif' // Make WOW extra bold
+    ctx.fillText(wowText, 48 + paletteWidth, 48)
 
+    // Draw PALETTE WOW title on the right
     ctx.fillStyle = '#a3a3a3'
     ctx.font = 'bold 20px sans-serif'
     ctx.textAlign = 'right'
     ctx.fillText('PALETTE WOW', 1152, 48)
-
-    // Load and draw logo if URL is present
-    if (this.logoUrlValue) {
-      try {
-        const img = new Image()
-        img.crossOrigin = 'Anonymous'
-        await new Promise((resolve, reject) => {
-          img.onload = resolve
-          img.onerror = reject
-          img.src = this.logoUrlValue
-        })
-        ctx.drawImage(img, 48, 24, 48, 48)
-      } catch (e) {
-        console.warn('Failed to load logo for export', e)
-      }
-    }
 
     // Draw columns
     const hexes = this.columnTargets.map(col => this.getHexFromColumn(col))

@@ -32,9 +32,10 @@
     <nav class="border-b border-neutral-200 relative z-50 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-          <div class="flex items-center space-x-2">
-            <%= image_tag "logo.png", class: "h-8 w-8 object-contain", width: 32, height: 32 %>
-            <%= link_to "paletteWOW", root_path, class: "text-2xl font-black tracking-tighter hover:text-neutral-600 transition-colors" %>
+          <div class="flex items-center">
+            <%= link_to root_path, class: "font-outfit text-2xl font-bold tracking-tight inline-block", aria: { label: "paletteWOW Home" } do %>
+              palette<span class="gradient-text font-bold">WOW</span>
+            <% end %>
           </div>
           <div class="flex items-center space-x-6">
             <% if user_signed_in? %>
