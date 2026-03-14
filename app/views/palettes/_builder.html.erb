@@ -100,9 +100,10 @@
            </div>
            
            <div class="flex flex-col justify-center h-full md:items-center text-left md:text-center mt-0 md:mt-4 pointer-events-auto shrink min-h-0">
-             <h2 class="text-base sm:text-[17px] md:text-2xl font-bold tracking-widest uppercase cursor-pointer opacity-70 hover:opacity-100 active:opacity-50 transition-opacity font-sans relative group/hex" data-palette-target="hexCode" data-action="click->palette#copyHex">
+             <h2 class="text-base sm:text-[17px] md:text-2xl font-bold tracking-widest uppercase cursor-pointer opacity-70 hover:opacity-100 active:opacity-50 transition-opacity font-sans relative group/hex" data-palette-target="hexCode" data-action="click->palette#openColorPicker">
                <span class="inline-block">FFFFFF</span>
                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded shadow opacity-0 group-[.copied]/hex:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Copied!</span>
+               <input type="color" data-action="input->palette#updateColorFromPicker change->palette#saveColorFromPicker" class="absolute w-0 h-0 opacity-0 pointer-events-none" tabindex="-1">
              </h2>
              <span class="block text-[10px] sm:text-[11px] font-medium opacity-50 capitalize tracking-wider mt-1 mix-blend-color-burn text-center" data-palette-target="colorName">Color Name</span>
            </div>
@@ -278,9 +279,10 @@
        </div>
        
        <div class="flex flex-col justify-center h-full md:items-center text-left md:text-center mt-0 md:mt-4 pointer-events-auto shrink min-h-0">
-         <h2 class="text-base sm:text-[17px] md:text-2xl font-bold tracking-widest uppercase cursor-pointer opacity-70 hover:opacity-100 active:opacity-50 transition-opacity font-sans relative group/hex" data-palette-target="hexCode" data-action="click->palette#copyHex">
+         <h2 class="text-base sm:text-[17px] md:text-2xl font-bold tracking-widest uppercase cursor-pointer opacity-70 hover:opacity-100 active:opacity-50 transition-opacity font-sans relative group/hex" data-palette-target="hexCode" data-action="click->palette#openColorPicker">
            <span class="inline-block">FFFFFF</span>
            <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded shadow opacity-0 group-[.copied]/hex:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Copied!</span>
+           <input type="color" data-action="input->palette#updateColorFromPicker change->palette#saveColorFromPicker" class="absolute w-0 h-0 opacity-0 pointer-events-none" tabindex="-1">
          </h2>
          <span class="block text-[10px] sm:text-[11px] font-medium opacity-50 capitalize tracking-wider mt-1 mix-blend-color-burn text-center" data-palette-target="colorName">Color Name</span>
        </div>

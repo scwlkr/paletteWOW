@@ -281,6 +281,32 @@ export default class extends Controller {
     setTimeout(() => this.saveCurrentStateToSnapshot(), 10)
   }
 
+  openColorPicker(event) {
+    const column = event.currentTarget.closest('[data-palette-target="column"]')
+    if (!column) return
+
+    const colorInput = column.querySelector('input[type="color"]')
+    if (colorInput) {
+      colorInput.click()
+    }
+  }
+
+  updateColorFromPicker(event) {
+    const input = event.target
+    const hex = input.value.toUpperCase()
+    const column = input.closest('[data-palette-target="column"]')
+    const isLight = this.isLightColor(hex)
+
+    column.style.backgroundColor = hex
+    column.style.color = isLight ? '#000000' : '#FFFFFF'
+    this.setHexInColumn(column, hex)
+    this.setColorNameInColumn(column, hex)
+  }
+
+  saveColorFromPicker(event) {
+    this.saveCurrentStateToSnapshot()
+  }
+
   toggleLock(event) {
     event.currentTarget.blur()
     const column = event.currentTarget.closest('[data-palette-target="column"]')
@@ -749,6 +775,16 @@ export default class extends Controller {
     } else {
       const hexNode = column.querySelector('[data-palette-target="hexCode"]')
       if (hexNode) hexNode.textContent = hex
+    }
+    const colorInput = column.querySelector('input[type="color"]')
+    if (colorInput) {
+      // Input type="color" requires exactly 7 chars: #RRGGBB
+      let formattedHex = hex
+      if (!formattedHex.startsWith('#')) formattedHex = '#' + formattedHex
+      if (formattedHex.length === 4) {
+        formattedHex = '#' + formattedHex[1] + formattedHex[1] + formattedHex[2] + formattedHex[2] + formattedHex[3] + formattedHex[3]
+      }
+      colorInput.value = formattedHex
     }
   }
 
