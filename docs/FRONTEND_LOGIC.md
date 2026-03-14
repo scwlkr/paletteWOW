@@ -1,33 +1,41 @@
-# Frontend Logic & Color Theory
+# Explanation: Frontend Mechanics & Color Theory
 
-paletteWOW's UI behaves almost entirely as a Single Page Application (SPA), heavily driven by client-side Javascript via Stimulus (`palette_controller.js`). 
+This document explains the algorithms powering paletteWOW's instant color generation, client-side exports, and dual-stack memory implementation using `chroma-js`.
 
-## Color Theory Generation Engine (`chroma-js`)
+## 1. Color Theory Algorithms
 
-To calculate beautiful palettes dynamically, we leverage the `chroma-js` library. The logic applies distinct degree offsets to a randomly generated base color located on the HSL color wheel.
+The application generates complementary, analogous, monochromatic, and more complex palettes by applying geometric degree shifts across a generated base hue `HSL` value via `chroma.js`.
 
-Here is how the 8 methods are calculated:
-1. **Auto:** No strict rules; randomly pairs aesthetically pleasing colors using isolated HSL generation constraints.
-2. **Monochromatic:** Adjusts the Lightness (`L` in HSL) of the base hue in increments without shifting the color angle.
-3. **Analogous:** Steps the Hue by **+30 degrees** sequentially across the wheel.
-4. **Complementary:** Offsets the base Hue by exactly **180 degrees**. It uses light/dark variations of these two opposites to fill a 5-color palette.
-5. **Split Complementary:** Offsets the Hue by **150 degrees** and **210 degrees** from the base color.
-6. **Triadic:** Selects three colors spaced evenly at **120 degrees** apart.
-7. **Tetradic:** Selects four colors shaped as a rectangle on the wheel (e.g., base, **+60 degrees**, **+180 degrees**, **+240 degrees**).
-8. **Square:** Selects four colors spaced evenly at **90 degrees** apart.
+The `palette_controller.js` file houses the core logic for the method engine selector:
+- **Auto:** Randomizes five distinct RGB hashes and displays them natively.
+- **Monochromatic:** Secures an identical `H` (Hue) value across all 5 colors, parsing variations exclusively using `L` (Lightness) increments.
+- **Analogous:** Computes and shifts the primary Hue angle precisely **+30 degrees** for every sequential index in the array.
+- **Complementary:** Implements a strict **180 degree** diametric angle from the core color on the wheel. It blends this singular inverse with light and shadow manipulations to output 5 valid hex codes.
+- **Split Complementary:** Leverages **A** (Base Node) and generates exactly **150 degrees** and **210 degrees** on either side of its absolute complement.
+- **Triadic:** Determines extreme color separation by charting three absolute values positioned at specific **120 degree** points across the radial gradient.
+- **Tetradic:** Executes a "rectangular" selection scheme generating values located at **0, +60, +180, and +240 degrees** from the master node.
+- **Square:** Defines a perfect quadrangular rotation around the color circle, marking absolute hex coordinates every **90 degrees**.
 
-## Client-Side Branded PNG Generation
+## 2. Client-Side PNG Export Utility
 
-When a user clicks "Export to Image", paletteWOW generates a fully branded PNG graphic entirely in the user's browser, preventing the need for backend image-processing server loads.
-1. The Javascript utilizes the DOM rendering engine to map the active colors and their hex codes to a hidden HTML canvas template.
-2. It paints the paletteWOW logo, applies the exact colors using `fillRect`, and overlays the hex codes using canvas font context.
-3. The resulting canvas element is converted to a base64 Data URI (`toDataURL("image/png")`) and fed directly to `<a download>` triggering the native browser download prompt.
+When users click the `Export to Image` dropdown option, paletteWOW bypasses all server latency by computing the PNG graphics purely on the user's browser runtime.
 
-## Undo/Redo Stack State Management
+We employ `html2canvas` architecture layered on top of the browser's DOM object model. 
 
-paletteWOW features lightning-fast Undo/Redo buttons capable of reversing spacebar generations. This is completely localized and *never* hits the database.
+1. A hidden DOM snippet `<canvas>` encapsulates the application's logo.
+2. The JS paints the five respective active columns dynamically mapping to 5 `fillRect` commands across the layout bounds.
+3. The context maps the exact text of the hex code into a Canvas Text block in true White/Black contrast syntax.
+4. The JS merges the composite template `canvas.toDataURL("image/png")` outputting a base64 Data URI injected directly to a temporary DOM anchored `<a>` tag string explicitly loaded to fire an auto-download event mimicking traditional browser attachments.
 
-- **Dual-Stack Memory:** The `palette_controller.js` memory maintains two arrays (`undoStack` and `redoStack`).
-- **Pushing State:** Every time the user generates a new palette, the active hex codes are joined into a string (e.g., `#FFFFFF,...`) and pushed onto the `undoStack`, while clearing the `redoStack`.
-- **Reverting:** Clicking "Undo" pops the latest state off the `undoStack`, applies it to the DOM, and pushes the reverted state to the `redoStack`. 
-- **Efficiency:** This ensures infinite backtracking within a session perfectly seamlessly with zero network overhead.
+## 3. The Dual-Stack UI Engine (Undo/Redo Tracking)
+
+Because generation relies heavily on the `Spacebar` rapid-press mechanism, mapping active `Undo` capabilities using Active Record to PostgreSQL instances is functionally impossible without significant latency.
+
+Our `palette_controller.js` isolates a pure internal session history, manipulating a dual-stack algorithm built natively inside the Javascript memory buffer.
+
+When a fresh instance computes:
+- The previous exact 5-string hex block is pushed instantly to the internal `undoStack`.
+- The corresponding `redoStack` clears automatically.
+- Reverting forces the code block index to pop backward from `undoStack`, render onto the dynamic Stimulus DOM variables mapped to each visual column, and dump that prior block code into the empty `redoStack`.
+
+This structure yields flawless `<` (undo) and `>` (redo) tracking identical to software applications locally installed on disk.

@@ -1,53 +1,81 @@
 # paletteWOW
 
-![paletteWOW banner](assets/brand/banner-square.png)
+> A lightning-fast, sleek, and minimalist open-source Ruby on Rails color palette generator inspired by Coolors.
 
-A lightning-fast, sleek, and minimalist open-source Ruby on Rails color palette generator inspired by Coolors. 
+[![Ruby on Rails: 8.x](https://img.shields.io/badge/Ruby_on_Rails-8.x-CC0000.svg)](https://rubyonrails.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**[🌐 Try it live at palettewow.xyz](https://palettewow.xyz)**
+## Why This Exists
 
-## Project Summary
-paletteWOW is a fully functional, open-source color palette generator designed for speed and aesthetic simplicity. It provides an intuitive interface for generating, fine-tuning, and exporting beautiful 5-color palettes. Built with a focus on performance and minimalist design, paletteWOW leverages an optimized database architecture and client-side processing to deliver a seamless user experience.
-
-## Tech Stack
-- **Backend:** Ruby on Rails 8, PostgreSQL, OmniAuth (Google OAuth)
-- **Frontend:** Hotwire (Turbo & Stimulus), Tailwind CSS, chroma-js
-- **Deployment:** Kamal, Docker, DigitalOcean Droplet
-- **Icons:** Heroicons (SVG)
+Color palettes are essential for design, but many tools are bloated with ads, slow to load, or require paid subscriptions. paletteWOW provides a free, open-source, lightning-fast alternative that focuses purely on the colors, generating beautiful palettes instantly without server roundtrips.
 
 ## Quick Start
-Get paletteWOW running locally in just a few steps:
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/scwlkr/paletteWOW.git
-   cd paletteWOW
-   ```
-2. **Install dependencies:**
-   ```bash
-   bundle install
-   yarn install
-   ```
-3. **Setup the database:**
-   ```bash
-   bin/rails db:prepare
-   ```
-4. **Start the development server:**
-   ```bash
-   bin/dev
-   ```
-5. Open `http://localhost:3000` in your browser.
+```bash
+git clone https://github.com/scwlkr/paletteWOW.git
+cd paletteWOW
+bundle install
+yarn install
+bin/rails db:prepare
+bin/dev
+```
 
-For a full step-by-step setup guide, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
+## Installation
 
-## Documentation
-Dive deeper into how paletteWOW is built:
-- [Capabilities](docs/FEATURES.md)
-- [Architecture & Database Strategy](docs/ARCHITECTURE.md)
-- [Frontend Logic & Color Theory](docs/FRONTEND_LOGIC.md)
-- [Installation Guide](docs/INSTALLATION.md)
-- [Contributing](docs/CONTRIBUTING.md)
-- [Changelog](docs/CHANGELOG.md)
+**Prerequisites**: Ruby 3.2.0+, Node.js, Yarn, PostgreSQL
+
+```bash
+git clone https://github.com/scwlkr/paletteWOW.git
+cd paletteWOW
+bundle install
+yarn install
+```
+
+Create a `.env` file at the root of the project with your Google OAuth credentials:
+```text
+GOOGLE_CLIENT_ID=your_local_client_id
+GOOGLE_CLIENT_SECRET=your_local_client_secret
+```
+
+Initialize the database and start the server:
+```bash
+bin/rails db:prepare
+bin/dev
+```
+
+Open `http://localhost:3000` in your browser.
+
+## Usage
+
+### Basic Example
+
+Open the app and press the `Spacebar` to instantly generate a completely new color palette. Click on the padlock icon to lock specific colors, keeping them in place while the rest of the palette generates.
+
+### Configuration
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `GOOGLE_CLIENT_ID` | `string` | `none` | Used for Google OAuth login |
+| `GOOGLE_CLIENT_SECRET` | `string` | `none` | Used for Google OAuth login |
+| `POSTGRES_PASSWORD` | `string` | `none` | Required for production deployment |
+
+### Advanced Usage
+
+Use the Method Selector dropdown to switch between 8 advanced color theory techniques (Auto, Monochromatic, Analogous, Complementary, Split Complementary, Triadic, Tetradic, Square). Export your completed palette to PNG, PDF, SVG, CSS, or Tailwind configuration using the export menu. 
+
+## Documentation Library
+
+paletteWOW's documentation follows the Divio system:
+
+- **Tutorials**: [Installation Guide](docs/INSTALLATION.md)
+- **How-To Guides**: [Deployment Guide](docs/DEPLOY_GUIDE.md)
+- **Reference**: [Features & Capabilities](docs/FEATURES.md)
+- **Explanation**: [Architecture & Database Strategy](docs/ARCHITECTURE.md), [Frontend Logic & Color Theory](docs/FRONTEND_LOGIC.md)
+
+## Contributing
+
+See [CONTRIBUTING.md](docs/CONTRIBUTING.md)
 
 ## License
-Licensed under the [MIT License](LICENSE.md).
+
+MIT © Shane Walker

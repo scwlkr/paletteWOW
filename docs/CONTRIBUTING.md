@@ -10,11 +10,20 @@ We welcome contributions from the community to help make paletteWOW the best ope
 
 ## Submitting a Pull Request (PR)
 
-1. **Fork the Repository** and clone your fork locally.
-2. **Create a Feature Branch:** `git checkout -b feature/your-feature-name`
-3. **Commit your Changes:** Write clear, concise commit messages.
-4. **Push to your Fork:** `git push origin feature/your-feature-name`
-5. **Open a PR:** Go to the main repository and open a Pull Request. Describe exactly what changes you made and provide screenshots if the UI was affected.
+1. **Fork the Repository** and clone your fork locally:
+   ```bash
+   git clone https://github.com/your-username/paletteWOW.git
+   ```
+2. **Create a Feature Branch:** 
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. **Commit your Changes:** Write clear, concise commit messages identifying precisely what has changed.
+4. **Push to your Fork:** 
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+5. **Open a PR:** Go to the main repository and open a Pull Request. Describe exactly what changes you made and provide screenshots if the UI was affected. Reference any associated issues.
 
 ## Reporting Bugs
 
