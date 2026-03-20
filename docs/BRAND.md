@@ -90,6 +90,12 @@
 ### Usage Guidelines
 The `paletteWOW` name must always be written in standard text as one word, with a lowercase "palette" and uppercase "WOW". Do not hyphenate ("palette-wow") or capitalize the "P" ("PaletteWOW").
 
+### Public Brand Assets
+Production-safe brand assets are published from the app's public directory so external sites can hotlink them directly.
+
+- Square logo PNG: `https://palettewow.xyz/brand/logo-square.png`
+- Banner PNG: `https://palettewow.xyz/brand/banner-square.png`
+
 ### Monitoring Plan
 Quarterly audits of GitHub repositories, design tool directories (like Product Hunt integration lists), and SEO keywords to ensure the name and brand assets are not being misappropriated by malicious clones or wrapped in paid applications.
 
