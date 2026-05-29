@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Project Truth Bootstrap.
+Maintenance Queue Triage.
 
 ## Current State
 
@@ -16,19 +16,21 @@ Project Truth Bootstrap.
 
 ## Next Phase
 
-Maintenance Queue Triage.
+Dependency PR Validation.
 
 ## Next Action
 
-After this project-truth-docs PR is reviewed, triage the open Dependabot pull requests one at a time. Start with a low-risk patch dependency, run the validation ladder, and record the result in the PR.
+Triage one low-risk Dependabot patch PR. Run the validation ladder and record pass/fail evidence in the PR before merge consideration.
 
 ## Blockers
 
-- No blocker for the docs bootstrap.
+- No blocker for Maintenance Queue Triage.
 - Authenticated dashboard behavior depends on valid Google OAuth configuration outside the repository.
 
 ## Latest Proof
 
+- Project-truth docs are present on `main` after the Vampyre docs bootstrap PR was merged.
+- Vampyre selected this status-refresh task from the runtime Project Registry as Auto-safe Work.
 - Watcher discovery on `wlkrlab` inspected `scwlkr/paletteWOW` at commit `e143b21` on `main`.
 - Discovery found missing `CONTEXT.md`, `docs/STATUS.md`, and `docs/ROADMAP.md`; those docs are now added in this branch.
 - Discovery identified the validation ladder as:
