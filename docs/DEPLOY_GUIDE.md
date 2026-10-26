@@ -45,7 +45,7 @@ docker compose --env-file "$OPERATOR_ENV" -p palettewow -f deploy/octal8/compose
 
 Provision the dedicated forwarding user and authorized public key on the VPS. Install `deploy/ovh/sshd.conf` as a drop-in, run `sshd -t`, and reload SSH while retaining the current administration session. Restrict the authorized key with `restrict,port-forwarding,permitlisten="127.0.0.1:18081"`. Never replace existing administration keys.
 
-Stage `deploy/ovh/compose.yml` and `Caddyfile` in a dedicated edge directory. Validate the interpolated Compose and Caddy configuration, then start only `palettewow-edge`. Persist certificate/configuration state outside the release directory.
+Stage `deploy/ovh/compose.yml` and `Caddyfile` in a dedicated edge directory. Before starting Caddy, run `sudo sh deploy/ovh/prepare-state.sh "$PALETTEWOW_EDGE_STATE"` to initialize certificate/configuration directories for the pinned image's UID/GID 0. The dropped capabilities mean container root cannot bypass incorrect bind-mount ownership. Validate the interpolated Compose and Caddy configuration, then start only `palettewow-edge`. Persist certificate/configuration state outside the release directory.
 
 Verify root, health, and a shared palette from the VPS through the loopback forward before DNS cutover. Change the domain A record to the verified VPS address, then verify a trusted public certificate, HTTP-to-HTTPS redirect, assets, and generator/export interactions. Do not accept a certificate warning as a successful deployment.
 
