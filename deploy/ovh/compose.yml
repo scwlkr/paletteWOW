@@ -1,0 +1,18 @@
+services:
+  caddy:
+    image: caddy:2.11.4-alpine
+    restart: unless-stopped
+    # The SSH reverse-forward listens only on the VPS loopback interface.
+    network_mode: host
+    environment:
+      PALETTEWOW_DOMAIN: ${PALETTEWOW_DOMAIN:?Set the approved public hostname}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${PALETTEWOW_EDGE_STATE:?Set the persistent edge directory}/data:/data
+      - ${PALETTEWOW_EDGE_STATE}/config:/config
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 256m
+    cpus: 1
+    pids_limit: 128

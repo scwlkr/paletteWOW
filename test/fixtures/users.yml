@@ -1,0 +1,7 @@
+owner:
+  email: owner@example.test
+  full_name: Palette Owner
+
+other:
+  email: other@example.test
+  full_name: Other User

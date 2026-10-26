@@ -1,43 +1,37 @@
-# paletteWOW Status
+# paletteWOW status
 
-## Current Phase
+Updated 26 October 2026.
 
-Maintenance Queue Triage.
+## Current phase
 
-## Current State
+Account-free generator running on Octal8 through the OVHcloud VPS. Public DNS/TLS cutover is pending Hostinger access.
 
-- paletteWOW is a Rails 8 color palette generator focused on fast generation, minimal UI, sharing, exporting, and optional saved palettes.
-- The public README is present and describes the project purpose, setup, usage, configuration, documentation library, contribution path, and MIT license.
-- Existing documentation lives under `docs/` and covers installation, deployment, features, architecture, frontend logic, brand, contributing, changelog, and license.
-- The app uses PostgreSQL, Google OAuth, Tailwind CSS, Hotwire, Stimulus, and import maps.
-- Primary routes include the generator root, saved palette resources, dashboard/profile/privacy pages, OAuth callbacks, health check, and shared palette URLs.
-- The inferred validation ladder is `bundle exec rails test`, `bundle exec rails zeitwerk:check`, and `bundle exec rails assets:precompile`.
-- GitHub currently has a Vampyre review issue and multiple open Dependabot pull requests that should be triaged one at a time.
+## Completed
 
-## Next Phase
+- Closed all 12 inherited dependency pull requests without merging them; history remains available.
+- Paused routine Dependabot version PRs for the fresh baseline.
+- Updated to Ruby 3.4.12 and Rails 8.1.4, with compatible dependency updates.
+- Removed Google OAuth middleware, callbacks, gems, sign-in/save controls, and the development auto-login bypass.
+- Disabled dashboard, profile, account-session, and saved-library API routes. Existing library source/model remains available for a future authentication integration.
+- Added isolated Octal8 application/PostgreSQL/SSH-client deployment and an OVHcloud Caddy edge with persistent certificate storage.
+- Restricted SSH forwarding to one VPS loopback port and pinned host keys. Application and database ports remain unpublished on Octal8.
+- Retired the DigitalOcean/Kamal deployment path and updated installation, feature, privacy, deployment, and planning docs.
 
-Dependency PR Validation.
+WorkOS AuthKit is a possible future direction, not an implemented integration.
 
-## Next Action
+## Verification
 
-Triage one low-risk Dependabot patch PR. Run the validation ladder and record pass/fail evidence in the PR before merge consideration.
+- New public-release tests: **7 tests, 42 assertions, zero failures/errors**, using the Ruby 3.4.12 validation image and a separate test database.
+- Autoloading and production asset compilation passed.
+- Ruby lint passed locally; Brakeman reported zero warnings; gem and import-map audits reported no vulnerable packages.
+- Application and database health checks pass. The VPS can fetch the generator and shared palettes through the encrypted forward with HTTP 200. Retired Google callbacks return 404.
+- The OVHcloud edge returns an HTTP-to-HTTPS redirect for the public hostname. This alone is not trusted public TLS proof.
+- Logical dumps exist for all four Rails databases, plus storage and checksums. The primary dump was restored to an isolated database and its fresh-state counts were verified: zero users and zero saved palettes.
+- A persistent daily user backup timer runs before the existing shared-host backup. The shared backup service remains in place.
 
-## Blockers
+## Remaining work and limits
 
-- No blocker for Maintenance Queue Triage.
-- Authenticated dashboard behavior depends on valid Google OAuth configuration outside the repository.
-
-## Latest Proof
-
-- Project-truth docs are present on `main` after the Vampyre docs bootstrap PR was merged.
-- Vampyre selected this status-refresh task from the runtime Project Registry as Auto-safe Work.
-- Watcher discovery on `wlkrlab` inspected `scwlkr/paletteWOW` at commit `e143b21` on `main`.
-- Discovery found missing `CONTEXT.md`, `docs/STATUS.md`, and `docs/ROADMAP.md`; those docs are now added in this branch.
-- Discovery identified the validation ladder as:
-  - `bundle exec rails test`
-  - `bundle exec rails zeitwerk:check`
-  - `bundle exec rails assets:precompile`
-- Baseline validation on `wlkrlab` passed before this docs change:
-  - `bundle exec rails test` completed with 0 runs, 0 assertions, 0 failures, and 0 errors.
-  - `bundle exec rails zeitwerk:check` reported `All is good!`.
-  - `bundle exec rails assets:precompile` completed successfully.
+- Complete Hostinger DNS cutover to the verified OVHcloud VPS, then verify a trusted certificate and the public generator/export flows.
+- No historical user/palette migration was performed; the Octal8 deployment uses a fresh database.
+- Full-host reboot recovery and independent public browser/export checks are not yet verified.
+- Exact image identities, account/host/storage details, PR closure receipts, and operational logs are kept in private deployment evidence outside Git.

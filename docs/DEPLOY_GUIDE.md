@@ -1,71 +1,66 @@
-# How-To: Deploy paletteWOW to DigitalOcean with Kamal 2
+# Deploying paletteWOW on Octal8 through OVHcloud
 
-This guide walks you through the exact steps required to push a production build of paletteWOW to a DigitalOcean Droplet using Kamal 2, Docker, and Bitwarden Secret Manager.
+## Layout
 
-## Step 1: Provision Your DigitalOcean Infrastructure
+- Octal8 runs the Rails image, PostgreSQL 16, and an SSH forwarding client in the dedicated `palettewow` Compose project.
+- The app and database publish no host ports. The database is on an internal Docker network. The forwarding client shares only the app network.
+- The OVHcloud VPS runs the dedicated `palettewow-edge` Caddy project. It terminates HTTPS and proxies to a loopback-only SSH forward.
+- The dedicated VPS SSH user can create only the assigned remote loopback listener. It cannot open a shell, use a TTY, forward an agent, or create local forwards. The client pins the VPS host keys.
+- Existing Octal8 services and the original prepared VPS projects have separate lifecycles.
 
-Before deploying, ensure you have a clean slate on a single DigitalOcean Droplet.
+Rails is retained for compatibility with the existing application, Stimulus frontend, and PostgreSQL data model. This migration does not introduce a separate backend service.
 
-1. **Create the Droplet**: Select **Ubuntu 24.04 LTS (x64)**.
-2. **Assign Resource Volume**: Ensure the Droplet has at least 1GB of RAM and 1 CPU.
-3. **Connect SSH**: Embed your SSH key on creation so Kamal can SSH entirely password-less.
-4. **Point your DNS**: Add an A Record pointing `palettewow.xyz` to your new Droplet IP address. Let's Encrypt will fail to issue the automatic SSL certificate if this step is not completed.
+## Private operator configuration
 
-## Step 2: Establish the Secrets Vault
+Keep host addresses, deployment accounts, assigned storage paths, and secrets outside Git. Use mode 700 for operator directories and 600 for credentials.
 
-Kamal parses bash commands inside `.kamal/secrets` at deploy-time using `bws` to fetch secrets. Ensure you have the Bitwarden ID values for three critical secrets:
-- DockerHub Read/Write Token
-- Rails Master Key
-- PostgreSQL Password
+The Octal8 operator environment supplies:
 
-Modify your `.kamal/secrets` file:
-
-```bash
-KAMAL_REGISTRY_PASSWORD=$(bws secret get <DOCKER_HUB_TOKEN_UUID> | jq -r '.value')
-RAILS_MASTER_KEY=$(bws secret get <RAILS_MASTER_KEY_UUID> | jq -r '.value')
-POSTGRES_PASSWORD=$(bws secret get <POSTGRES_PASSWORD_UUID> | jq -r '.value')
-PALETTE_WOW_DATABASE_PASSWORD=$POSTGRES_PASSWORD
+```text
+PALETTEWOW_DOMAIN=
+PALETTEWOW_IMAGE=
+PALETTEWOW_TUNNEL_IMAGE=
+PALETTEWOW_OPERATOR_DIR=
+PALETTEWOW_STATE_DIR=
+PALETTEWOW_BACKUP_DIR=
+PALETTEWOW_COMPOSE=
 ```
 
-## Step 3: Configure Kamal (`deploy.yml`)
+`app.env` contains `SECRET_KEY_BASE`, `RAILS_MASTER_KEY`, and `PALETTE_WOW_DATABASE_PASSWORD`. `postgres.env` contains `POSTGRES_USER=palette_wow`, `POSTGRES_DB=palette_wow_production`, and the matching `POSTGRES_PASSWORD`. `tunnel.env` supplies `PALETTEWOW_VPS_HOST`. Store the dedicated SSH key and pinned known-hosts file in the operator `ssh/` directory.
 
-The `config/deploy.yml` dictates how Kamal mounts your Rails image, enables Let's Encrypt SSL, and spins up a PostgreSQL companion accessory.
+Google OAuth is removed. No Google credentials are needed. Account and saved-library routes are disabled; WorkOS AuthKit has not been implemented.
 
-You must manually update the `<DROPLET_IP_ADDRESS>` inside `config/deploy.yml` in two specific spots: `servers: web:` block and the `accessories: db: host:` block.
+The VPS edge environment supplies `PALETTEWOW_DOMAIN` and `PALETTEWOW_EDGE_STATE`.
 
-Example configuration snippet:
-```yaml
-# config/deploy.yml
-servers:
-  web:
-    - 192.168.1.1 # REPLACE WITH DROPLET IP
+## Build and activate
 
-accessories:
-  db:
-    image: postgres:16
-    host: 192.168.1.1 # REPLACE WITH DROPLET IP
-    port: 5432
+Build both images on Octal8 from the exact reviewed source revision:
+
+```sh
+docker build --pull -t "$PALETTEWOW_IMAGE" .
+docker build -f deploy/octal8/tunnel.Dockerfile -t "$PALETTEWOW_TUNNEL_IMAGE" .
+docker compose --env-file "$OPERATOR_ENV" -p palettewow -f deploy/octal8/compose.yml config --quiet
+docker compose --env-file "$OPERATOR_ENV" -p palettewow -f deploy/octal8/compose.yml up -d --wait
 ```
 
-## Step 4: Execute the Initial Setup
+Provision the dedicated forwarding user and authorized public key on the VPS. Install `deploy/ovh/sshd.conf` as a drop-in, run `sshd -t`, and reload SSH while retaining the current administration session. Restrict the authorized key with `restrict,port-forwarding,permitlisten="127.0.0.1:18081"`. Never replace existing administration keys.
 
-Kamal will handle everything: SSH connection, Docker installation, environment variable population, image compiling (forcing amd64 since you build locally on arm64), and launching Puma.
+Stage `deploy/ovh/compose.yml` and `Caddyfile` in a dedicated edge directory. Validate the interpolated Compose and Caddy configuration, then start only `palettewow-edge`. Persist certificate/configuration state outside the release directory.
 
-Run this command inside the project root on your local machine:
+Verify root, health, and a shared palette from the VPS through the loopback forward before DNS cutover. Change the domain A record to the verified VPS address, then verify a trusted public certificate, HTTP-to-HTTPS redirect, assets, and generator/export interactions. Do not accept a certificate warning as a successful deployment.
 
-```bash
-kamal setup
-```
+The previous DigitalOcean/Kamal deployment is retired. Its configuration remains in Git history for reference; do not deploy to that host or replace changed SSH host keys without independent verification.
 
-The process will take several minutes to build the image blocks and push to DockerHub.
+## Validation
 
-> **Tip:** Ensure your local bash terminal has exported `BWS_ACCESS_TOKEN` so Kamal can decrypt the `.kamal/secrets` file silently during this initial setup.
+Build the `validation` Docker target and run the Rails tests against a separate validation database. This target uses the same Ruby runtime/source as production and adds the test/development gems excluded from the shipped image. Check autoloading, asset compilation, Ruby lint, Brakeman, gem advisories, and import-map advisories. Confirm that retired Google callbacks, dashboard/profile pages, and saved-library mutation routes return 404.
 
-## Step 5: Execute Routine Deployments
+Verify that application/database ports remain unpublished and that the VPS forwarding listener is bound to loopback. Restart the app and forwarding client separately and confirm recovery. A full shared-host reboot is a separate operational check.
 
-Once `setup` succeeds, you'll never need to run it again unless you rebuild the Droplet.
-To push future updates to your codebase to DigitalOcean, strictly use:
+## Backup and recovery
 
-```bash
-kamal deploy
-```
+`deploy/octal8/backup.sh` makes PostgreSQL custom-format dumps for the primary, cache, queue, and cable databases, a storage archive, and a checksum manifest. Run it with the private operator environment. Its lock prevents overlapping backups. Retain the existing shared-host backup services and include these logical dumps in the backed-up data drive.
+
+For a restore check, create a new, clearly named temporary database and restore the primary dump there. Verify the schema and expected user/palette counts, then remove only that temporary database. Do not restore over production as a test.
+
+For an application rollback, select the previous recorded image and release Compose path in private operator configuration, then recreate only the web/forwarding services. Keep the database and storage directories. Review migration compatibility before rolling back across a schema change. Keep image IDs, source revision, validation results, DNS state, and backup paths in the private deployment receipt.

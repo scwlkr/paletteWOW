@@ -1,3 +1,5 @@
+> Current release: Google sign-in is removed and accounts/saved-library routes are disabled. Generation, editing, sharing, and exports remain available without an account.
+
 # Explanation: Frontend Mechanics & Color Theory
 
 This document explains the algorithms powering paletteWOW's instant color generation, client-side exports, and dual-stack memory implementation using `chroma-js`.

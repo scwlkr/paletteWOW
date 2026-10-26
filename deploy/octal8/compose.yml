@@ -1,0 +1,68 @@
+services:
+  web:
+    image: ${PALETTEWOW_IMAGE:?Set the verified application image}
+    restart: unless-stopped
+    env_file:
+      - ${PALETTEWOW_OPERATOR_DIR:?Set the private operator directory}/app.env
+    environment:
+      RAILS_ENV: production
+      APP_HOST: ${PALETTEWOW_DOMAIN:?Set the public hostname}
+      DB_HOST: db
+    volumes:
+      - ${PALETTEWOW_STATE_DIR:?Set the persistent state directory}/storage:/rails/storage
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, curl, --fail, --silent, http://localhost/up]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 90s
+    networks: [app, database]
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 1g
+    cpus: 2
+    pids_limit: 256
+
+  db:
+    image: postgres:16-bookworm
+    restart: unless-stopped
+    env_file:
+      - ${PALETTEWOW_OPERATOR_DIR}/postgres.env
+    volumes:
+      - ${PALETTEWOW_STATE_DIR}/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [database]
+    mem_limit: 1g
+    cpus: 1
+    pids_limit: 256
+
+  tunnel:
+    image: ${PALETTEWOW_TUNNEL_IMAGE:?Set the SSH tunnel image}
+    restart: unless-stopped
+    env_file:
+      - ${PALETTEWOW_OPERATOR_DIR}/tunnel.env
+    volumes:
+      - ${PALETTEWOW_OPERATOR_DIR}/ssh:/run/ssh:ro
+    depends_on:
+      web:
+        condition: service_healthy
+    networks: [app]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 64m
+    cpus: 0.25
+    pids_limit: 32
+
+networks:
+  app: {}
+  database:
+    internal: true

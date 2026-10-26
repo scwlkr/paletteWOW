@@ -10,15 +10,9 @@ class ApplicationController < ActionController::Base
   private
 
   def current_user
-    if session[:user_id]
-      @current_user ||= User.find_by(id: session[:user_id])
-    elsif Rails.env.development?
-      @current_user ||= User.find_or_create_by(email: "dev@palettewow.local") do |u|
-        u.full_name = "Local Developer"
-        u.provider = "developer"
-        u.uid = "12345"
-      end
-    end
+    # Authentication is disabled for this release, including old sessions.
+    # A future AuthKit integration can supply the authenticated user here.
+    nil
   end
 
   def user_signed_in?

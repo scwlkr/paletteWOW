@@ -1,67 +1,27 @@
-# paletteWOW Context
+# paletteWOW context
 
-paletteWOW is a fast, minimalist, open-source Ruby on Rails color palette generator inspired by Coolors. The product centers on instant palette generation, direct manipulation of colors, sharing/export workflows, and optional saved palettes for authenticated users.
+paletteWOW is a minimal open-source Rails color palette generator. Its primary workflows are instant generation, locking/reordering/editing colors, undo/redo, shared hex-code URLs, and browser-side exports.
 
-## Product Language
+## Current product
 
-**paletteWOW**:
-The application and project. Use this name when referring to the color palette generator.
+The public app has no sign-in. Google OAuth was removed at the owner's request on 26 October 2026. Accounts and the saved library are disabled; their source and data model are preserved. WorkOS AuthKit is only a possible future provider.
 
-**Palette**:
-A user-facing set of colors represented as hex codes. Palettes may be generated in the browser, shared through the URL, exported, or saved by signed-in users.
+The stack is Ruby 3.4.12, Rails 8.1, PostgreSQL, Hotwire, Stimulus, import maps, and Tailwind CSS. Preserve the minimal color-first interface.
 
-**Generator**:
-The primary fullscreen interface at the root route. It supports spacebar generation, locking colors, reordering colors, adding or removing color segments, copying hex values, and choosing a color-theory method.
+## Hosting
 
-**Color Method**:
-One of the generation strategies exposed in the UI, including Auto, Monochromatic, Analogous, Complementary, Split Complementary, Triadic, Tetradic, and Square.
+The Rails app, database, and restricted SSH client run as a dedicated Docker Compose project on Octal8. An OVHcloud VPS runs Caddy for public HTTPS and forwards through a pinned-key, loopback-only SSH connection. Keep deployment/recovery instructions in this repository and all credentials, host addresses, and assigned operator paths outside Git. Preserve unrelated services and the shared host's storage/backup architecture.
 
-**Saved Palette**:
-A persisted palette tied to an authenticated user. Saved palettes are managed through the dashboard and stored with a PostgreSQL array of color hex values.
+## Project record
 
-**Project Truth**:
-The durable project record in this repository: this file, `docs/ROADMAP.md`, `docs/STATUS.md`, and the existing docs in `docs/`.
+- `README.md`: public entry point.
+- `docs/STATUS.md`: verified state, limitations, and next action.
+- `docs/ROADMAP.md`: future direction and product boundaries.
+- `docs/DEPLOY_GUIDE.md`: deployment and recovery.
+- `docs/FEATURES.md`: current user-facing capabilities.
 
-## Current Product Shape
+## Checks
 
-- Rails 8 application with PostgreSQL.
-- Root route renders the palette generator through `PalettesController#index`.
-- Shared palette URLs are supported with slash-separated hex-code route constraints.
-- Google OAuth powers sign-in for dashboard and saved-palette workflows.
-- Stimulus controllers handle the primary browser-side interactions and export behavior.
-- Tailwind CSS provides the UI styling approach.
-- Existing documentation follows a Divio-style library: tutorials, how-to guides, reference, and explanation docs live under `docs/`.
+Run the meaningful tests in a separate database, autoload check, asset compilation, lint, Brakeman, gem audit, and import-map audit. Validate browser behavior when changing interactions. Never use a production database as a test fixture.
 
-## Source Of Truth
-
-- `README.md` is the public entry point.
-- `docs/FEATURES.md` lists current user-facing capabilities.
-- `docs/ARCHITECTURE.md` explains the Rails, Hotwire, and PostgreSQL array decisions.
-- `docs/FRONTEND_LOGIC.md` explains the color generation and client-side export mechanics.
-- `docs/STATUS.md` is the handoff document for current state, proof, blockers, and next action.
-- `docs/ROADMAP.md` records the next maintenance and product direction.
-
-## Working Rules
-
-- Preserve the product promise: fast, minimal, color-focused, and free of unnecessary UI weight.
-- Keep frontend interactivity in Stimulus controllers unless a broader architecture decision is explicitly made.
-- Prefer Tailwind utility styling and avoid new custom CSS unless the existing asset structure requires it.
-- Treat Google OAuth and saved-palette behavior as user-facing flows that need explicit validation when touched.
-- Do not store secrets or credentials in repository docs, commits, logs, or screenshots.
-- Use branches and pull requests for reviewable maintenance work.
-
-## Validation Ladder
-
-Run the applicable checks after meaningful changes:
-
-```bash
-bundle exec rails test
-bundle exec rails zeitwerk:check
-bundle exec rails assets:precompile
-```
-
-For broader quality passes, also consider the repository CI helper:
-
-```bash
-bin/ci
-```
+Existing PRs were closed for the fresh start, with history preserved. Routine Dependabot version PRs are paused.

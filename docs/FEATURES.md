@@ -25,13 +25,8 @@ This document provides an ultimate catalog of paletteWOW's primary functions, us
 | **Tailwind Export** | Code String | Builds customized theme structure ready to securely format a tailwind config. |
 | **SVG Layout** | Graphic File | Compiles mathematically flawless vector maps of the specific layout colors. |
 
-## Dashboard Integration Features
-*(Authentication requires Google credentials to be successfully authenticated.)*
+## Accounts and the saved library
 
-| Module | Purpose | Action Behavior Context |
-|--------|---------|-------------------------|
-| **OAuth Node** | Security Lock | Strictly overrides forms utilizing an external Google popup schema exclusively. |
-| **Palette Array Persistence** | Data Schema | Assigns target columns dynamically into PostgreSQL Pocket instances safely. |
-| **Naming String** | UX Schema | Attaches customized text names uniquely assigned statically beside the visual representation. |
-| **Dashboard Grid View** | Overview UX | Returns all user payload blocks structured chronologically for swift internal indexing and viewing. |
-| **Deletion Utility** | User Control | Fully removes the exact target instance from the PostgreSQL array. |
+Google sign-in has been removed. Accounts, profile/dashboard pages, and saved-library API routes are disabled for the current release. The existing library source is retained for a possible future WorkOS AuthKit integration, which has not been implemented.
+
+Generation, color manipulation, share links, and exports remain public and require no account.

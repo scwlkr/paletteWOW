@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-26 — Fresh hosting baseline
+- Added Octal8 application/database hosting with an OVHcloud HTTPS edge and restricted SSH forwarding.
+- Removed Google sign-in and disabled account/library routes and controls; preserved library source for later work.
+- Updated Ruby to 3.4.12, Rails to 8.1.4, and compatible dependencies.
+- Added public-route/data-boundary tests and CI test execution.
+- Added logical backups and recovery instructions; retired the Kamal deployment path.
+- Paused routine dependency PR generation after closing the inherited queue.
+
 ## [6.0.0] - Phase 6: UI/UX & Polish
 - Automatically map HEX codes to human-readable color names in the UI.
 - Implemented responsive design logic: column layout gracefully converts to horizontal rows on mobile.
