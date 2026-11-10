@@ -11,6 +11,49 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
     assert_select 'a[href="/dashboard"]', count: 0
   end
 
+  test "generator renders its five default color columns" do
+    get root_path
+    assert_response :success
+    assert_select '[data-palette-target="container"] > [data-palette-target="column"]', count: 5
+  end
+
+  test "generator renders its column controls" do
+    get root_path
+    assert_response :success
+    assert_select '[data-action="click->palette#toggleLock"]', minimum: 1
+    assert_select '[data-action="click->palette#copyHex"]', minimum: 1
+    assert_select '[data-action="click->palette#viewShades"]', minimum: 1
+    assert_select '[data-action="click->palette#addColumn"]', minimum: 1
+    assert_select '[data-action="click->palette#removeColumn"]', minimum: 1
+  end
+
+  test "generator renders undo and redo controls" do
+    get root_path
+    assert_response :success
+    assert_select '[data-action="click->palette#undo"]', minimum: 1
+    assert_select '[data-action="click->palette#redo"]', minimum: 1
+  end
+
+  test "generator method selector offers all eight methods" do
+    get root_path
+    assert_response :success
+    assert_select 'select[data-action="change->palette#changeMethod"]', minimum: 1
+
+    methods = css_select('select[data-action="change->palette#changeMethod"] option')
+      .map { |option| option["value"] }
+      .uniq
+    assert_equal %w[auto monochromatic analogous complementary split_complementary triadic tetradic square].sort, methods.sort
+  end
+
+  test "export modal offers PNG, PDF, SVG, CSS, Tailwind and URL options" do
+    get root_path
+    assert_response :success
+    assert_select '[data-palette-target="exportModal"]', minimum: 1
+    %w[exportImage exportPdf copySvg copyCss copyTailwind copyUrl].each do |action|
+      assert_select "[data-action='click->palette##{action}']", minimum: 1
+    end
+  end
+
   test "shared palette links preserve the requested colors" do
     get "/123456-abcdef"
     assert_response :success
@@ -18,6 +61,21 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "#abcdef"
     get "/" + Array.new(10, "123456").join("-")
     assert_response :success
+  end
+
+  test "shared palette with ten colors renders all ten columns" do
+    hex_codes = %w[000001 000002 000003 000004 000005 000006 000007 000008 000009 00000a]
+    colors = hex_codes.map { |hex| "##{hex}" }
+
+    get "/#{hex_codes.join('-')}"
+    assert_response :success
+
+    initial_colors = css_select("[data-palette-initial-colors-value]").first
+    assert initial_colors, "expected the generator to receive the shared palette"
+    assert_equal colors, JSON.parse(initial_colors["data-palette-initial-colors-value"])
+    colors.each { |hex| assert_includes response.body, hex }
+
+    assert_select 'template#column-template [data-palette-target="column"]', count: 1
   end
 
   test "invalid shared palettes are not routed" do
@@ -48,5 +106,13 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
     get privacy_path
     assert_response :success
     assert_includes response.body, "currently disabled"
+  end
+
+  test "privacy and health endpoints return 200" do
+    get privacy_path
+    assert_response :success
+
+    get rails_health_check_path
+    assert_response :success
   end
 end
