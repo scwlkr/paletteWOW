@@ -78,6 +78,17 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
     assert_equal %w[auto monochromatic analogous complementary split_complementary triadic tetradic square].sort, methods.sort
   end
 
+  test "both toolbars offer a labelled color vision selector defaulting to normal" do
+    get root_path
+    assert_response :success
+    assert_select 'select[aria-label="Color vision"][data-action="change->palette#changeVision"]', count: 2 do |selectors|
+      selectors.each do |selector|
+        assert_equal "normal", selector.css("option").first["value"]
+        assert_equal %w[normal protanopia protanomaly deuteranopia deuteranomaly tritanopia tritanomaly achromatopsia achromatomaly], selector.css("option").map { |option| option["value"] }
+      end
+    end
+  end
+
   test "export modal offers image, document, code, swatch and URL options" do
     get root_path
     assert_response :success

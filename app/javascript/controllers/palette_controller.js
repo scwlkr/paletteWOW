@@ -1,3 +1,4 @@
+import { simulate } from "lib/vision"
 import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 import chroma from "chroma-js"
@@ -15,10 +16,11 @@ export default class extends Controller {
     "exportModal", "exportBackdrop", "exportContent",
     "exportColumnsContainer", "exportTitle",
     "colorInfoDialog", "colorInfoValue", "colorInfoStatus", "colorInfoPreview",
-    "contrastDialog", "contrastTable"
+    "contrastDialog", "contrastTable", "visionSelect"
   ]
   static values = {
     method: { type: String, default: 'auto' },
+    vision: { type: String, default: 'normal' },
     initialColors: { type: Array, default: [] },
     savedPatterns: { type: Array, default: [] }
   }
@@ -56,13 +58,10 @@ export default class extends Controller {
         const column = this.columnTargets[index]
         if (!column) return
 
-        const isLight = isLightColor(hex)
-        const computedTextColor = isLight ? '#000000' : '#FFFFFF'
+        const computedTextColor = isLightColor(hex) ? '#000000' : '#FFFFFF'
 
-        column.style.backgroundColor = hex
         this.setHexInColumn(column, hex)
         this.setColorNameInColumn(column, hex)
-        column.style.color = computedTextColor
 
         paletteCols.push({
           hex: hex,
@@ -100,6 +99,8 @@ export default class extends Controller {
       this.redo()
       return
     }
+
+    if (event.target?.closest("input, select, textarea, button, [contenteditable]")) return
 
     if (event.code === "Space") {
       event.preventDefault()
@@ -162,14 +163,8 @@ export default class extends Controller {
         hex = newColors[nextColorIndex].toUpperCase()
         nextColorIndex++
 
-        const isLight = isLightColor(hex)
-
-        column.style.backgroundColor = hex
         this.setHexInColumn(column, hex)
         this.setColorNameInColumn(column, hex)
-
-        const computedTextColor = isLight ? '#000000' : '#FFFFFF'
-        column.style.color = computedTextColor
       }
 
       paletteCols.push({
@@ -234,10 +229,8 @@ export default class extends Controller {
         const column = this.columnTargets[index]
         if (!column) return
 
-        column.style.backgroundColor = colState.hex
         this.setHexInColumn(column, colState.hex)
         this.setColorNameInColumn(column, colState.hex)
-        column.style.color = colState.textColor
 
         column.dataset.locked = colState.locked
 
@@ -267,10 +260,6 @@ export default class extends Controller {
 
     const newColumn = currentColumn.nextElementSibling
     const newHex = randomHex()
-    const isLight = isLightColor(newHex)
-
-    newColumn.style.backgroundColor = newHex
-    newColumn.style.color = isLight ? '#000000' : '#FFFFFF'
     this.setHexInColumn(newColumn, newHex)
     this.setColorNameInColumn(newColumn, newHex)
 
@@ -304,10 +293,6 @@ export default class extends Controller {
     const input = event.target
     const hex = input.value.toUpperCase()
     const column = input.closest('[data-palette-target="column"]')
-    const isLight = isLightColor(hex)
-
-    column.style.backgroundColor = hex
-    column.style.color = isLight ? '#000000' : '#FFFFFF'
     this.setHexInColumn(column, hex)
     this.setColorNameInColumn(column, hex)
   }
@@ -534,10 +519,6 @@ export default class extends Controller {
     const hex = shadeBtn.dataset.hex
 
     const column = shadeBtn.closest('[data-palette-target="column"]')
-    const isLight = isLightColor(hex)
-
-    column.style.backgroundColor = hex
-    column.style.color = isLight ? '#000000' : '#FFFFFF'
     this.setHexInColumn(column, hex)
     this.setColorNameInColumn(column, hex)
 
@@ -885,7 +866,23 @@ export default class extends Controller {
     return hexNode ? hexNode.textContent.trim().split(' ')[0] : '#FFFFFF'
   }
 
+  changeVision(event) {
+    this.visionValue = event.target.value
+  }
+
+  visionValueChanged() {
+    this.visionSelectTargets.forEach(select => { select.value = this.visionValue })
+    this.columnTargets.forEach(column => this.paintColumn(column, this.getHexFromColumn(column)))
+  }
+
+  paintColumn(column, hex) {
+    const displayed = simulate(hex, this.visionValue)
+    column.style.backgroundColor = displayed
+    column.style.color = isLightColor(displayed) ? '#000000' : '#FFFFFF'
+  }
+
   setHexInColumn(column, hex) {
+    this.paintColumn(column, hex)
     const span = column.querySelector('[data-palette-target="hexCode"] span.inline-block')
     if (span) {
       span.textContent = hex
