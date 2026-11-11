@@ -378,7 +378,7 @@ export default class extends Controller {
           this.updateSaveButtonState()
 
           const toast = document.createElement('div')
-          toast.className = 'fixed top-0 left-0 right-0 z-[100] bg-black text-white px-4 py-3 text-center text-sm font-medium transition-transform duration-300 -translate-y-full'
+          toast.className = 'fixed top-0 left-0 right-0 z-[100] bg-black text-white dark:bg-white dark:text-neutral-900 px-4 py-3 text-center text-sm font-medium transition-transform duration-300 -translate-y-full'
           toast.innerText = 'Your palette is now saved in your dashboard'
           document.body.appendChild(toast)
 

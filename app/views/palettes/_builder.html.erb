@@ -178,84 +178,84 @@
 
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
         <!-- Export Actions -->
-        <button data-action="click->palette#exportImage" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+        <button data-action="click->palette#exportImage" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
           <div class="w-12 h-12 flex items-center justify-center bg-black text-white dark:bg-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform">
             <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Image (PNG)</span>
         </button>
 
-        <button data-action="click->palette#exportPdf" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+        <button data-action="click->palette#exportPdf" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
           <div class="w-12 h-12 flex items-center justify-center bg-black text-white dark:bg-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform">
             <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">PDF</span>
         </button>
 
-        <button data-action="click->palette#copyUrl" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+        <button data-action="click->palette#copyUrl" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
           <div class="w-12 h-12 flex items-center justify-center bg-black text-white dark:bg-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform">
             <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Copy URL</span>
         </button>
 
-        <button data-action="click->palette#copySvg" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+        <button data-action="click->palette#copySvg" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
           <div class="w-12 h-12 flex items-center justify-center bg-black text-white dark:bg-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             SVG
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Copy SVG</span>
         </button>
 
-        <button data-action="click->palette#copyCss" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+        <button data-action="click->palette#copyCss" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
           <div class="w-12 h-12 flex items-center justify-center bg-black text-white dark:bg-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             CSS
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Copy CSS</span>
         </button>
 
-        <button data-action="click->palette#copyTailwind" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+        <button data-action="click->palette#copyTailwind" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
           <div class="w-12 h-12 flex items-center justify-center bg-black text-white dark:bg-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs tracking-tighter">
             .TW
           </div>
           <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">Tailwind<br>Config</span>
         </button>
 
-        <button data-action="click->palette#exportAse" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+        <button data-action="click->palette#exportAse" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
           <div class="w-12 h-12 flex items-center justify-center bg-black text-white dark:bg-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             ASE
           </div>
           <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">Adobe<br>Swatch</span>
         </button>
 
-        <button data-action="click->palette#copyScss" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+        <button data-action="click->palette#copyScss" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
           <div class="w-12 h-12 flex items-center justify-center bg-black text-white dark:bg-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             SCSS
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Copy SCSS</span>
         </button>
 
-        <button data-action="click->palette#copyLess" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+        <button data-action="click->palette#copyLess" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
           <div class="w-12 h-12 flex items-center justify-center bg-black text-white dark:bg-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             LESS
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Copy LESS</span>
         </button>
 
-        <button data-action="click->palette#copyJson" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+        <button data-action="click->palette#copyJson" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
           <div class="w-12 h-12 flex items-center justify-center bg-black text-white dark:bg-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             JSON
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Copy JSON</span>
         </button>
 
-        <button data-action="click->palette#copyJsArray" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+        <button data-action="click->palette#copyJsArray" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
           <div class="w-12 h-12 flex items-center justify-center bg-black text-white dark:bg-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             JS
           </div>
           <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">JavaScript<br>Array</span>
         </button>
 
-        <button data-action="click->palette#copyEmbedHtml" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+        <button data-action="click->palette#copyEmbedHtml" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
           <div class="w-12 h-12 flex items-center justify-center bg-black text-white dark:bg-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs tracking-tighter">
             &lt;/&gt;
           </div>
