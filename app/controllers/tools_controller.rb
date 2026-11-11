@@ -1,4 +1,7 @@
 class ToolsController < ApplicationController
+  def gradient_palette
+  end
+
   def gradient
   end
 

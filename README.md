@@ -39,6 +39,8 @@ Set `SCREENSHOTS=.build-mode/screens` to save desktop and phone views.
 
 The gradient tool uses the same browser check setup (with `playwright-core`
 available): `BASE_URL=http://127.0.0.1:3000 node test/browser/gradient.cjs`.
+The gradient palette check uses the same setup:
+`BASE_URL=http://127.0.0.1:3000 node test/browser/gradient_palette.cjs`.
 
 ## Hosting
 
