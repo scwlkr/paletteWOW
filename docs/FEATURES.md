@@ -24,6 +24,13 @@ browser and never uploaded. PNG, JPEG, WebP, GIF, AVIF and BMP images up to 20 M
 are supported when the browser can decode them. Images with fewer distinct
 colors return fewer swatches; a solid image opens as two matching swatches.
 
+## Gradients
+
+At `/gradient`, build linear or radial gradients with two to ten color stops.
+Edit each color and percentage position, add or remove stops, and choose the
+linear angle. The preview updates immediately and the URL restores the complete
+gradient. Copy CSS or download a 1600 × 1000 PNG, all within the browser.
+
 ## Export Integrations
 
 | Title | Type | Component Schema Output Configuration |

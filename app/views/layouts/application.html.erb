@@ -31,13 +31,14 @@
   <body class="bg-white text-neutral-900 border-none min-h-screen flex flex-col" style="font-family: 'Outfit', sans-serif;">
     <nav class="border-b border-neutral-200 relative z-50 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex flex-wrap items-center justify-between gap-3 min-h-16 py-3">
           <div class="flex items-center">
             <%= link_to root_path, class: "font-outfit text-2xl font-bold tracking-tight inline-block", aria: { label: "paletteWOW Home" } do %>
               palette<span class="gradient-text font-bold">WOW</span>
             <% end %>
           </div>
           <div class="flex items-center space-x-6">
+            <%= link_to "Gradient", gradient_path, class: "text-sm font-medium hover:text-neutral-500 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
             <%= link_to "Image", image_path, class: "text-sm font-medium hover:text-neutral-500 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
             <%= link_to "GitHub", "https://github.com/scwlkr/paletteWOW", class: "text-sm font-medium hover:text-neutral-500 transition-colors" %>
           </div>
