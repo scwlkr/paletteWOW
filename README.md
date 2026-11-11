@@ -32,6 +32,11 @@ bin/importmap audit
 
 Tests use a separate PostgreSQL test database. Never point the test database URL at production.
 
+The image tool also has a browser check. With Playwright installed separately
+and available on `NODE_PATH`, start the test app and run
+`BASE_URL=http://127.0.0.1:3000 node test/browser/image.cjs`.
+Set `SCREENSHOTS=.build-mode/screens` to save desktop and phone views.
+
 ## Hosting
 
 Coolify runs the application and PostgreSQL on the Octal8 front door, builds on the workhorse, and serves public HTTPS directly. The database has no public port. Nightly database backups keep three copies on the other machine.
