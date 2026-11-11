@@ -1,4 +1,7 @@
 class ToolsController < ApplicationController
+  def image
+  end
+
   def contrast
     @text_color = normalize_color(params[:text], "#000000")
     @background_color = normalize_color(params[:bg], "#ffffff")

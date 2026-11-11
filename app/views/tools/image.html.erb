@@ -1,0 +1,32 @@
+<% content_for :title, "Palette from image · paletteWOW" %>
+
+<section class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8" data-controller="image" data-action="paste@window->image#paste dragover@window->image#drag drop@window->image#drop">
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+    <h1 class="text-3xl sm:text-4xl font-black tracking-tight">Palette from image</h1>
+    <%= link_to "Generator", root_path, class: "text-sm font-medium underline underline-offset-4 rounded focus-visible:outline-2 focus-visible:outline-offset-4" %>
+  </div>
+
+  <div class="border-2 border-dashed border-neutral-300 rounded-2xl p-6 sm:p-10 text-center" data-image-target="dropzone" data-action="dragleave->image#leave">
+    <label for="palette-image" class="inline-block bg-black text-white font-bold py-3 px-6 rounded-full cursor-pointer hover:bg-neutral-800 has-focus-visible:outline-2 has-focus-visible:outline-offset-4">
+      Choose image
+      <input id="palette-image" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif,image/bmp" class="sr-only" data-image-target="file" data-action="change->image#pick">
+    </label>
+    <p class="mt-4 text-sm">Drop or paste an image</p>
+    <img alt="Selected image" class="mx-auto mt-6 max-h-80 max-w-full rounded-lg object-contain" data-image-target="preview" hidden>
+  </div>
+
+  <div class="flex items-center gap-3 my-6">
+    <label for="image-count" class="text-sm font-bold">Colors</label>
+    <select id="image-count" class="rounded-lg border border-neutral-300 px-4 py-2 focus-visible:outline-2 focus-visible:outline-offset-4" data-image-target="count" data-action="change->image#update">
+      <% (2..10).each do |count| %>
+        <option value="<%= count %>" <%= "selected" if count == 5 %>><%= count %></option>
+      <% end %>
+    </select>
+  </div>
+
+  <p class="text-sm mb-4" role="status" aria-live="polite" aria-atomic="true" data-image-target="status"></p>
+  <div data-image-target="results" hidden>
+    <ul aria-label="Extracted colors" class="flex overflow-hidden rounded-2xl mb-6" data-image-target="swatches"></ul>
+    <a class="inline-block bg-black text-white font-bold py-3 px-6 rounded-full hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4" data-image-target="generator">Open in generator</a>
+  </div>
+</section>

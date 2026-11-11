@@ -16,6 +16,14 @@ This document provides an ultimate catalog of paletteWOW's primary functions, us
 | **Adjust palette** | Editing | Preview hue, saturation, brightness and temperature changes across unlocked colors. Apply creates one undo step; Cancel or Escape restores the original palette. | Desktop and mobile Adjust buttons |
 | **Method Configuration** | Theory | Swaps internal generation engines across 8 chroma.js mathematical behaviors. | Top Navigation Bar Tab |
 
+## Image palettes
+
+At `/image`, choose, drop or paste a photo, select two to ten colors, then open
+the extracted palette in the generator. Images are decoded and sampled in the
+browser and never uploaded. PNG, JPEG, WebP, GIF, AVIF and BMP images up to 20 MB
+are supported when the browser can decode them. Images with fewer distinct
+colors return fewer swatches; a solid image opens as two matching swatches.
+
 ## Export Integrations
 
 | Title | Type | Component Schema Output Configuration |
