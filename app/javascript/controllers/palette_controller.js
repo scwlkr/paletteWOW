@@ -3,7 +3,10 @@ import Sortable from "sortablejs"
 import chroma from "chroma-js"
 import ntc from "ntc"
 import { isLightColor, randomHex } from "lib/color"
-import { cssVariables, tailwindConfig, svgMarkup, shareUrl } from "lib/exports"
+import {
+  cssVariables, tailwindConfig, svgMarkup, shareUrl,
+  scss, less, json, jsArray, embedHtml, aseFile
+} from "lib/exports"
 
 export default class extends Controller {
   static targets = [
@@ -540,6 +543,13 @@ export default class extends Controller {
     return this.columnTargets.map(col => this.getHexFromColumn(col))
   }
 
+  getExportNames() {
+    return this.columnTargets.map(col => {
+      const nameNode = col.querySelector('[data-palette-target="colorName"]')
+      return nameNode ? nameNode.textContent.trim() : ''
+    })
+  }
+
   async generateCanvas() {
     // Use scale multiplier for higher resolution/sharpness
     const scale = 2
@@ -682,6 +692,57 @@ export default class extends Controller {
     navigator.clipboard.writeText(tw).then(() => {
       alert("Tailwind config copied to clipboard!")
     })
+  }
+
+  exportAse(event) {
+    event.currentTarget.blur()
+    try {
+      const bytes = aseFile(this.getExportHexes(), this.getExportNames())
+      const blob = new Blob([bytes], { type: 'application/octet-stream' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `paletteWOW-${Date.now()}.ase`
+      link.click()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      console.error("Export ASE failed:", err)
+      alert("Failed to export ASE.")
+    } finally {
+      this.closeExportModal()
+    }
+  }
+
+  copyScss(event) {
+    this.copyExport(event, scss(this.getExportHexes(), this.getExportNames()), "SCSS copied to clipboard!")
+  }
+
+  copyLess(event) {
+    this.copyExport(event, less(this.getExportHexes(), this.getExportNames()), "LESS copied to clipboard!")
+  }
+
+  copyJson(event) {
+    this.copyExport(event, json(this.getExportHexes(), this.getExportNames()), "JSON copied to clipboard!")
+  }
+
+  copyJsArray(event) {
+    this.copyExport(event, jsArray(this.getExportHexes()), "JavaScript array copied to clipboard!")
+  }
+
+  copyEmbedHtml(event) {
+    this.copyExport(event, embedHtml(this.getExportHexes(), this.getExportNames()), "Embed code copied to clipboard!")
+  }
+
+  copyExport(event, text, message) {
+    event.currentTarget.blur()
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        alert(message)
+      })
+      .catch(err => {
+        console.error("Copy failed:", err)
+        alert("Failed to copy to clipboard.")
+      })
   }
 
   // --- Utility functions ---
