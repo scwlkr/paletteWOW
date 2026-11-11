@@ -1,0 +1,13 @@
+<dialog data-palette-target="contrastDialog" aria-labelledby="palette-contrast-title" class="m-auto w-[calc(100%_-_2rem)] max-w-6xl max-h-[90dvh] overflow-y-auto bg-white text-neutral-900 rounded-2xl shadow-2xl p-0 backdrop:bg-black/60 backdrop:backdrop-blur-sm">
+  <div class="flex items-center justify-between gap-4 p-4 sm:p-6 border-b border-neutral-200">
+    <h2 id="palette-contrast-title" class="text-xl sm:text-2xl font-black tracking-tight">Normal text contrast</h2>
+    <form method="dialog">
+      <button aria-label="Close contrast" autofocus class="p-2 text-neutral-400 hover:text-black hover:bg-neutral-100 rounded-full focus-visible:ring-2 focus-visible:ring-black focus:outline-none">
+        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </form>
+  </div>
+  <div tabindex="0" role="region" aria-label="Palette contrast grid" class="overflow-auto max-h-[65dvh] p-4 sm:p-6 focus-visible:outline-black">
+    <table data-palette-target="contrastTable" class="w-full border-separate border-spacing-0"></table>
+  </div>
+</dialog>
