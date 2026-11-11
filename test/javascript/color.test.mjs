@@ -1,9 +1,37 @@
 import { test } from "node:test"
 import assert from "node:assert"
 import {
-  contrastRatio, hexToRgb, hslToRgb, isLightColor, normalizeHex, randomHex,
+  contrastMatrix, contrastRatio, hexToRgb, hslToRgb, isLightColor, normalizeHex, randomHex,
   relativeLuminance, rgbToCmyk, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab, wcagLevels
 } from "../../app/javascript/lib/color.js"
+
+test("contrastMatrix includes every ordered pair, including matching and duplicate colours, for 2 to 10 colours", () => {
+  const palette = ["#000000", "#ffffff", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#00ffff", "#ff00ff", "#777777", "#000000"]
+  for (let count = 2; count <= 10; count++) {
+    const colors = palette.slice(0, count)
+    const matrix = contrastMatrix(colors)
+    assert.equal(matrix.length, count)
+    matrix.forEach((row, textIndex) => {
+      assert.equal(row.length, count)
+      row.forEach((pair, backgroundIndex) => {
+        assert.equal(pair.text, colors[textIndex])
+        assert.equal(pair.background, colors[backgroundIndex])
+      })
+      assert.equal(row[textIndex].ratio, 1)
+      assert.equal(row[textIndex].levels.aa, false)
+    })
+    assert.equal(matrix[0][1].ratio, 21)
+    assert.equal(matrix[1][0].ratio, 21)
+    assert.equal(matrix[0][1].levels.aaa, true)
+  }
+})
+
+test("contrastMatrix distinguishes AAA, AA and failing normal text pairs", () => {
+  const matrix = contrastMatrix(["#ffffff", "#000000", "#767676", "#777777"])
+  assert.deepEqual(matrix[0].map(pair => [pair.ratio, pair.levels.aa, pair.levels.aaa]), [
+    [1, false, false], [21, true, true], [4.54, true, false], [4.48, false, false]
+  ])
+})
 
 test("normalizeHex expands and lowercases three-digit hex codes", () => {
   assert.equal(normalizeHex("abc"), "#aabbcc")

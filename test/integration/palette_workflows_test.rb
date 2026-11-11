@@ -34,6 +34,17 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
     assert_select '[data-action="click->palette#redo"]', minimum: 1
   end
 
+  test "generator offers a contrast dialog from both toolbars" do
+    get root_path
+    assert_response :success
+    assert_select 'button[data-action="click->palette#openContrastModal"][aria-haspopup="dialog"]', count: 2
+    assert_select 'dialog[data-palette-target="contrastModal"][aria-labelledby="contrast-title"]' do
+      assert_select "h2#contrast-title", text: /Contrast/
+      assert_select 'button[data-action="click->palette#closeContrastModal"]', count: 1
+      assert_select 'table[data-palette-target="contrastTable"]', count: 1
+    end
+  end
+
   test "generator method selector offers all eight methods" do
     get root_path
     assert_response :success

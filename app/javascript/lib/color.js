@@ -221,6 +221,13 @@ export function wcagLevels(ratio) {
   }
 }
 
+export function contrastMatrix(colors) {
+  return colors.map((text) => colors.map((background) => {
+    const ratio = contrastRatio(text, background)
+    return { text, background, ratio, levels: wcagLevels(ratio) }
+  }))
+}
+
 function round1(value) {
   return Math.round(value * 10) / 10
 }

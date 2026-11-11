@@ -40,6 +40,9 @@
 
     <!-- Right: Actions -->
     <div class="flex items-center space-x-4">
+      <button type="button" aria-haspopup="dialog" data-action="click->palette#openContrastModal" class="flex items-center text-[12px] font-bold tracking-widest uppercase text-black px-4 py-2.5 rounded-full transition-colors bg-white hover:bg-neutral-50 border border-neutral-300 shadow-sm cursor-pointer hover:border-neutral-400 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none">
+        Contrast
+      </button>
       <button aria-label="Export Palette" data-action="click->palette#openExportModal" class="flex items-center space-x-2 text-[12px] font-bold tracking-widest uppercase text-black px-4 py-2.5 rounded-full transition-colors bg-white hover:bg-neutral-50 border border-neutral-300 shadow-sm cursor-pointer hover:border-neutral-400 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none">
         <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
         <span>Export</span>
@@ -116,10 +119,10 @@
 
   <!-- Mobile Fixed Action Bar (Bottom) -->
   <div class="fixed bottom-0 left-0 right-0 md:hidden z-20 bg-white border-t border-neutral-100 shadow-[0_-2px_10px_rgba(0,0,0,0.02)] pb-[env(safe-area-inset-bottom)]">
-    <div class="h-[72px] flex items-center justify-between px-6">
+    <div class="h-[72px] grid grid-cols-[1fr_auto_1fr] gap-2 items-center px-3 sm:px-6">
 
       <!-- Left Tools: Undo / Redo -->
-      <div class="flex items-center space-x-3 sm:space-x-5 text-neutral-800">
+      <div class="flex items-center space-x-1 sm:space-x-5 text-neutral-800">
         <button data-action="click->palette#undo" class="p-1 text-neutral-600 active:opacity-50 transition-opacity" title="Undo">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" /></svg>
         </button>
@@ -129,16 +132,17 @@
       </div>
 
       <!-- Center: Generate Text Button -->
-      <div class="absolute left-1/2 -translate-x-1/2 flex flex-row items-center">
-        <button aria-label="Generate Palette" data-action="click->palette#generate" class="text-base sm:text-lg font-bold tracking-wide active:opacity-50 transition-colors border border-transparent bg-black text-white hover:bg-neutral-800 rounded-full px-6 sm:px-8 py-2.5 shadow-md focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none">
+      <div class="flex flex-row items-center">
+        <button aria-label="Generate Palette" data-action="click->palette#generate" class="text-base sm:text-lg font-bold tracking-wide active:opacity-50 transition-colors border border-transparent bg-black text-white hover:bg-neutral-800 rounded-full px-4 sm:px-8 py-2.5 shadow-md focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none">
           Generate
         </button>
       </div>
 
       <!-- Right Tools: Options / Menu -->
-      <div class="flex items-center space-x-3 sm:space-x-5 text-neutral-800">
-
-
+      <div class="flex items-center justify-self-end space-x-1 sm:space-x-5 text-neutral-800">
+        <button type="button" aria-label="Contrast" aria-haspopup="dialog" data-action="click->palette#openContrastModal" class="p-1 active:opacity-50 transition-opacity rounded-full hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none">
+          <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18V4a8 8 0 0 1 0 16Z" /></svg>
+        </button>
         <div class="relative flex items-center group cursor-pointer active:opacity-50 transition-opacity" title="Generation Method">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
           <select data-action="change->palette#changeMethod" data-palette-target="methodSelect" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
@@ -159,6 +163,19 @@
 
     </div>
   </div>
+
+  <!-- Contrast Modal -->
+  <dialog data-palette-target="contrastModal" aria-labelledby="contrast-title" class="m-auto w-[calc(100%_-_2rem)] max-w-6xl max-h-[90vh] overflow-hidden bg-white text-neutral-900 rounded-2xl shadow-2xl p-0 backdrop:bg-black/60 backdrop:backdrop-blur-sm">
+    <div class="flex items-center justify-between p-4 sm:p-6 border-b border-neutral-200">
+      <h2 id="contrast-title" class="text-xl sm:text-2xl font-black tracking-tight">Contrast <span class="text-sm font-medium text-neutral-500">Normal text</span></h2>
+      <button type="button" autofocus aria-label="Close Contrast" data-action="click->palette#closeContrastModal" class="p-2 text-neutral-400 hover:text-black hover:bg-neutral-100 rounded-full transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-black focus:outline-none">
+        <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+    <div tabindex="0" role="region" aria-label="Palette contrast grid" class="overflow-auto max-h-[65vh] p-4 sm:p-6 focus-visible:outline-black">
+      <table data-palette-target="contrastTable" class="w-full border-separate border-spacing-0"></table>
+    </div>
+  </dialog>
 
   <!-- Export Modal -->
   <div data-palette-target="exportModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">

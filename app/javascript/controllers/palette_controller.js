@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 import chroma from "chroma-js"
 import ntc from "ntc"
-import { isLightColor, randomHex } from "lib/color"
+import { contrastMatrix, isLightColor, normalizeHex, randomHex } from "lib/color"
 import {
   cssVariables, tailwindConfig, svgMarkup, shareUrl,
   scss, less, json, jsArray, embedHtml, aseFile
@@ -13,7 +13,8 @@ export default class extends Controller {
     "container", "column", "hexCode", "colorName", "unlockedIcon", "lockedIcon",
     "shadesModal", "shadesContainer", "methodSelect",
     "exportModal", "exportBackdrop", "exportContent",
-    "exportColumnsContainer", "exportTitle"
+    "exportColumnsContainer", "exportTitle",
+    "contrastModal", "contrastTable"
   ]
   static values = {
     method: { type: String, default: 'auto' },
@@ -83,6 +84,8 @@ export default class extends Controller {
   }
 
   handleKeydown(event) {
+    if (this.hasContrastModalTarget && this.contrastModalTarget.open) return
+
     if ((event.metaKey || event.ctrlKey) && !event.shiftKey && event.key === 'z') {
       event.preventDefault()
       this.undo()
@@ -498,6 +501,31 @@ export default class extends Controller {
 
     this.saveCurrentStateToSnapshot()
     this.closeShades({ currentTarget: shadeBtn })
+  }
+
+  // --- Contrast UI ---
+
+  openContrastModal() {
+    const colors = this.columnTargets.map(column => normalizeHex(this.getHexFromColumn(column)))
+    const rows = contrastMatrix(colors)
+    const header = (hex, scope) => `<th scope="${scope}" class="sticky ${scope === 'row' ? 'left-0' : 'top-0'} z-10 bg-white border border-neutral-200 p-3 font-mono text-xs whitespace-nowrap">
+      <span class="inline-block w-3 h-3 rounded-full border border-neutral-300 align-middle mr-1" style="background-color: ${hex}"></span>${hex.toUpperCase()}
+    </th>`
+
+    this.contrastTableTarget.innerHTML = `
+      <caption class="sr-only">WCAG contrast for normal text. Rows are text colours; columns are backgrounds.</caption>
+      <thead><tr><th scope="col" class="sticky top-0 left-0 z-20 bg-white border border-neutral-200 p-3 text-xs">Text ↓ / Background →</th>${colors.map(hex => header(hex, 'col')).join('')}</tr></thead>
+      <tbody>${rows.map(row => `<tr>${header(row[0].text, 'row')}${row.map(pair => `
+        <td class="border border-neutral-200 p-3 text-center min-w-28">
+          <span aria-hidden="true" class="block rounded-lg p-2 text-xl font-bold mb-2" style="color: ${pair.text}; background-color: ${pair.background}">Aa</span>
+          <span class="block text-sm font-bold tabular-nums">${pair.ratio.toFixed(2)}:1</span>
+          <span class="block text-xs mt-1">${pair.levels.aaa ? '✓ AAA' : pair.levels.aa ? '✓ AA' : '× Fail'}</span>
+        </td>`).join('')}</tr>`).join('')}</tbody>`
+    this.contrastModalTarget.showModal()
+  }
+
+  closeContrastModal() {
+    this.contrastModalTarget.close()
   }
 
   // --- Export UI ---
