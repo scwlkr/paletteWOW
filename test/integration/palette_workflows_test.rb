@@ -30,7 +30,7 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
         assert_select column, 'button[aria-label="Color Info"][data-action="click->palette#viewInfo"]', count: 1
       end
     end
-    assert_select 'template#column-template' do
+    assert_select "template#column-template" do
       assert_select 'button[aria-label="Color Info"][data-action="click->palette#viewInfo"]', count: 1
     end
   end
