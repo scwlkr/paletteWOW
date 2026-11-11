@@ -45,11 +45,14 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
     assert_equal %w[auto monochromatic analogous complementary split_complementary triadic tetradic square].sort, methods.sort
   end
 
-  test "export modal offers PNG, PDF, SVG, CSS, Tailwind and URL options" do
+  test "export modal offers image, document, code, swatch and URL options" do
     get root_path
     assert_response :success
     assert_select '[data-palette-target="exportModal"]', minimum: 1
-    %w[exportImage exportPdf copySvg copyCss copyTailwind copyUrl].each do |action|
+    %w[
+      exportImage exportPdf copySvg copyCss copyTailwind copyUrl
+      exportAse copyScss copyLess copyJson copyJsArray copyEmbedHtml
+    ].each do |action|
       assert_select "[data-action='click->palette##{action}']", minimum: 1
     end
   end

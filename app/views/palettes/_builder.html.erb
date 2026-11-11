@@ -166,7 +166,7 @@
     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" data-palette-target="exportBackdrop" data-action="click->palette#closeExportModal"></div>
 
     <!-- Modal Content -->
-    <div class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6 sm:p-8 transform scale-95 opacity-0 transition-all duration-300" data-palette-target="exportContent">
+    <div class="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl p-6 sm:p-8 transform scale-95 opacity-0 transition-all duration-300" data-palette-target="exportContent">
       <div class="absolute top-4 right-4">
         <button data-action="click->palette#closeExportModal" class="p-2 text-neutral-400 hover:text-black hover:bg-neutral-100 rounded-full transition-colors cursor-pointer">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -218,6 +218,48 @@
             .TW
           </div>
           <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">Tailwind<br>Config</span>
+        </button>
+
+        <button data-action="click->palette#exportAse" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
+            ASE
+          </div>
+          <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">Adobe<br>Swatch</span>
+        </button>
+
+        <button data-action="click->palette#copyScss" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
+            SCSS
+          </div>
+          <span class="text-sm font-bold tracking-wide uppercase">Copy SCSS</span>
+        </button>
+
+        <button data-action="click->palette#copyLess" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
+            LESS
+          </div>
+          <span class="text-sm font-bold tracking-wide uppercase">Copy LESS</span>
+        </button>
+
+        <button data-action="click->palette#copyJson" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
+            JSON
+          </div>
+          <span class="text-sm font-bold tracking-wide uppercase">Copy JSON</span>
+        </button>
+
+        <button data-action="click->palette#copyJsArray" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
+            JS
+          </div>
+          <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">JavaScript<br>Array</span>
+        </button>
+
+        <button data-action="click->palette#copyEmbedHtml" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs tracking-tighter">
+            &lt;/&gt;
+          </div>
+          <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">Embed<br>Code</span>
         </button>
 
   </div>
