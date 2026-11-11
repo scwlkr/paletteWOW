@@ -1,16 +1,18 @@
 // Names are optional export keys; unnamed colors keep their numbered keys.
 export function cssVariables(hexes, names = []) {
+  const keys = exportKeys(names, hexes.length)
   let css = ':root {\n'
   hexes.forEach((hex, i) => {
-    css += `  --${names[i] || `color-${i + 1}`}: ${hex};\n`
+    css += `  --${keys[i]}: ${hex};\n`
   })
   return css + '}'
 }
 
 export function tailwindConfig(hexes, names = []) {
+  const keys = exportKeys(names, hexes.length)
   let config = '{\n  colors: {\n'
   hexes.forEach((hex, i) => {
-    config += `    '${names[i] || `color-${i + 1}`}': '${hex}',\n`
+    config += `    '${keys[i]}': '${hex}',\n`
   })
   return config + '  }\n}'
 }
@@ -28,18 +30,54 @@ export function shareUrl(origin, hexes) {
   return `${origin}/${hexes.map(hex => hex.replace('#', '')).join('-')}`
 }
 
+function exportKeys(names, count) {
+  const used = new Set()
+  const keys = []
+
+  for (let i = 0; i < count; i++) {
+    let base = sanitizeName(names[i]) || `color-${i + 1}`
+    if (/^[0-9]/.test(base)) base = `color-${base}`
+
+    let key = base
+    let suffix = 2
+    while (used.has(key)) {
+      key = `${base}-${suffix}`
+      suffix += 1
+    }
+
+    used.add(key)
+    keys.push(key)
+  }
+
+  return keys
+}
+
+function sanitizeName(name) {
+  return String(name || '')
+    .trim()
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
 export function scss(hexes, names = []) {
-  return hexes.map((hex, i) => `$${names[i] || `color-${i + 1}`}: ${hex};`).join('\n')
+  const keys = exportKeys(names, hexes.length)
+  return hexes.map((hex, i) => `$${keys[i]}: ${hex};`).join('\n')
 }
 
 export function less(hexes, names = []) {
-  return hexes.map((hex, i) => `@${names[i] || `color-${i + 1}`}: ${hex};`).join('\n')
+  const keys = exportKeys(names, hexes.length)
+  return hexes.map((hex, i) => `@${keys[i]}: ${hex};`).join('\n')
 }
 
 export function json(hexes, names = []) {
+  const keys = exportKeys(names, hexes.length)
   const palette = {}
   hexes.forEach((hex, i) => {
-    palette[names[i] || `color-${i + 1}`] = hex
+    palette[keys[i]] = hex
   })
   return JSON.stringify(palette, null, 2)
 }

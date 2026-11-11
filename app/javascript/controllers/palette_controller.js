@@ -735,9 +735,14 @@ export default class extends Controller {
 
   copyExport(event, text, message) {
     event.currentTarget.blur()
-    navigator.clipboard.writeText(text).then(() => {
-      alert(message)
-    })
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        alert(message)
+      })
+      .catch(err => {
+        console.error("Copy failed:", err)
+        alert("Failed to copy to clipboard.")
+      })
   }
 
   // --- Utility functions ---

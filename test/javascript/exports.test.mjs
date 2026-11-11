@@ -46,12 +46,39 @@ test("SCSS and LESS preserve keys, color order and numbered fallbacks", () => {
   assert.equal(less(hexes, names), "@brand: #aBc123;\n@color-2: #FFFFFF;\n@color-3: #aBc123;")
 })
 
+test("SCSS and LESS kebab-case names and dedupe colliding keys", () => {
+  const names = Object.freeze(["Tuft Blue", "Tuft Blue", "Hot Pink"])
+  assert.equal(scss(hexes, names), "$tuft-blue: #aBc123;\n$tuft-blue-2: #FFFFFF;\n$hot-pink: #aBc123;")
+  assert.equal(less(hexes, names), "@tuft-blue: #aBc123;\n@tuft-blue-2: #FFFFFF;\n@hot-pink: #aBc123;")
+})
+
+test("export keys replace invalid characters and avoid leading digits", () => {
+  const names = Object.freeze(["2 Tone!", "Already-kebab", "  "])
+  assert.equal(scss(hexes, names), "$color-2-tone: #aBc123;\n$already-kebab: #FFFFFF;\n$color-3: #aBc123;")
+  assert.deepEqual(JSON.parse(json(hexes, names)), {
+    "color-2-tone": "#aBc123",
+    "already-kebab": "#FFFFFF",
+    "color-3": "#aBc123"
+  })
+})
+
+test("CSS and Tailwind use the same sanitised keys as SCSS, LESS and JSON", () => {
+  const names = Object.freeze(["Tuft Blue", "Tuft Blue", "Hot Pink"])
+  assert.equal(cssVariables(hexes, names), ":root {\n  --tuft-blue: #aBc123;\n  --tuft-blue-2: #FFFFFF;\n  --hot-pink: #aBc123;\n}")
+  assert.equal(tailwindConfig(hexes, names), "{\n  colors: {\n    'tuft-blue': '#aBc123',\n    'tuft-blue-2': '#FFFFFF',\n    'hot-pink': '#aBc123',\n  }\n}")
+})
+
 test("JSON maps names to hex values in palette order", () => {
   assert.equal(json(hexes), '{\n  "color-1": "#aBc123",\n  "color-2": "#FFFFFF",\n  "color-3": "#aBc123"\n}')
   assert.deepEqual(JSON.parse(json(hexes, ["brand", ""])), {
     brand: "#aBc123",
     "color-2": "#FFFFFF",
     "color-3": "#aBc123"
+  })
+  assert.deepEqual(JSON.parse(json(hexes, ["Tuft Blue", "Tuft Blue", "Hot Pink"])), {
+    "tuft-blue": "#aBc123",
+    "tuft-blue-2": "#FFFFFF",
+    "hot-pink": "#aBc123"
   })
   assert.equal(json([]), "{}")
 })
