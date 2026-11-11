@@ -69,7 +69,7 @@ test("shared URL colours normalize hashes, short hex and case without losing oth
   assert.equal(controller.textHexTarget.value, "#777777")
   assert.equal(controller.textPickerTarget.value, "#777777")
   assert.equal(controller.bgHexTarget.value, "#ffffff")
-  assert.equal(controller.ratioTarget.textContent, "4.48:1")
+  assert.equal(controller.ratioTarget.textContent, "4.47:1")
   assert.deepEqual(results(controller), ["AA Fail", "AAA Fail", "AA Pass", "AAA Fail"])
   const url = new URL(browser.location.href)
   assert.equal(url.searchParams.get("text"), "777777")
@@ -83,10 +83,18 @@ test("invalid or missing URL colours fall back independently", t => {
   assert.equal(controller.bgHexTarget.value, "#123456")
 })
 
-test("WCAG badges use the exact ratio even when its display rounds up to a threshold", t => {
-  const { controller } = checker(t, "/contrast?text=008580&bg=ffffff")
-  assert.equal(controller.ratioTarget.textContent, "4.50:1")
-  assert.deepEqual(results(controller), ["AA Fail", "AAA Fail", "AA Pass", "AAA Fail"])
+test("displayed ratios never round a failing pair up to a WCAG pass threshold", async t => {
+  for (const [hex, ratio, badges] of [
+    ["00a3c0", "2.99:1", ["AA Fail", "AAA Fail", "AA Fail", "AAA Fail"]],
+    ["008580", "4.49:1", ["AA Fail", "AAA Fail", "AA Pass", "AAA Fail"]],
+    ["086734", "6.99:1", ["AA Pass", "AAA Fail", "AA Pass", "AAA Pass"]]
+  ]) {
+    await t.test(hex, t => {
+      const { controller } = checker(t, `/contrast?text=${hex}&bg=ffffff`)
+      assert.equal(controller.ratioTarget.textContent, ratio)
+      assert.deepEqual(results(controller), badges)
+    })
+  }
 })
 
 test("typing updates preview, picker, ratio, WCAG levels and URL; change normalizes the field", t => {
@@ -98,7 +106,7 @@ test("typing updates preview, picker, ratio, WCAG levels and URL; change normali
   assert.equal(field.attributes["aria-invalid"], "false")
   assert.equal(controller.textPickerTarget.value, "#777777")
   assert.equal(controller.previewTarget.style.color, "#777777")
-  assert.equal(controller.ratioTarget.textContent, "4.48:1")
+  assert.equal(controller.ratioTarget.textContent, "4.47:1")
   assert.deepEqual(results(controller), ["AA Fail", "AAA Fail", "AA Pass", "AAA Fail"])
   assert.equal(new URL(browser.location.href).searchParams.get("text"), "777777")
   controller.hexChange({ currentTarget: field })
@@ -130,14 +138,14 @@ test("native picker and swap synchronize both controls, the preview and the shar
   controller.textPickerTarget.value = "#ff0000"
   controller.pick({ currentTarget: controller.textPickerTarget })
   assert.equal(controller.textHexTarget.value, "#ff0000")
-  assert.equal(controller.ratioTarget.textContent, "4.00:1")
+  assert.equal(controller.ratioTarget.textContent, "3.99:1")
   controller.swap()
   assert.equal(controller.textHexTarget.value, "#ffffff")
   assert.equal(controller.textPickerTarget.value, "#ffffff")
   assert.equal(controller.bgHexTarget.value, "#ff0000")
   assert.equal(controller.bgPickerTarget.value, "#ff0000")
   assert.deepEqual(controller.previewTarget.style, { color: "#ffffff", backgroundColor: "#ff0000" })
-  assert.equal(controller.ratioTarget.textContent, "4.00:1")
+  assert.equal(controller.ratioTarget.textContent, "3.99:1")
   const url = new URL(browser.location.href)
   assert.equal(url.searchParams.get("text"), "ffffff")
   assert.equal(url.searchParams.get("bg"), "ff0000")

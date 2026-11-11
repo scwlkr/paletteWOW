@@ -68,7 +68,8 @@ export default class extends Controller {
     const levels = wcagLevels(ratio)
     this.previewTarget.style.color = this.colors.text
     this.previewTarget.style.backgroundColor = this.colors.bg
-    this.ratioTarget.textContent = `${ratio.toFixed(2)}:1`
+    // Never display a passing threshold for a ratio that still fails it.
+    this.ratioTarget.textContent = `${(Math.floor(ratio * 100) / 100).toFixed(2)}:1`
 
     for (const badge of this.badgeTargets) {
       const pass = levels[badge.dataset.level]
