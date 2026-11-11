@@ -1,4 +1,7 @@
 class ToolsController < ApplicationController
+  def gradient
+  end
+
   def image
   end
 
