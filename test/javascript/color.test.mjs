@@ -1,9 +1,33 @@
 import { test } from "node:test"
 import assert from "node:assert"
 import {
-  contrastRatio, hexToRgb, hslToRgb, isLightColor, normalizeHex, randomHex,
+  colorFormats, contrastRatio, hexToRgb, hslToRgb, isLightColor, normalizeHex, randomHex,
   relativeLuminance, rgbToCmyk, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab, wcagLevels
 } from "../../app/javascript/lib/color.js"
+
+test("colorFormats provides copyable values for every info panel format", () => {
+  assert.deepEqual(colorFormats("f00"), {
+    HEX: "#FF0000",
+    RGB: "rgb(255, 0, 0)",
+    HSL: "hsl(0, 100%, 50%)",
+    HSB: "0°, 100%, 100%",
+    CMYK: "0%, 100%, 100%, 0%",
+    LAB: "53.23, 80.11, 67.22"
+  })
+})
+
+test("colorFormats handles achromatic colors without undefined channels", () => {
+  assert.deepEqual(colorFormats("#000000"), {
+    HEX: "#000000",
+    RGB: "rgb(0, 0, 0)",
+    HSL: "hsl(0, 0%, 0%)",
+    HSB: "0°, 0%, 0%",
+    CMYK: "0%, 0%, 0%, 100%",
+    LAB: "0, 0, 0"
+  })
+  assert.equal(colorFormats("#ffffff").HSB, "0°, 0%, 100%")
+  assert.equal(colorFormats("#ffffff").CMYK, "0%, 0%, 0%, 0%")
+})
 
 test("normalizeHex expands and lowercases three-digit hex codes", () => {
   assert.equal(normalizeHex("abc"), "#aabbcc")

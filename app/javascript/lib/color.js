@@ -186,6 +186,24 @@ export function rgbToLab(r, g, b) {
   }
 }
 
+export function colorFormats(hex) {
+  const normalized = normalizeHex(hex)
+  const { r, g, b } = hexToRgb(normalized)
+  const hsl = rgbToHsl(r, g, b)
+  const hsb = rgbToHsb(r, g, b)
+  const cmyk = rgbToCmyk(r, g, b)
+  const lab = rgbToLab(r, g, b)
+
+  return {
+    HEX: normalized.toUpperCase(),
+    RGB: `rgb(${r}, ${g}, ${b})`,
+    HSL: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,
+    HSB: `${hsb.h}°, ${hsb.s}%, ${hsb.b}%`,
+    CMYK: `${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%`,
+    LAB: `${lab.l}, ${lab.a}, ${lab.b}`
+  }
+}
+
 export function relativeLuminance(hex) {
   const rgb = hexToRgb(hex)
   if (!rgb) return null

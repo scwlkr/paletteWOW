@@ -25,6 +25,25 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
     assert_select '[data-action="click->palette#viewShades"]', minimum: 1
     assert_select '[data-action="click->palette#addColumn"]', minimum: 1
     assert_select '[data-action="click->palette#removeColumn"]', minimum: 1
+    assert_select '[data-palette-target="container"] > [data-palette-target="column"]' do |columns|
+      columns.each do |column|
+        assert_select column, 'button[aria-label="Color info"][data-action="click->palette#openInfoModal"]', count: 1
+      end
+    end
+    assert_select 'template#column-template button[data-action="click->palette#openInfoModal"]', count: 1
+  end
+
+  test "color info panel offers all formats and the name with copy controls" do
+    get root_path
+    assert_response :success
+    assert_select 'dialog[data-palette-target="infoModal"][aria-labelledby="color-info-title"]', count: 1 do
+      %w[HEX RGB HSL HSB CMYK LAB Name].each do |format|
+        assert_select 'dt', text: format, count: 1
+        assert_select "button[aria-label='Copy #{format}'][data-action='click->palette#copyColorInfo']", count: 1
+      end
+      assert_select 'button[data-action="click->palette#closeInfoModal"]', count: 1
+      assert_select 'input', count: 0
+    end
   end
 
   test "generator renders undo and redo controls" do

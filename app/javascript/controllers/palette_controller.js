@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 import chroma from "chroma-js"
 import ntc from "ntc"
-import { isLightColor, randomHex } from "lib/color"
+import { colorFormats, isLightColor, randomHex } from "lib/color"
 import {
   cssVariables, tailwindConfig, svgMarkup, shareUrl,
   scss, less, json, jsArray, embedHtml, aseFile
@@ -13,7 +13,7 @@ export default class extends Controller {
     "container", "column", "hexCode", "colorName", "unlockedIcon", "lockedIcon",
     "shadesModal", "shadesContainer", "methodSelect",
     "exportModal", "exportBackdrop", "exportContent",
-    "exportColumnsContainer", "exportTitle"
+    "exportColumnsContainer", "exportTitle", "infoModal", "infoValue"
   ]
   static values = {
     method: { type: String, default: 'auto' },
@@ -83,6 +83,8 @@ export default class extends Controller {
   }
 
   handleKeydown(event) {
+    if (this.hasInfoModalTarget && this.infoModalTarget.open) return
+
     if ((event.metaKey || event.ctrlKey) && !event.shiftKey && event.key === 'z') {
       event.preventDefault()
       this.undo()
@@ -498,6 +500,32 @@ export default class extends Controller {
 
     this.saveCurrentStateToSnapshot()
     this.closeShades({ currentTarget: shadeBtn })
+  }
+
+  // --- Color Info ---
+
+  openInfoModal(event) {
+    const column = event.currentTarget.closest('[data-palette-target="column"]')
+    const hex = this.getHexFromColumn(column)
+    const values = { ...colorFormats(hex), Name: ntc.name(hex)[1] }
+
+    this.infoValueTargets.forEach(value => {
+      value.textContent = values[value.dataset.format]
+    })
+    this.infoModalTarget.showModal()
+  }
+
+  closeInfoModal() {
+    this.infoModalTarget.close()
+  }
+
+  closeInfoBackdrop(event) {
+    if (event.target === this.infoModalTarget) this.closeInfoModal()
+  }
+
+  copyColorInfo(event) {
+    const value = event.currentTarget.closest('div').querySelector('[data-palette-target="infoValue"]')
+    this.copyExport(event, value.textContent, `${value.dataset.format} copied to clipboard!`)
   }
 
   // --- Export UI ---
