@@ -10,7 +10,7 @@ The stack is Ruby 3.4.12, Rails 8.1, PostgreSQL, Hotwire, Stimulus, import maps,
 
 ## Hosting
 
-The Rails app, database, and restricted SSH client run as a dedicated Docker Compose project on Octal8. An OVHcloud VPS runs Caddy for public HTTPS and forwards through a pinned-key, loopback-only SSH connection. Keep deployment/recovery instructions in this repository and all credentials, host addresses, and assigned operator paths outside Git. Preserve unrelated services and the shared host's storage/backup architecture.
+Coolify runs the Rails app and a standalone PostgreSQL 16 database on the front door, with builds on the workhorse and a dedicated private registry repository. Coolify serves HTTPS directly; the old SSH tunnel and Caddy projects are retired. Nightly backups include all four Rails databases, keep three copies and live on the workhorse. Keep deployment/recovery instructions in this repository and all credentials, host addresses, and assigned operator paths outside Git. Preserve unrelated services and the shared host's storage/backup architecture.
 
 ## Project record
 

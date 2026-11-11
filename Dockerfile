@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # check=error=true
 
-# Production image. See docs/DEPLOY_GUIDE.md for the Octal8/OVH Compose deployment.
+# Production image. See docs/DEPLOY_GUIDE.md for the Coolify deployment.
 # docker build -t palette_wow .
 # docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name palette_wow palette_wow
 

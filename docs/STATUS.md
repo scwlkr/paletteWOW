@@ -1,39 +1,37 @@
 # paletteWOW status
 
-Updated 26 October 2026.
+Updated 11 November 2026.
 
 ## Current phase
 
-Account-free generator live at https://palettewow.xyz, running on Octal8 through the OVHcloud VPS. Public DNS and trusted HTTPS are verified.
+The account-free generator is live at https://palettewow.xyz on Coolify. The November server rebuild removed its old hosting; issue #68 restores it on the front door, with builds on the workhorse. Coolify serves trusted public HTTPS directly.
 
-## Completed
+## Current tools
 
-- Closed all 12 inherited dependency pull requests without merging them; history remains available.
-- Paused routine Dependabot version PRs for the fresh baseline.
-- Updated to Ruby 3.4.12 and Rails 8.1.4, with compatible dependency updates.
-- Removed Google OAuth middleware, callbacks, gems, sign-in/save controls, and the development auto-login bypass.
-- Disabled dashboard, profile, account-session, and saved-library API routes. Existing library source/model remains available for a future authentication integration.
-- Added isolated Octal8 application/PostgreSQL/SSH-client deployment and an OVHcloud Caddy edge with persistent certificate storage.
-- Restricted SSH forwarding to one VPS loopback port and pinned host keys. Application and database ports remain unpublished on Octal8.
-- Completed the Hostinger DNS cutover, issued trusted certificates for the root and existing `www` hostname, and verified the `www` redirect.
-- Added explicit Caddy state-directory ownership initialization so certificate issuance works with the container's dropped capabilities.
-- Retired the DigitalOcean/Kamal deployment path and updated installation, feature, privacy, deployment, and planning docs.
+- Generate, lock, edit, reorder, undo and share palettes of two to ten colors.
+- Color information for each swatch, a standalone contrast checker and a palette contrast grid.
+- Browser-side PNG, PDF, SVG, CSS, Tailwind, SCSS, LESS, JSON, JavaScript, HTML and ASE exports.
 
-WorkOS AuthKit is a possible future direction, not an implemented integration.
+Google sign-in and account/library routes remain disabled. Existing account and library models are preserved. WorkOS AuthKit remains a possible future choice.
+
+## Recovery and hosting
+
+- Recovered all four Rails databases from the pre-wipe archive's cleanly stopped PostgreSQL 16 data directory. Verified integrity and compared every restored table and sequence before connecting the app.
+- The recovered primary database contains zero users and zero saved palettes. No historical account migration was introduced; this preserves the prior deployment's state.
+- New standalone PostgreSQL resource has no public port. App storage has a persistent volume; the recovered upload directory was empty.
+- Native nightly backups cover all databases, retain three copies on the workhorse and remove source copies only after upload succeeds.
+- The first remote backup was downloaded and restored into a disposable PostgreSQL 16 container with no network. All four restored databases matched their source table contents with zero SQL errors.
+- Deployment and rollback are owned by the fleet script, maintained at the Mac source. Credentials and receipts remain outside Git. The old Compose, SSH tunnel and Caddy configuration is historical.
 
 ## Verification
 
-- New public-release tests: **7 tests, 42 assertions, zero failures/errors**, using the Ruby 3.4.12 validation image and a separate test database.
-- Autoloading and production asset compilation passed.
-- Ruby lint passed locally; Brakeman reported zero warnings; gem and import-map audits reported no vulnerable packages.
-- Application and database health checks pass. The VPS can fetch the generator and shared palettes through the encrypted forward with HTTP 200. Retired Google callbacks return 404.
-- Trusted public HTTPS serves the generator, shared palettes, and health endpoint. HTTP redirects to HTTPS; `www` redirects to the root hostname. Certificates and service operation persisted through an edge restart.
-- In the existing Chrome browser, verified spacebar generation, color locking, undo, shared palette links, and actual PNG/PDF downloads.
-- Logical dumps exist for all four Rails databases, plus storage and checksums. The primary dump was restored to an isolated database and its fresh-state counts were verified: zero users and zero saved palettes.
-- A persistent daily user backup timer runs before the existing shared-host backup. The shared backup service remains in place.
+- Rails: 19 tests, 225 assertions, zero failures, errors or skips.
+- JavaScript: 45 passing tests.
+- Autoloading, production assets, RuboCop, Brakeman, gem audit and import-map audit passed.
+- Trusted public HTTPS returned 200 for the generator, shared palettes, contrast checker and `/up`.
+- Pinned Chromium checks passed at 1440px and 390px: shared palette, locking, generation, undo, contrast grid and checker. No page errors, failed requests or horizontal page overflow.
+- Operational deployment and rollback evidence is recorded on [issue #68](https://github.com/scwlkr/paletteWOW/issues/68).
 
-## Remaining work and limits
+## Remaining work
 
-- No historical user/palette migration was performed; the Octal8 deployment uses a fresh database.
-- Full-host reboot recovery and inclusion of logical dumps in the shared host's secondary backup are not yet verified.
-- Exact image identities, account/host/storage details, PR closure receipts, and operational logs are kept in private deployment evidence outside Git.
+Continue the remaining account-free feature checklist in [tracking issue #52](https://github.com/scwlkr/paletteWOW/issues/52). Accounts, public palette discovery and paid AI features remain outside the approved scope. Back up server-side uploads before introducing any feature that creates them.
