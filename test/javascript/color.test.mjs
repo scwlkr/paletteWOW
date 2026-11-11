@@ -175,13 +175,26 @@ test("contrastRatio measures known pairs with the WCAG 2.x formula", () => {
   assert.equal(contrastRatio("#000000", "#ffffff"), 21)
   assert.equal(contrastRatio("#ffffff", "#ffffff"), 1)
   assert.equal(contrastRatio("#000000", "#000000"), 1)
-  assert.equal(contrastRatio("#ffffff", "#767677"), 4.54)
-  assert.equal(contrastRatio("#ffffff", "#3366cc"), 5.37)
+  assert.ok(Math.abs(contrastRatio("#ffffff", "#767677") - 4.537533) < 0.000001)
+  assert.ok(Math.abs(contrastRatio("#ffffff", "#3366cc") - 5.366402) < 0.000001)
 })
 
 test("contrastRatio rejects invalid input", () => {
   assert.equal(contrastRatio("red", "#000000"), null)
   assert.equal(contrastRatio("#ffffff", ""), null)
+})
+
+test("colour pairs just below WCAG thresholds fail without rounding up", () => {
+  for (const [hex, level, threshold] of [
+    ["#00a3c0", "aaLarge", 3],
+    ["#008580", "aa", 4.5],
+    ["#008580", "aaaLarge", 4.5],
+    ["#086734", "aaa", 7]
+  ]) {
+    const ratio = contrastRatio(hex, "#ffffff")
+    assert.ok(ratio < threshold && ratio > threshold - 0.001, hex)
+    assert.equal(wcagLevels(ratio)[level], false, `${hex} must fail ${level}`)
+  }
 })
 
 test("wcagLevels reports which AA and AAA thresholds a ratio passes", () => {

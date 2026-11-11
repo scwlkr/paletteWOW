@@ -83,6 +83,12 @@ test("invalid or missing URL colours fall back independently", t => {
   assert.equal(controller.bgHexTarget.value, "#123456")
 })
 
+test("WCAG badges use the exact ratio even when its display rounds up to a threshold", t => {
+  const { controller } = checker(t, "/contrast?text=008580&bg=ffffff")
+  assert.equal(controller.ratioTarget.textContent, "4.50:1")
+  assert.deepEqual(results(controller), ["AA Fail", "AAA Fail", "AA Pass", "AAA Fail"])
+})
+
 test("typing updates preview, picker, ratio, WCAG levels and URL; change normalizes the field", t => {
   const { controller, browser } = checker(t)
   const field = controller.textHexTarget
