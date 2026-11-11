@@ -3,6 +3,7 @@ import Sortable from "sortablejs"
 import chroma from "chroma-js"
 import ntc from "ntc"
 import { isLightColor, randomHex } from "lib/color"
+import { cssVariables, tailwindConfig, svgMarkup, shareUrl } from "lib/exports"
 
 export default class extends Controller {
   static targets = [
@@ -535,6 +536,10 @@ export default class extends Controller {
 
   // --- Export Generators ---
 
+  getExportHexes() {
+    return this.columnTargets.map(col => this.getHexFromColumn(col))
+  }
+
   async generateCanvas() {
     // Use scale multiplier for higher resolution/sharpness
     const scale = 2
@@ -583,7 +588,7 @@ export default class extends Controller {
     ctx.fillText('PALETTE WOW', 1152, 48)
 
     // Draw columns
-    const hexes = this.columnTargets.map(col => this.getHexFromColumn(col))
+    const hexes = this.getExportHexes()
     const colWidth = 1200 / hexes.length
 
     hexes.forEach((hex, i) => {
@@ -645,8 +650,7 @@ export default class extends Controller {
 
   copyUrl(event) {
     event.currentTarget.blur()
-    const hexes = this.columnTargets.map(col => this.getHexFromColumn(col).replace('#', ''))
-    const url = `${window.location.origin}/${hexes.join('-')}`
+    const url = shareUrl(window.location.origin, this.getExportHexes())
 
     navigator.clipboard.writeText(url).then(() => {
       alert("URL copied to clipboard!")
@@ -655,15 +659,7 @@ export default class extends Controller {
 
   copySvg(event) {
     event.currentTarget.blur()
-    const hexes = this.columnTargets.map(col => this.getHexFromColumn(col))
-    const width = hexes.length * 100
-
-    let rects = ''
-    hexes.forEach((hex, i) => {
-      rects += `<rect x="${i * 100}" y="0" width="100" height="500" fill="${hex}"/>\n`
-    })
-
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="500" viewBox="0 0 ${width} 500">\n${rects}</svg>`
+    const svg = svgMarkup(this.getExportHexes())
 
     navigator.clipboard.writeText(svg).then(() => {
       alert("SVG copied to clipboard!")
@@ -672,13 +668,7 @@ export default class extends Controller {
 
   copyCss(event) {
     event.currentTarget.blur()
-    const hexes = this.columnTargets.map(col => this.getHexFromColumn(col))
-
-    let css = ':root {\n'
-    hexes.forEach((hex, i) => {
-      css += `  --color-${i + 1}: ${hex};\n`
-    })
-    css += '}'
+    const css = cssVariables(this.getExportHexes())
 
     navigator.clipboard.writeText(css).then(() => {
       alert("CSS copied to clipboard!")
@@ -687,13 +677,7 @@ export default class extends Controller {
 
   copyTailwind(event) {
     event.currentTarget.blur()
-    const hexes = this.columnTargets.map(col => this.getHexFromColumn(col))
-
-    let tw = '{\n  colors: {\n'
-    hexes.forEach((hex, i) => {
-      tw += `    'color-${i + 1}': '${hex}',\n`
-    })
-    tw += '  }\n}'
+    const tw = tailwindConfig(this.getExportHexes())
 
     navigator.clipboard.writeText(tw).then(() => {
       alert("Tailwind config copied to clipboard!")
