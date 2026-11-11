@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get "privacy", to: "pages#privacy"
+  get "contrast", to: "tools#contrast"
   # Accounts and the saved library are paused until a new provider is adopted.
   resources :palettes, only: [ :index ]
 

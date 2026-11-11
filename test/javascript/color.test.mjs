@@ -175,8 +175,14 @@ test("contrastRatio measures known pairs with the WCAG 2.x formula", () => {
   assert.equal(contrastRatio("#000000", "#ffffff"), 21)
   assert.equal(contrastRatio("#ffffff", "#ffffff"), 1)
   assert.equal(contrastRatio("#000000", "#000000"), 1)
-  assert.equal(contrastRatio("#ffffff", "#767677"), 4.54)
-  assert.equal(contrastRatio("#ffffff", "#3366cc"), 5.37)
+  assert.ok(Math.abs(contrastRatio("#ffffff", "#767677") - 4.54) < 0.005)
+  assert.ok(Math.abs(contrastRatio("#ffffff", "#3366cc") - 5.37) < 0.005)
+})
+
+test("WCAG results never pass colors just below a threshold after display rounding", () => {
+  assert.equal(wcagLevels(contrastRatio("#0599ff", "#ffffff")).aaLarge, false)
+  assert.equal(wcagLevels(contrastRatio("#018859", "#ffffff")).aa, false)
+  assert.equal(wcagLevels(contrastRatio("#0842ec", "#ffffff")).aaa, false)
 })
 
 test("contrastRatio rejects invalid input", () => {
