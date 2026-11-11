@@ -205,7 +205,8 @@ export function contrastRatio(hexA, hexB) {
 
   const lighter = Math.max(luminanceA, luminanceB)
   const darker = Math.min(luminanceA, luminanceB)
-  return Math.round(((lighter + 0.05) / (darker + 0.05)) * 100) / 100
+  // Keep full precision for WCAG thresholds; round only when displaying a ratio.
+  return (lighter + 0.05) / (darker + 0.05)
 }
 
 export function wcagLevels(ratio) {
