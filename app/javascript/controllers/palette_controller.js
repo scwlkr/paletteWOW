@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 import chroma from "chroma-js"
 import ntc from "ntc"
-import { isLightColor, randomHex } from "lib/color"
+import { isLightColor, randomHex, normalizeHex, hexToRgb, rgbToHsl, rgbToHsb, rgbToCmyk, rgbToLab } from "lib/color"
 import {
   cssVariables, tailwindConfig, svgMarkup, shareUrl,
   scss, less, json, jsArray, embedHtml, aseFile
@@ -12,6 +12,7 @@ export default class extends Controller {
   static targets = [
     "container", "column", "hexCode", "colorName", "unlockedIcon", "lockedIcon",
     "shadesModal", "shadesContainer", "methodSelect",
+    "infoModal", "infoValue", "infoPreview", "infoStatus",
     "exportModal", "exportBackdrop", "exportContent",
     "exportColumnsContainer", "exportTitle"
   ]
@@ -83,6 +84,8 @@ export default class extends Controller {
   }
 
   handleKeydown(event) {
+    if (this.hasInfoModalTarget && this.infoModalTarget.open) return
+
     if ((event.metaKey || event.ctrlKey) && !event.shiftKey && event.key === 'z') {
       event.preventDefault()
       this.undo()
@@ -498,6 +501,51 @@ export default class extends Controller {
 
     this.saveCurrentStateToSnapshot()
     this.closeShades({ currentTarget: shadeBtn })
+  }
+
+  viewInfo(event) {
+    const column = event.currentTarget.closest('[data-palette-target="column"]')
+    const hex = normalizeHex(this.getHexFromColumn(column)).toUpperCase()
+    const { r, g, b } = hexToRgb(hex)
+    const hsl = rgbToHsl(r, g, b)
+    const hsb = rgbToHsb(r, g, b)
+    const cmyk = rgbToCmyk(r, g, b)
+    const lab = rgbToLab(r, g, b)
+    const values = {
+      Name: ntc.name(hex)[1],
+      HEX: hex,
+      RGB: `rgb(${r}, ${g}, ${b})`,
+      HSL: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,
+      HSB: `${hsb.h}°, ${hsb.s}%, ${hsb.b}%`,
+      CMYK: `${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%`,
+      LAB: `${lab.l}, ${lab.a}, ${lab.b}`
+    }
+
+    this.infoValueTargets.forEach(node => {
+      node.textContent = values[node.dataset.format]
+    })
+    this.infoPreviewTarget.style.backgroundColor = hex
+    this.infoStatusTarget.textContent = ''
+    this.infoModalTarget.showModal()
+  }
+
+  closeInfo() {
+    this.infoModalTarget.close()
+  }
+
+  closeInfoOnBackdrop(event) {
+    if (event.target === this.infoModalTarget) this.closeInfo()
+  }
+
+  async copyInfo(event) {
+    const format = event.currentTarget.dataset.format
+    const node = this.infoValueTargets.find(node => node.dataset.format === format)
+    try {
+      await navigator.clipboard.writeText(node.textContent)
+      this.infoStatusTarget.textContent = `${format} copied!`
+    } catch {
+      this.infoStatusTarget.textContent = 'Unable to copy. Select the value to copy it manually.'
+    }
   }
 
   // --- Export UI ---
