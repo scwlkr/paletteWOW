@@ -199,13 +199,18 @@ export function relativeLuminance(hex) {
 }
 
 export function contrastRatio(hexA, hexB) {
+  const ratio = rawContrastRatio(hexA, hexB)
+  return ratio === null ? null : round2(ratio)
+}
+
+function rawContrastRatio(hexA, hexB) {
   const luminanceA = relativeLuminance(hexA)
   const luminanceB = relativeLuminance(hexB)
   if (luminanceA === null || luminanceB === null) return null
 
   const lighter = Math.max(luminanceA, luminanceB)
   const darker = Math.min(luminanceA, luminanceB)
-  return Math.round(((lighter + 0.05) / (darker + 0.05)) * 100) / 100
+  return (lighter + 0.05) / (darker + 0.05)
 }
 
 export function wcagLevels(ratio) {
@@ -223,8 +228,9 @@ export function wcagLevels(ratio) {
 
 export function contrastMatrix(colors) {
   return colors.map((text) => colors.map((background) => {
-    const ratio = contrastRatio(text, background)
-    return { text, background, ratio, levels: wcagLevels(ratio) }
+    const ratio = rawContrastRatio(text, background)
+    // WCAG thresholds use the full ratio; round only the displayed value.
+    return { text, background, ratio: ratio === null ? null : round2(ratio), levels: wcagLevels(ratio) }
   }))
 }
 

@@ -33,6 +33,22 @@ test("contrastMatrix distinguishes AAA, AA and failing normal text pairs", () =>
   ])
 })
 
+test("contrastMatrix checks WCAG thresholds before rounding displayed ratios", () => {
+  const cases = [
+    { hex: "#478080", ratio: 4.5, levels: { aa: false, aaLarge: true, aaa: false, aaaLarge: false } },
+    { hex: "#59595a", ratio: 7, levels: { aa: true, aaLarge: true, aaa: false, aaaLarge: true } },
+    { hex: "#959595", ratio: 3, levels: { aa: false, aaLarge: false, aaa: false, aaaLarge: false } }
+  ]
+
+  for (const { hex, ratio, levels } of cases) {
+    const matrix = contrastMatrix([hex, "#ffffff"])
+    for (const pair of [matrix[0][1], matrix[1][0]]) {
+      assert.equal(pair.ratio, ratio)
+      assert.deepEqual(pair.levels, levels, `${hex} on white or white on ${hex}`)
+    }
+  }
+})
+
 test("normalizeHex expands and lowercases three-digit hex codes", () => {
   assert.equal(normalizeHex("abc"), "#aabbcc")
   assert.equal(normalizeHex("#abc"), "#aabbcc")
