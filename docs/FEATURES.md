@@ -31,7 +31,14 @@ Edit each color and percentage position, add or remove stops, and choose the
 linear angle. The preview updates immediately and the URL restores the complete
 gradient. Copy CSS or download a 1600 × 1000 PNG, all within the browser.
 
+## Gradient palettes
+
+At `/gradient-palette`, choose two endpoint colors and three to ten swatches.
+Colors are evenly spaced in LAB, with the exact chosen endpoints preserved.
+Open the resulting palette in the generator for editing, sharing and exports.
+
 ## Export Integrations
+
 
 | Title | Type | Component Schema Output Configuration |
 |-------|------|--------------------------------|

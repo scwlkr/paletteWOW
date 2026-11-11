@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get "contrast", to: "tools#contrast"
   get "image", to: "tools#image"
   get "gradient", to: "tools#gradient"
+  get "gradient-palette", to: "tools#gradient_palette"
   # Accounts and the saved library are paused until a new provider is adopted.
   resources :palettes, only: [ :index ]
 
