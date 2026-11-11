@@ -12,6 +12,7 @@ This document provides an ultimate catalog of paletteWOW's primary functions, us
 | **Add Color Segment** | Capacity | Modifies absolute grid array up to 10 columns within a single UI scope. | Inter-column Plus Icon |
 | **Remove Color Segment** | Capacity | Depreciates active grid array mapping down to a minimum configuration. | Column Delete Icon |
 | **Hex Copying** | Exporting | Applies the `#` value directly to the native OS Copy/Paste clipboard schema. | Bottom Hex Text Node |
+| **Color vision preview** | Accessibility | Preview full and milder color vision deficiencies. Original colors remain available for editing, copying, sharing and exports. | Desktop and mobile Color vision selectors |
 | **Method Configuration** | Theory | Swaps internal generation engines across 8 chroma.js mathematical behaviors. | Top Navigation Bar Tab |
 
 ## Export Integrations

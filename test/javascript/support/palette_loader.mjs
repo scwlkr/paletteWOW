@@ -5,6 +5,7 @@ const imports = {
   "sortablejs": new URL("vendor/javascript/sortablejs.js", root).href,
   "chroma-js": new URL("vendor/javascript/chroma-js.js", root).href,
   "ntc": new URL("vendor/javascript/ntc.js", root).href,
+  "lib/vision": new URL("app/javascript/lib/vision.js", root).href,
   "lib/color": new URL("app/javascript/lib/color.js", root).href,
   "lib/exports": new URL("app/javascript/lib/exports.js", root).href
 }
