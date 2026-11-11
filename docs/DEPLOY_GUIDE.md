@@ -1,66 +1,58 @@
-# Deploying paletteWOW on Octal8 through OVHcloud
+# Deploying paletteWOW with Coolify
 
-## Layout
+Coolify runs the Rails app and a standalone PostgreSQL 16 database on the front door. The database has no public port. Builds run on the workhorse and use a dedicated private registry repository. If a future dependency requires newer CPU features, use the front door for that build as described in the Octal8 architecture.
 
-- Octal8 runs the Rails image, PostgreSQL 16, and an SSH forwarding client in the dedicated `palettewow` Compose project.
-- The app and database publish no host ports. The database is on an internal Docker network. The forwarding client shares only the app network.
-- The OVHcloud VPS runs the dedicated `palettewow-edge` Caddy project. It terminates HTTPS and proxies to a loopback-only SSH forward.
-- The dedicated VPS SSH user can create only the assigned remote loopback listener. It cannot open a shell, use a TTY, forward an agent, or create local forwards. The client pins the VPS host keys.
-- Existing Octal8 services and the original prepared VPS projects have separate lifecycles.
+The public address is https://palettewow.xyz. Coolify terminates HTTPS; Rails trusts the terminating proxy and allows the public host. The app health endpoint is `/up`. There is no SSH tunnel or separate Caddy deployment.
 
-Rails is retained for compatibility with the existing application, Stimulus frontend, and PostgreSQL data model. This migration does not introduce a separate backend service.
+## Operator configuration
 
-## Private operator configuration
+Use the existing **Coolify (Octal8)** item in **My Passwords** for the panel URL, API token, `palettewow_app_uuid` and `palettewow_health_url`. The existing **Octal8 registry and workhorse** item holds the private registry login. Keep identifiers, addresses, credentials and deployment receipts outside Git.
 
-Keep host addresses, deployment accounts, assigned storage paths, and secrets outside Git. Use mode 700 for operator directories and 600 for credentials.
+The app uses this repository's Dockerfile, branch `main`, port 80 and `/up` health check. Deployments pin the full reviewed Git commit. Automatic source webhooks are disabled: the build-mode worker ships after checks pass.
 
-The Octal8 operator environment supplies:
+Runtime variables in Coolify:
 
-```text
-PALETTEWOW_DOMAIN=
-PALETTEWOW_IMAGE=
-PALETTEWOW_TUNNEL_IMAGE=
-PALETTEWOW_OPERATOR_DIR=
-PALETTEWOW_STATE_DIR=
-PALETTEWOW_BACKUP_DIR=
-PALETTEWOW_COMPOSE=
-```
+- `RAILS_ENV=production`
+- `APP_HOST=palettewow.xyz,www.palettewow.xyz`
+- `DB_HOST`: the standalone PostgreSQL resource's internal hostname
+- `PALETTE_WOW_DATABASE_PASSWORD`, `SECRET_KEY_BASE`, `RAILS_MASTER_KEY`: existing private operator values
 
-`app.env` contains `SECRET_KEY_BASE`, `RAILS_MASTER_KEY`, and `PALETTE_WOW_DATABASE_PASSWORD`. `postgres.env` contains `POSTGRES_USER=palette_wow`, `POSTGRES_DB=palette_wow_production`, and the matching `POSTGRES_PASSWORD`. `tunnel.env` supplies `PALETTEWOW_VPS_HOST`. Store the dedicated SSH key and pinned known-hosts file in the operator `ssh/` directory.
+PostgreSQL owns `palette_wow_production`, `palette_wow_production_cache`, `palette_wow_production_queue` and `palette_wow_production_cable`, all with owner `palette_wow`. The Docker entrypoint runs `db:prepare` before Rails starts. Never give tests these production connection settings.
 
-Google OAuth is removed. No Google credentials are needed. Account and saved-library routes are disabled; WorkOS AuthKit has not been implemented.
+A named Coolify volume mounts at `/rails/storage`. The recovered deployment has no uploaded files; current image extraction and exports run in the browser. If server-side uploads are introduced, cover them with the Octal8 minimum backup plan before enabling them.
 
-The VPS edge environment supplies `PALETTEWOW_DOMAIN` and `PALETTEWOW_EDGE_STATE`.
+## Release and undo
 
-## Build and activate
-
-Build both images on Octal8 from the exact reviewed source revision:
+From a checkout of the checked, merged default branch, run:
 
 ```sh
-docker build --pull -t "$PALETTEWOW_IMAGE" .
-docker build -f deploy/octal8/tunnel.Dockerfile -t "$PALETTEWOW_TUNNEL_IMAGE" .
-docker compose --env-file "$OPERATOR_ENV" -p palettewow -f deploy/octal8/compose.yml config --quiet
-docker compose --env-file "$OPERATOR_ENV" -p palettewow -f deploy/octal8/compose.yml up -d --wait
+~/.local/share/agent-fleet/deploy/palettewow-octal8.sh
 ```
 
-Provision the dedicated forwarding user and authorized public key on the VPS. Install `deploy/ovh/sshd.conf` as a drop-in, run `sshd -t`, and reload SSH while retaining the current administration session. Restrict the authorized key with `restrict,port-forwarding,permitlisten="127.0.0.1:18081"`. Never replace existing administration keys.
+The fleet script reads Coolify credentials from 1Password, deploys the exact checkout revision, waits for completion and checks trusted public HTTPS. It records the previous successful release outside the repository. To undo an application release:
 
-Stage `deploy/ovh/compose.yml` and `Caddyfile` in a dedicated edge directory. Before starting Caddy, run `sudo sh deploy/ovh/prepare-state.sh "$PALETTEWOW_EDGE_STATE"` to initialize certificate/configuration directories for the pinned image's UID/GID 0. The dropped capabilities mean container root cannot bypass incorrect bind-mount ownership. Validate the interpolated Compose and Caddy configuration, then start only `palettewow-edge`. Persist certificate/configuration state outside the release directory.
+```sh
+~/.local/share/agent-fleet/deploy/palettewow-octal8.sh rollback
+```
 
-Verify root, health, and a shared palette from the VPS through the loopback forward before DNS cutover. Change the domain A record to the verified VPS address, then verify a trusted public certificate, HTTP-to-HTTPS redirect, assets, and generator/export interactions. Do not accept a certificate warning as a successful deployment.
+Rollback reuses a previously built image and preserves the database and storage volume. Check migration compatibility before reverting a future schema change. A failed health check must pause build mode after rollback, with an honest failure report. Stopping this app in Coolify undoes the hosting change without changing DNS or other apps.
 
-The previous DigitalOcean/Kamal deployment is retired. Its configuration remains in Git history for reference; do not deploy to that host or replace changed SSH host keys without independent verification.
+## Verification
 
-## Validation
+Run the JavaScript suite (`node --test test/javascript/`), Rails tests against a disposable PostgreSQL database, autoload check, asset compilation, RuboCop, Brakeman, gem audit and import-map audit. The Dockerfile's `validation` target supplies the correct Ruby and test gems.
 
-Build the `validation` Docker target and run the Rails tests against a separate validation database. This target uses the same Ruby runtime/source as production and adds the test/development gems excluded from the shipped image. Check autoloading, asset compilation, Ruby lint, Brakeman, gem advisories, and import-map advisories. Confirm that retired Google callbacks, dashboard/profile pages, and saved-library mutation routes return 404.
+After release, require trusted HTTPS 200 for `/up`, `/`, a shared palette and `/contrast`; fetch the referenced assets. Check the generator in a real browser at desktop and phone widths, including generation, lock, undo and contrast. A successful `/up` alone does not establish database recovery or usable assets.
 
-Verify that application/database ports remain unpublished and that the VPS forwarding listener is bound to loopback. Restart the app and forwarding client separately and confirm recovery. A full shared-host reboot is a separate operational check.
+## Backups and recovery
 
-## Backup and recovery
+The Octal8 app-backup role creates a native Coolify backup schedule: nightly at 03:00 in the database server's configured timezone, all PostgreSQL databases, three retained copies, stored on the workhorse. Source copies are removed only after upload succeeds. Run the installed app-backup reconciliation service and check the resource's Backups within five minutes of provisioning.
 
-`deploy/octal8/backup.sh` makes PostgreSQL custom-format dumps for the primary, cache, queue, and cable databases, a storage archive, and a checksum manifest. Run it with the private operator environment. Its lock prevents overlapping backups. Retain the existing shared-host backup services and include these logical dumps in the backed-up data drive.
+Use **Back up now** and restore the downloaded remote backup into a disposable PostgreSQL 16 container with no network. Require zero SQL errors and compare the restored schema and table contents with the source before relying on it. Never restore a test over production. Preserve database ownership and include all four Rails databases.
 
-For a restore check, create a new, clearly named temporary database and restore the primary dump there. Verify the schema and expected user/palette counts, then remove only that temporary database. Do not restore over production as a test.
+For a server replacement, create a new Coolify database, restore the verified backup, check table contents, then connect the app. A database move needs a second, different model's review for problems that would break recovery. Keep the original data until the replacement and its off-machine backup are verified.
 
-For an application rollback, select the previous recorded image and release Compose path in private operator configuration, then recreate only the web/forwarding services. Keep the database and storage directories. Review migration compatibility before rolling back across a schema change. Keep image IDs, source revision, validation results, DNS state, and backup paths in the private deployment receipt.
+The November 2026 rebuild recovered all four databases from the pre-wipe archive. That archive is temporary; the new nightly backups are the recovery source after its expiry.
+
+## Historical deployments
+
+`deploy/octal8/` and `deploy/ovh/` describe the retired Compose/SSH-tunnel/Caddy deployment. They remain only as recovery references; do not use them for current releases. DigitalOcean/Kamal hosting is also retired.

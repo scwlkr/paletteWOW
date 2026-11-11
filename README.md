@@ -34,7 +34,7 @@ Tests use a separate PostgreSQL test database. Never point the test database URL
 
 ## Hosting
 
-The application and PostgreSQL run in an isolated Docker Compose project on Octal8. The OVHcloud VPS terminates public HTTPS and reaches the application through a restricted, key-authenticated SSH reverse forward. App and database ports are not published on Octal8.
+Coolify runs the application and PostgreSQL on the Octal8 front door, builds on the workhorse, and serves public HTTPS directly. The database has no public port. Nightly database backups keep three copies on the other machine.
 
 See [deployment and recovery](docs/DEPLOY_GUIDE.md), [current status](docs/STATUS.md), [roadmap](docs/ROADMAP.md), [features](docs/FEATURES.md), and [installation](docs/INSTALLATION.md).
 
