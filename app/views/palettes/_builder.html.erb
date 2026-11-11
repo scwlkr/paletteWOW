@@ -40,6 +40,7 @@
 
     <!-- Right: Actions -->
     <div class="flex items-center space-x-4">
+      <button type="button" data-action="click->palette#openContrast" aria-haspopup="dialog" class="text-[12px] font-bold tracking-widest uppercase text-black px-4 py-2.5 rounded-full bg-white hover:bg-neutral-50 border border-neutral-300 shadow-sm cursor-pointer focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none">Contrast</button>
       <button aria-label="Export Palette" data-action="click->palette#openExportModal" class="flex items-center space-x-2 text-[12px] font-bold tracking-widest uppercase text-black px-4 py-2.5 rounded-full transition-colors bg-white hover:bg-neutral-50 border border-neutral-300 shadow-sm cursor-pointer hover:border-neutral-400 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none">
         <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
         <span>Export</span>
@@ -138,6 +139,9 @@
 
       <!-- Right Tools: Options / Menu -->
       <div class="flex items-center space-x-3 sm:space-x-5 text-neutral-800">
+        <button type="button" aria-label="Contrast" data-action="click->palette#openContrast" aria-haspopup="dialog" class="p-1 rounded-full hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-black focus:outline-none">
+          <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18V4a8 8 0 0 1 0 16Z" /></svg>
+        </button>
 
 
         <div class="relative flex items-center group cursor-pointer active:opacity-50 transition-opacity" title="Generation Method">
@@ -162,6 +166,7 @@
   </div>
 
   <%= render "palettes/color_info_dialog" %>
+  <%= render "palettes/contrast_dialog" %>
 
   <!-- Export Modal -->
   <div data-palette-target="exportModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
