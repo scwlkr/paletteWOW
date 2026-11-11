@@ -13,6 +13,7 @@ This document provides an ultimate catalog of paletteWOW's primary functions, us
 | **Remove Color Segment** | Capacity | Depreciates active grid array mapping down to a minimum configuration. | Column Delete Icon |
 | **Hex Copying** | Exporting | Applies the `#` value directly to the native OS Copy/Paste clipboard schema. | Bottom Hex Text Node |
 | **Color vision preview** | Accessibility | Preview full and milder color vision deficiencies. Original colors remain available for editing, copying, sharing and exports. | Desktop and mobile Color vision selectors |
+| **Adjust palette** | Editing | Preview hue, saturation, brightness and temperature changes across unlocked colors. Apply creates one undo step; Cancel or Escape restores the original palette. | Desktop and mobile Adjust buttons |
 | **Method Configuration** | Theory | Swaps internal generation engines across 8 chroma.js mathematical behaviors. | Top Navigation Bar Tab |
 
 ## Export Integrations

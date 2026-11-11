@@ -120,6 +120,23 @@ export function hslToRgb(h, s, l) {
   }
 }
 
+// Hue shifts in degrees; saturation and brightness shift HSL percentage points.
+// Temperature runs from -100 (cooler) to 100 (warmer), shifting red/blue by 64.
+export function adjust(hex, { hue = 0, saturation = 0, brightness = 0, temperature = 0 } = {}) {
+  const normalized = normalizeHex(hex)
+  if (!normalized) return null
+  if (![hue, saturation, brightness, temperature].every(Number.isFinite)) return null
+  if (hue === 0 && saturation === 0 && brightness === 0 && temperature === 0) return normalized
+
+  let rgb = hexToRgb(normalized)
+  if (hue !== 0 || saturation !== 0 || brightness !== 0) {
+    const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b)
+    rgb = hslToRgb(hsl.h + hue, hsl.s + saturation, hsl.l + brightness)
+  }
+  const warmth = Math.max(-100, Math.min(100, temperature)) * 0.64
+  return rgbToHex(rgb.r + warmth, rgb.g, rgb.b - warmth)
+}
+
 export function rgbToHsb(r, g, b) {
   const red = r / 255
   const green = g / 255

@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 import chroma from "chroma-js"
 import ntc from "ntc"
-import { contrastRatio, wcagLevels, isLightColor, randomHex, normalizeHex, hexToRgb, rgbToHsl, rgbToHsb, rgbToCmyk, rgbToLab } from "lib/color"
+import { adjust, contrastRatio, wcagLevels, isLightColor, randomHex, normalizeHex, hexToRgb, rgbToHsl, rgbToHsb, rgbToCmyk, rgbToLab } from "lib/color"
 import {
   cssVariables, tailwindConfig, svgMarkup, shareUrl,
   scss, less, json, jsArray, embedHtml, aseFile
@@ -16,7 +16,8 @@ export default class extends Controller {
     "exportModal", "exportBackdrop", "exportContent",
     "exportColumnsContainer", "exportTitle",
     "colorInfoDialog", "colorInfoValue", "colorInfoStatus", "colorInfoPreview",
-    "contrastDialog", "contrastTable", "visionSelect"
+    "contrastDialog", "contrastTable", "visionSelect",
+    "adjustDialog", "adjustSlider", "adjustValue"
   ]
   static values = {
     method: { type: String, default: 'auto' },
@@ -86,6 +87,7 @@ export default class extends Controller {
   handleKeydown(event) {
     if (this.hasColorInfoDialogTarget && this.colorInfoDialogTarget.open) return
     if (this.hasContrastDialogTarget && this.contrastDialogTarget.open) return
+    if (this.hasAdjustDialogTarget && this.adjustDialogTarget.open) return
 
     if ((event.metaKey || event.ctrlKey) && !event.shiftKey && event.key === 'z') {
       event.preventDefault()
@@ -524,6 +526,60 @@ export default class extends Controller {
 
     this.saveCurrentStateToSnapshot()
     this.closeShades({ currentTarget: shadeBtn })
+  }
+
+  openAdjust() {
+    if (this.adjustDialogTarget.open) return
+    this.adjustOriginal = this.columnTargets.map(column => ({
+      column,
+      hex: this.getHexFromColumn(column),
+      locked: column.dataset.locked === 'true'
+    }))
+    this.adjustSliderTargets.forEach(slider => { slider.value = 0 })
+    this.updateAdjustValues()
+    this.adjustDialogTarget.showModal()
+  }
+
+  updateAdjustValues() {
+    const values = Object.fromEntries(this.adjustSliderTargets.map(slider => [slider.dataset.adjustment, Number(slider.value)]))
+    this.adjustValueTargets.forEach(output => {
+      const value = values[output.dataset.adjustment]
+      const unit = output.dataset.adjustment === 'hue' ? '°' : ''
+      output.textContent = `${value > 0 ? '+' : ''}${value}${unit}`
+    })
+    return values
+  }
+
+  previewAdjust() {
+    if (!this.adjustOriginal) return
+    const values = this.updateAdjustValues()
+    this.adjustOriginal.forEach(({ column, hex, locked }) => {
+      if (locked) return
+      // Always start from the original so dragging back to zero restores it exactly.
+      const adjusted = adjust(hex, values).toUpperCase()
+      this.setHexInColumn(column, adjusted)
+      this.setColorNameInColumn(column, adjusted)
+    })
+  }
+
+  applyAdjust() {
+    if (!this.adjustOriginal) return
+    const changed = this.adjustOriginal.some(({ column, hex }) =>
+      normalizeHex(this.getHexFromColumn(column)) !== normalizeHex(hex))
+    if (changed) this.saveCurrentStateToSnapshot()
+    this.adjustOriginal = null
+    this.adjustDialogTarget.close()
+  }
+
+  cancelAdjust(event) {
+    if (event?.type === 'cancel') event.preventDefault()
+    this.adjustOriginal?.forEach(({ column, hex, locked }) => {
+      if (locked) return
+      this.setHexInColumn(column, hex)
+      this.setColorNameInColumn(column, hex)
+    })
+    this.adjustOriginal = null
+    if (this.adjustDialogTarget.open) this.adjustDialogTarget.close()
   }
 
   openContrast() {
