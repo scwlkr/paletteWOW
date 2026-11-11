@@ -1,0 +1,46 @@
+<% content_for :title, "Contrast checker | paletteWOW" %>
+
+<div class="w-full max-w-5xl mx-auto px-6 py-10" data-controller="contrast">
+  <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-10">Contrast checker</h1>
+
+  <div class="flex flex-col sm:flex-row sm:items-end gap-6 mb-8">
+    <% [ [ "text", "Text color", "#000000" ], [ "bg", "Background color", "#ffffff" ] ].each_with_index do |(key, label, color), index| %>
+      <% if index == 1 %>
+        <button type="button" data-action="contrast#swap" class="self-start sm:self-auto px-5 py-3 rounded-full border border-neutral-300 text-sm font-bold hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2">Swap</button>
+      <% end %>
+      <div class="flex-1 min-w-0">
+        <label for="contrast-<%= key %>" class="block text-sm font-medium mb-3"><%= label %></label>
+        <div class="flex items-center gap-3">
+          <input type="color" value="<%= color %>" aria-label="Pick <%= label.downcase %>" data-contrast-target="<%= key %>Picker" data-color="<%= key %>" data-action="input->contrast#pick" class="w-12 h-12 shrink-0 cursor-pointer rounded border border-neutral-300 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2">
+          <input type="text" id="contrast-<%= key %>" value="<%= color %>" spellcheck="false" autocomplete="off" aria-label="<%= label %> hex" data-contrast-target="<%= key %>" data-color="<%= key %>" data-action="input->contrast#update" class="w-full min-w-0 rounded-xl border border-neutral-300 px-4 py-3 font-mono text-base aria-invalid:border-red-600 focus:outline-none focus:ring-2 focus:ring-black">
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div data-contrast-target="preview" aria-label="Text preview" style="color: #000000; background-color: #ffffff;" class="rounded-2xl border border-neutral-200 px-8 py-12 sm:px-12 sm:py-16 mb-8">
+    <p class="text-3xl font-bold mb-4">Color in context</p>
+    <p class="text-base">The quick brown fox jumps over the lazy dog.</p>
+  </div>
+
+  <section aria-label="WCAG contrast results" aria-live="polite" aria-atomic="true" class="rounded-2xl border border-neutral-200 p-6 sm:p-8">
+    <h2 class="text-sm font-medium mb-2">Contrast ratio</h2>
+    <p data-contrast-target="ratio" class="text-5xl font-bold tracking-tight mb-8">—</p>
+    <div class="grid sm:grid-cols-2 gap-6">
+      <% [ [ "Normal text", [ [ "AA", "aa" ], [ "AAA", "aaa" ] ] ], [ "Large text (24px or 19px bold)", [ [ "AA", "aaLarge" ], [ "AAA", "aaaLarge" ] ] ] ].each do |heading, levels| %>
+        <div>
+          <h3 class="text-sm font-medium mb-4"><%= heading %></h3>
+          <dl class="flex gap-6">
+            <% levels.each do |label, level| %>
+              <div class="flex items-center gap-2">
+                <dt class="text-sm font-bold"><%= label %></dt>
+                <dd data-contrast-target="badge" data-level="<%= level %>" class="rounded-full px-3 py-1 text-xs font-bold">—</dd>
+              </div>
+            <% end %>
+          </dl>
+        </div>
+      <% end %>
+    </div>
+  </section>
+  <noscript><p class="mt-6">Enable JavaScript to check contrast.</p></noscript>
+</div>
