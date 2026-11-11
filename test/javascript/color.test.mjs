@@ -1,9 +1,42 @@
 import { test } from "node:test"
 import assert from "node:assert"
 import {
-  contrastRatio, hexToRgb, hslToRgb, isLightColor, normalizeHex, randomHex,
+  contrastMatrix, contrastRatio, hexToRgb, hslToRgb, isLightColor, normalizeHex, randomHex,
   relativeLuminance, rgbToCmyk, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab, wcagLevels
 } from "../../app/javascript/lib/color.js"
+
+test("contrastMatrix includes every ordered pair and self-pair for two to ten colours", () => {
+  const palette = ["#000000", "#ffffff", "#ff0000", "#00ff00", "#0000ff", "#777777", "#123456", "#abcdef", "#ffff00", "#00ffff"]
+  for (let size = 2; size <= 10; size++) {
+    const matrix = contrastMatrix(palette.slice(0, size))
+    assert.equal(matrix.length, size)
+    matrix.forEach((row, i) => {
+      assert.equal(row.length, size)
+      row.forEach((cell, j) => {
+        assert.equal(cell.text, palette[i])
+        assert.equal(cell.background, palette[j])
+        assert.ok(cell.ratio >= 1 && cell.ratio <= 21)
+      })
+      assert.equal(row[i].ratio, 1)
+      assert.deepEqual(row[i].levels, { aa: false, aaLarge: false, aaa: false, aaaLarge: false })
+    })
+    assert.equal(matrix[0][1].ratio, 21)
+    assert.equal(matrix[1][0].ratio, 21)
+    assert.deepEqual(matrix[0][1].levels, { aa: true, aaLarge: true, aaa: true, aaaLarge: true })
+  }
+})
+
+test("contrastMatrix distinguishes AA, large text only and failing combinations", () => {
+  const matrix = contrastMatrix(["#fff", "#000", "#767676", "#777", "#aaa", "#fff"])
+  assert.equal(matrix[0][2].ratio, 4.54)
+  assert.deepEqual(matrix[0][2].levels, { aa: true, aaLarge: true, aaa: false, aaaLarge: true })
+  assert.equal(matrix[0][3].ratio, 4.48)
+  assert.deepEqual(matrix[0][3].levels, { aa: false, aaLarge: true, aaa: false, aaaLarge: false })
+  assert.equal(matrix[0][4].ratio, 2.32)
+  assert.deepEqual(matrix[0][4].levels, { aa: false, aaLarge: false, aaa: false, aaaLarge: false })
+  assert.equal(matrix[0][5].ratio, 1)
+  assert.equal(matrix[5][0].ratio, 1)
+})
 
 test("normalizeHex expands and lowercases three-digit hex codes", () => {
   assert.equal(normalizeHex("abc"), "#aabbcc")

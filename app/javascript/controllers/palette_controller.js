@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 import chroma from "chroma-js"
 import ntc from "ntc"
-import { isLightColor, randomHex } from "lib/color"
+import { contrastMatrix, isLightColor, randomHex } from "lib/color"
 import {
   cssVariables, tailwindConfig, svgMarkup, shareUrl,
   scss, less, json, jsArray, embedHtml, aseFile
@@ -13,7 +13,7 @@ export default class extends Controller {
     "container", "column", "hexCode", "colorName", "unlockedIcon", "lockedIcon",
     "shadesModal", "shadesContainer", "methodSelect",
     "exportModal", "exportBackdrop", "exportContent",
-    "exportColumnsContainer", "exportTitle"
+    "exportColumnsContainer", "exportTitle", "contrastDialog", "contrastTable"
   ]
   static values = {
     method: { type: String, default: 'auto' },
@@ -83,6 +83,8 @@ export default class extends Controller {
   }
 
   handleKeydown(event) {
+    if (this.hasContrastDialogTarget && this.contrastDialogTarget.open) return
+
     if ((event.metaKey || event.ctrlKey) && !event.shiftKey && event.key === 'z') {
       event.preventDefault()
       this.undo()
@@ -498,6 +500,40 @@ export default class extends Controller {
 
     this.saveCurrentStateToSnapshot()
     this.closeShades({ currentTarget: shadeBtn })
+  }
+
+  // --- Contrast UI ---
+
+  openContrast() {
+    const matrix = contrastMatrix(this.getExportHexes())
+    const header = matrix[0].map(({ background }) => `
+      <th scope="col" class="p-3 font-mono text-xs whitespace-nowrap">
+        <span class="inline-block w-3 h-3 rounded-full border border-neutral-200 align-middle mr-1" style="background-color: ${background}"></span>${background.toUpperCase()}
+      </th>`).join('')
+    const rows = matrix.map((row) => `
+      <tr>
+        <th scope="row" class="sticky left-0 bg-white p-3 font-mono text-xs whitespace-nowrap border-t border-neutral-200">
+          <span class="inline-block w-3 h-3 rounded-full border border-neutral-200 align-middle mr-1" style="background-color: ${row[0].text}"></span>${row[0].text.toUpperCase()}
+        </th>
+        ${row.map(({ text, background, ratio, levels }) => {
+          const level = levels.aaa ? 'AAA' : levels.aa ? 'AA' : levels.aaLarge ? 'AA large' : 'Fail'
+          const mark = levels.aaLarge ? '✓' : '✗'
+          return `<td class="p-3 text-center border-t border-neutral-200 min-w-28">
+            <div class="rounded-lg p-3 text-xl font-bold mb-2" style="color: ${text}; background-color: ${background}" aria-hidden="true">Aa</div>
+            <div class="font-mono text-sm">${ratio.toFixed(2)}:1</div>
+            <div class="text-xs font-bold mt-1 whitespace-nowrap">${mark} ${level}</div>
+          </td>`
+        }).join('')}
+      </tr>`).join('')
+
+    this.contrastTableTarget.innerHTML = `
+      <thead><tr><th class="sticky left-0 bg-white p-3 text-xs whitespace-nowrap">Text ↓ / Background →</th>${header}</tr></thead>
+      <tbody>${rows}</tbody>`
+    this.contrastDialogTarget.showModal()
+  }
+
+  closeContrast() {
+    this.contrastDialogTarget.close()
   }
 
   // --- Export UI ---
