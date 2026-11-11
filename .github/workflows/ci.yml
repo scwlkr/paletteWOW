@@ -33,6 +33,21 @@ jobs:
           bin/rails tailwindcss:build
           bin/rails db:prepare test
 
+  javascript:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run JavaScript unit tests
+        run: node --test test/javascript/
+
   scan_ruby:
     runs-on: ubuntu-latest
 

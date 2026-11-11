@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 import chroma from "chroma-js"
 import ntc from "ntc"
+import { isLightColor, randomHex } from "lib/color"
 
 export default class extends Controller {
   static targets = [
@@ -49,7 +50,7 @@ export default class extends Controller {
         const column = this.columnTargets[index]
         if (!column) return
 
-        const isLight = this.isLightColor(hex)
+        const isLight = isLightColor(hex)
         const computedTextColor = isLight ? '#000000' : '#FFFFFF'
 
         column.style.backgroundColor = hex
@@ -128,12 +129,12 @@ export default class extends Controller {
     }
 
     const hasLocked = lockedColumns.length > 0
-    let baseHex = hasLocked ? this.getHexFromColumn(lockedColumns[0]) : this.generateRandomHex()
+    let baseHex = hasLocked ? this.getHexFromColumn(lockedColumns[0]) : randomHex()
 
     let newColors = []
     if (this.methodValue === 'auto') {
       for (let i = 0; i < unlockedColumns.length; i++) {
-        newColors.push(this.generateRandomHex())
+        newColors.push(randomHex())
       }
     } else {
       newColors = this.generateColorsForMethod(baseHex, unlockedColumns.length, this.methodValue, !hasLocked)
@@ -152,7 +153,7 @@ export default class extends Controller {
         hex = newColors[nextColorIndex].toUpperCase()
         nextColorIndex++
 
-        const isLight = this.isLightColor(hex)
+        const isLight = isLightColor(hex)
 
         column.style.backgroundColor = hex
         this.setHexInColumn(column, hex)
@@ -256,8 +257,8 @@ export default class extends Controller {
     currentColumn.after(clone)
 
     const newColumn = currentColumn.nextElementSibling
-    const newHex = this.generateRandomHex()
-    const isLight = this.isLightColor(newHex)
+    const newHex = randomHex()
+    const isLight = isLightColor(newHex)
 
     newColumn.style.backgroundColor = newHex
     newColumn.style.color = isLight ? '#000000' : '#FFFFFF'
@@ -294,7 +295,7 @@ export default class extends Controller {
     const input = event.target
     const hex = input.value.toUpperCase()
     const column = input.closest('[data-palette-target="column"]')
-    const isLight = this.isLightColor(hex)
+    const isLight = isLightColor(hex)
 
     column.style.backgroundColor = hex
     column.style.color = isLight ? '#000000' : '#FFFFFF'
@@ -447,7 +448,7 @@ export default class extends Controller {
     shadesContainer.innerHTML = ''
 
     scale.forEach(shadeHex => {
-      const isLight = this.isLightColor(shadeHex)
+      const isLight = isLightColor(shadeHex)
       const textColor = isLight ? '#000000' : '#ffffff'
 
       const btn = document.createElement('button')
@@ -484,7 +485,7 @@ export default class extends Controller {
     const hex = shadeBtn.dataset.hex
 
     const column = shadeBtn.closest('[data-palette-target="column"]')
-    const isLight = this.isLightColor(hex)
+    const isLight = isLightColor(hex)
 
     column.style.backgroundColor = hex
     column.style.color = isLight ? '#000000' : '#FFFFFF'
@@ -591,7 +592,7 @@ export default class extends Controller {
       ctx.fillRect(i * colWidth, 96, colWidth, 704)
 
       // Hex text
-      ctx.fillStyle = this.isLightColor(hex) ? '#000000' : '#ffffff'
+      ctx.fillStyle = isLightColor(hex) ? '#000000' : '#ffffff'
       ctx.font = 'bold 24px sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'bottom'
@@ -792,22 +793,5 @@ export default class extends Controller {
       const match = ntc.name(hex)
       nameNode.textContent = match ? match[1] : ''
     }
-  }
-
-  generateRandomHex() {
-    const letters = '0123456789ABCDEF'
-    let color = '#'
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)]
-    }
-    return color
-  }
-
-  isLightColor(hex) {
-    const r = parseInt(hex.slice(1, 3), 16)
-    const g = parseInt(hex.slice(3, 5), 16)
-    const b = parseInt(hex.slice(5, 7), 16)
-    const hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b))
-    return hsp > 127.5
   }
 }
