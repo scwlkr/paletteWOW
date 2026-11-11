@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 import chroma from "chroma-js"
 import ntc from "ntc"
-import { isLightColor, randomHex } from "lib/color"
+import { isLightColor, randomHex, normalizeHex, hexToRgb, rgbToHsl, rgbToHsb, rgbToCmyk, rgbToLab } from "lib/color"
 import {
   cssVariables, tailwindConfig, svgMarkup, shareUrl,
   scss, less, json, jsArray, embedHtml, aseFile
@@ -13,7 +13,8 @@ export default class extends Controller {
     "container", "column", "hexCode", "colorName", "unlockedIcon", "lockedIcon",
     "shadesModal", "shadesContainer", "methodSelect",
     "exportModal", "exportBackdrop", "exportContent",
-    "exportColumnsContainer", "exportTitle"
+    "exportColumnsContainer", "exportTitle",
+    "colorInfoDialog", "colorInfoValue", "colorInfoStatus", "colorInfoPreview"
   ]
   static values = {
     method: { type: String, default: 'auto' },
@@ -83,6 +84,8 @@ export default class extends Controller {
   }
 
   handleKeydown(event) {
+    if (this.hasColorInfoDialogTarget && this.colorInfoDialogTarget.open) return
+
     if ((event.metaKey || event.ctrlKey) && !event.shiftKey && event.key === 'z') {
       event.preventDefault()
       this.undo()
@@ -343,6 +346,46 @@ export default class extends Controller {
         hexContainer.classList.remove('copied')
       }, 1500)
     })
+  }
+
+  openColorInfo(event) {
+    const column = event.currentTarget.closest('[data-palette-target="column"]')
+    const hex = normalizeHex(this.getHexFromColumn(column))
+    const { r, g, b } = hexToRgb(hex)
+    const hsl = rgbToHsl(r, g, b)
+    const hsb = rgbToHsb(r, g, b)
+    const cmyk = rgbToCmyk(r, g, b)
+    const lab = rgbToLab(r, g, b)
+    const values = {
+      HEX: hex.toUpperCase(),
+      RGB: `rgb(${r}, ${g}, ${b})`,
+      HSL: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,
+      HSB: `${hsb.h}°, ${hsb.s}%, ${hsb.b}%`,
+      CMYK: `${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%`,
+      LAB: `${lab.l}, ${lab.a}, ${lab.b}`,
+      Name: ntc.name(hex)[1]
+    }
+
+    this.colorInfoValueTargets.forEach(row => {
+      row.textContent = values[row.dataset.format]
+    })
+    this.colorInfoPreviewTarget.style.backgroundColor = hex
+    this.colorInfoStatusTarget.textContent = ""
+    this.colorInfoDialogTarget.showModal()
+  }
+
+  closeColorInfoOnBackdrop(event) {
+    if (event.target === this.colorInfoDialogTarget) this.colorInfoDialogTarget.close()
+  }
+
+  async copyColorInfo(event) {
+    const row = event.currentTarget.closest('div').querySelector('[data-palette-target="colorInfoValue"]')
+    try {
+      await navigator.clipboard.writeText(row.textContent)
+      this.colorInfoStatusTarget.textContent = `${row.dataset.format} copied!`
+    } catch {
+      this.colorInfoStatusTarget.textContent = "Copy failed. Select the value to copy it."
+    }
   }
 
   save(event) {

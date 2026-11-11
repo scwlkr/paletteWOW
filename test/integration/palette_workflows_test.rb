@@ -34,6 +34,28 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
     assert_select '[data-action="click->palette#redo"]', minimum: 1
   end
 
+  test "every swatch and the new column template offer color info with copyable formats" do
+    get root_path
+    assert_response :success
+
+    assert_select '[data-palette-target="container"] > [data-palette-target="column"]', count: 5 do |columns|
+      columns.each do |column|
+        assert_select column, 'button[aria-label="Color info"][aria-haspopup="dialog"]', count: 1
+      end
+    end
+    assert_select "template#column-template" do
+      assert_select 'button[aria-label="Color info"][aria-haspopup="dialog"]', count: 1
+    end
+    assert_select 'dialog[aria-labelledby="color-info-title"]', count: 1 do
+      %w[HEX RGB HSL HSB CMYK LAB Name].each do |format|
+        assert_select "dd[data-format='#{format}']", count: 1
+        assert_select "button[aria-label='Copy #{format}']", count: 1
+      end
+      assert_select 'form[method="dialog"] button[aria-label="Close color info"]', count: 1
+      assert_select '[role="status"]', count: 1
+    end
+  end
+
   test "generator method selector offers all eight methods" do
     get root_path
     assert_response :success
