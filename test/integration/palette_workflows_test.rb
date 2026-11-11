@@ -38,11 +38,11 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'dialog[data-palette-target="infoModal"][aria-labelledby="color-info-title"]', count: 1 do
       %w[HEX RGB HSL HSB CMYK LAB Name].each do |format|
-        assert_select 'dt', text: format, count: 1
+        assert_select "dt", text: format, count: 1
         assert_select "button[aria-label='Copy #{format}'][data-action='click->palette#copyColorInfo']", count: 1
       end
       assert_select 'button[data-action="click->palette#closeInfoModal"]', count: 1
-      assert_select 'input', count: 0
+      assert_select "input", count: 0
     end
   end
 
