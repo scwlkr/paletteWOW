@@ -13,6 +13,7 @@ This document provides an ultimate catalog of paletteWOW's primary functions, us
 | **Remove Color Segment** | Capacity | Depreciates active grid array mapping down to a minimum configuration. | Column Delete Icon |
 | **Hex Copying** | Exporting | Applies the `#` value directly to the native OS Copy/Paste clipboard schema. | Bottom Hex Text Node |
 | **Method Configuration** | Theory | Swaps internal generation engines across 8 chroma.js mathematical behaviors. | Top Navigation Bar Tab |
+| **Dark Mode** | Presentation | Follows the device's dark setting and stores the manual toggle in the browser with no theme flash on load. | Header Moon/Sun Toggle |
 
 ## Export Integrations
 

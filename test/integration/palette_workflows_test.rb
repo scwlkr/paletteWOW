@@ -111,6 +111,37 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "currently disabled"
   end
 
+  test "header offers a theme toggle stored in the browser" do
+    get root_path
+    assert_response :success
+    assert_select '[data-controller="theme"]'
+    assert_select '[data-action="click->theme#toggle"]'
+  end
+
+  test "theme choice is applied before first paint to avoid a flash" do
+    get root_path
+    assert_response :success
+    assert_includes response.body, 'localStorage.getItem("palettewow-theme")'
+    assert_includes response.body, "prefers-color-scheme: dark"
+  end
+
+  test "shared palette and privacy pages render the theme toggle" do
+    get "/123456-abcdef"
+    assert_response :success
+    assert_select '[data-controller="theme"]'
+
+    get privacy_path
+    assert_response :success
+    assert_select '[data-controller="theme"]'
+  end
+
+  test "layout ships dark variants and never hardcodes a dark page" do
+    get root_path
+    assert_response :success
+    assert_includes response.body, "dark:bg-neutral-950"
+    assert_select "html.dark", count: 0
+  end
+
   test "privacy and health endpoints return 200" do
     get privacy_path
     assert_response :success

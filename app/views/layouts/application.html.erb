@@ -26,10 +26,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+      // Apply the saved or device theme before first paint to avoid a flash of the wrong theme.
+      (function () {
+        var theme;
+        try { theme = localStorage.getItem("palettewow-theme"); } catch (e) { theme = null; }
+        if (theme !== "dark" && theme !== "light") {
+          theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.classList.toggle("dark", theme === "dark");
+      })();
+    </script>
   </head>
 
-  <body class="bg-white text-neutral-900 border-none min-h-screen flex flex-col" style="font-family: 'Outfit', sans-serif;">
-    <nav class="border-b border-neutral-200 relative z-50 bg-white">
+  <body class="bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100 border-none min-h-screen flex flex-col" style="font-family: 'Outfit', sans-serif;">
+    <nav class="border-b border-neutral-200 dark:border-neutral-800 relative z-50 bg-white dark:bg-neutral-950">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
@@ -38,19 +50,23 @@
             <% end %>
           </div>
           <div class="flex items-center space-x-6">
-            <%= link_to "GitHub", "https://github.com/scwlkr/paletteWOW", class: "text-sm font-medium hover:text-neutral-500 transition-colors" %>
+            <%= link_to "GitHub", "https://github.com/scwlkr/paletteWOW", class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors" %>
+            <button data-controller="theme" data-action="click->theme#toggle" aria-label="Toggle dark mode" class="p-1.5 text-neutral-400 hover:text-black dark:hover:text-neutral-100 transition-colors rounded-full focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-1 dark:focus-visible:ring-offset-neutral-950 focus:outline-none">
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 dark:hidden"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 hidden dark:block"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>
+            </button>
           </div>
         </div>
       </div>
     </nav>
 
     <% if notice %>
-      <div class="bg-black text-white px-4 py-3 text-center text-sm font-medium" role="alert">
+      <div class="bg-black text-white dark:bg-white dark:text-neutral-900 px-4 py-3 text-center text-sm font-medium" role="alert">
         <%= notice %>
       </div>
     <% end %>
     <% if alert %>
-      <div class="bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3 text-center text-sm font-medium" role="alert">
+      <div class="bg-red-100 border-l-4 border-red-500 text-red-700 dark:bg-red-950/50 dark:border-red-400 dark:text-red-300 px-4 py-3 text-center text-sm font-medium" role="alert">
         <%= alert %>
       </div>
     <% end %>
@@ -59,9 +75,9 @@
       <%= yield %>
     </main>
 
-    <footer class="mt-auto border-t border-neutral-200 py-6">
+    <footer class="mt-auto border-t border-neutral-200 dark:border-neutral-800 py-6">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center">
-        <%= link_to "Privacy Policy", privacy_path, class: "text-xs text-neutral-400 hover:text-neutral-600 transition-colors" %>
+        <%= link_to "Privacy Policy", privacy_path, class: "text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors" %>
       </div>
     </footer>
   </body>
