@@ -67,6 +67,20 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "desktop and phone offer a labelled adjustment dialog with four sliders" do
+    get root_path
+    assert_response :success
+    assert_select 'button[data-action="click->palette#openAdjust"][aria-haspopup="dialog"]', count: 2
+    assert_select 'dialog[aria-labelledby="palette-adjust-title"]', count: 1 do
+      %w[hue saturation brightness temperature].each do |name|
+        assert_select "label[for='palette-adjust-#{name}']", count: 1
+        assert_select "input#palette-adjust-#{name}[type='range'][value='0']", count: 1
+      end
+      assert_select 'button[data-action="click->palette#applyAdjust"]', text: "Apply"
+      assert_select 'button[data-action="click->palette#cancelAdjust"]', text: "Cancel"
+    end
+  end
+
   test "generator method selector offers all eight methods" do
     get root_path
     assert_response :success
