@@ -43,8 +43,8 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
         assert_select "dd[data-palette-target='infoValue'][data-format='#{format}']", count: 1
         assert_select "button[aria-label='Copy #{format}'][data-action='click->palette#copyInfo']", count: 1
       end
-      assert_select 'input, select, textarea, [contenteditable]', count: 0
-      assert_select 'button[data-action="click->palette#closeInfo"]', count: 1
+      assert_select "input, select, textarea, [contenteditable]", count: 0
+      assert_select "button[data-action='click->palette#closeInfo']", count: 1
     end
   end
 
