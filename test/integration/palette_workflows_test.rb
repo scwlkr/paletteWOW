@@ -20,18 +20,22 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
   test "generator renders its column controls" do
     get root_path
     assert_response :success
-    assert_select '[data-action="click->palette#toggleLock"]', minimum: 1
-    assert_select '[data-action="click->palette#copyHex"]', minimum: 1
-    assert_select '[data-action="click->palette#viewShades"]', minimum: 1
-    assert_select '[data-action="click->palette#addColumn"]', minimum: 1
-    assert_select '[data-action="click->palette#removeColumn"]', minimum: 1
+    assert_select 'button[aria-label="Toggle Lock"][aria-pressed="false"]', count: 6
+    assert_select 'button[aria-label="Copy Hex"][data-action="click->palette#copyHex"]', count: 6
+    assert_select 'button[aria-label="View Shades"][data-action="click->palette#viewShades"]', count: 6
+    assert_select 'dialog[aria-label="Color shades"]', count: 6
+    assert_select 'button[aria-label="Add Color"][data-action="click->palette#addColumn"]', count: 12
+    assert_select 'button[aria-label="Remove Color"][data-action="click->palette#removeColumn"]', count: 12
+    assert_select 'button[aria-label^="Reorder color"][aria-keyshortcuts]', count: 12
+    assert_select 'button[aria-label="Edit #FFFFFF White"][data-palette-target="hexCode"]', count: 6
+    assert_select '[role="group"][aria-label="#FFFFFF White"]', count: 6
   end
 
   test "generator renders undo and redo controls" do
     get root_path
     assert_response :success
-    assert_select '[data-action="click->palette#undo"]', minimum: 1
-    assert_select '[data-action="click->palette#redo"]', minimum: 1
+    assert_select 'button[aria-label="Undo"][data-action="click->palette#undo"]', count: 2
+    assert_select 'button[aria-label="Redo"][data-action="click->palette#redo"]', count: 2
   end
 
   test "every swatch and the new column template offer color info with copyable formats" do
@@ -84,7 +88,7 @@ class PaletteWorkflowsTest < ActionDispatch::IntegrationTest
   test "generator method selector offers all eight methods" do
     get root_path
     assert_response :success
-    assert_select 'select[data-action="change->palette#changeMethod"]', minimum: 1
+    assert_select 'select[aria-label="Generation method"][data-action="change->palette#changeMethod"]', count: 2
 
     methods = css_select('select[data-action="change->palette#changeMethod"] option')
       .map { |option| option["value"] }

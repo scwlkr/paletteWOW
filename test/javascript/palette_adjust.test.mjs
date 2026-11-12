@@ -10,6 +10,7 @@ function swatch(hex, locked = false) {
   const label = { textContent: hex }
   const input = { value: hex }
   const name = { textContent: "" }
+  const lock = { ariaPressed: String(locked) }
   // DOMStringMap stores dataset assignments as strings, including during undo.
   const dataset = new Proxy({ locked: String(locked) }, {
     set(target, key, value) { target[key] = String(value); return true }
@@ -17,6 +18,7 @@ function swatch(hex, locked = false) {
   return {
     style: {}, dataset,
     querySelector(selector) {
+      if (selector === '[data-action="click->palette#toggleLock"]') return lock
       if (selector === 'input[type="color"]') return input
       if (selector === '[data-palette-target="colorName"]') return name
       if (selector.includes('hexCode')) return label

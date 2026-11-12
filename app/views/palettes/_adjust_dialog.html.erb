@@ -1,4 +1,4 @@
-<dialog data-palette-target="adjustDialog" data-action="cancel->palette#cancelAdjust close->palette#cancelAdjust" aria-labelledby="palette-adjust-title" class="m-auto w-[calc(100%_-_2rem)] max-w-md max-h-[90dvh] overflow-y-auto bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-2xl shadow-2xl p-6 sm:p-8 backdrop:bg-black/20">
+<dialog data-palette-target="adjustDialog" data-action="keydown->palette#trapDialogFocus cancel->palette#cancelAdjust close->palette#cancelAdjust" aria-labelledby="palette-adjust-title" class="m-auto w-[calc(100%_-_2rem)] max-w-md max-h-[90dvh] overflow-y-auto bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-2xl shadow-2xl p-6 sm:p-8 backdrop:bg-black/20">
   <h2 id="palette-adjust-title" class="text-xl sm:text-2xl font-black tracking-tight mb-6">Adjust palette</h2>
   <div class="space-y-6">
     <% [ ["hue", "Hue", 180], ["saturation", "Saturation", 100], ["brightness", "Brightness", 100], ["temperature", "Temperature", 100] ].each do |name, label, limit| %>

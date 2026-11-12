@@ -53,3 +53,14 @@ test("space on a vision selector uses the native control without generating colo
   controller.generate = () => assert.fail("must not generate while operating a selector")
   controller.handleKeydown({ code: "Space", target: { closest: () => ({ tagName: "SELECT" }) }, preventDefault: () => assert.fail("must preserve native keyboard behavior") })
 })
+
+test("swatch labels choose readable black or white even around middle gray", () => {
+  const controller = Object.create(PaletteController.prototype)
+  controller.visionValue = "normal"
+  for (const [hex, expected] of [["#777777", "#000000"], ["#ff0000", "#000000"], ["#0000ff", "#FFFFFF"], ["#ffffff", "#000000"]]) {
+    const column = swatch(hex)
+    controller.paintColumn(column, hex)
+    assert.equal(column.style.color, expected, hex)
+    assert.equal(column.style.backgroundColor, hex)
+  }
+})

@@ -8,3 +8,15 @@
   -webkit-text-fill-color: transparent;
   background-image: linear-gradient(to right, #4F46E5, #EC4899);
 }
+
+/* Focus stays visible on unstyled controls and on invisible select overlays. */
+:where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.generation-method:has(select:focus-visible) {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 9999px;
+}
