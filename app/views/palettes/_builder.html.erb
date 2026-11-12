@@ -34,6 +34,7 @@
 
     <!-- Right: Actions -->
     <div class="flex items-center space-x-4">
+      <%= render "palettes/import_button" %>
       <%= render "palettes/adjust_button" %>
       <%= render "palettes/vision_select" %>
       <button type="button" data-action="click->palette#openContrast" aria-haspopup="dialog" class="text-[12px] font-bold tracking-widest uppercase text-black px-4 py-2.5 rounded-full bg-white hover:bg-neutral-50 border border-neutral-300 shadow-sm cursor-pointer focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none">Contrast</button>
@@ -47,7 +48,8 @@
     </div>
   </div>
 
-  <div class="md:hidden bg-white border-b border-neutral-200 px-4 py-2 flex items-center justify-between gap-3 shrink-0">
+  <div class="md:hidden bg-white border-b border-neutral-200 px-4 py-2 flex flex-wrap items-center justify-between gap-3 shrink-0">
+    <%= render "palettes/import_button" %>
     <%= render "palettes/adjust_button" %>
     <%= render "palettes/vision_select" %>
   </div>
@@ -170,6 +172,7 @@
   <%= render "palettes/color_info_dialog" %>
   <%= render "palettes/contrast_dialog" %>
   <%= render "palettes/adjust_dialog" %>
+  <%= render "palettes/import_dialog" %>
 
   <!-- Export Modal -->
   <div data-palette-target="exportModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">

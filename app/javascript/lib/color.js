@@ -14,6 +14,37 @@ export function normalizeHex(text) {
   return `#${value.toLowerCase()}`
 }
 
+// Import only color values, keeping their order and repeated swatches.
+export function parsePalette(text) {
+  if (typeof text !== "string" || !text.trim()) return []
+  const input = text.trim()
+  let values
+
+  if (/^(https?:\/\/|www\.|coolors\.co\/|palettewow\.xyz\/)/i.test(input)) {
+    try {
+      const url = new URL(/^https?:\/\//i.test(input) ? input : `https://${input}`)
+      const path = decodeURIComponent(url.pathname).replace(/\/$/, "").split("/").pop()
+      if (!/^(?:[a-f\d]{6}|[a-f\d]{3})(?:-(?:[a-f\d]{6}|[a-f\d]{3}))*$/i.test(path)) return []
+      values = path.split("-")
+    } catch {
+      return []
+    }
+  } else if (input.startsWith("[")) {
+    try {
+      values = JSON.parse(input)
+      if (!Array.isArray(values)) return []
+    } catch {
+      return []
+    }
+  } else if (input.includes("#") && /[{}:]/.test(input)) {
+    values = input.match(/(?<![\w#])#(?:[a-f\d]{6}|[a-f\d]{3})(?![\w-])/gi) || []
+  } else {
+    values = input.split(/[\s,;|\-]+/)
+  }
+
+  return values.map(normalizeHex).filter(Boolean).slice(0, 10)
+}
+
 export function isLightColor(hex) {
   const normalized = normalizeHex(hex)
   if (!normalized) return false

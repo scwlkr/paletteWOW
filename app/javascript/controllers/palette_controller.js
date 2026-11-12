@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 import chroma from "chroma-js"
 import ntc from "ntc"
-import { adjust, contrastRatio, wcagLevels, isLightColor, randomHex, normalizeHex, hexToRgb, rgbToHsl, rgbToHsb, rgbToCmyk, rgbToLab } from "lib/color"
+import { adjust, contrastRatio, wcagLevels, isLightColor, randomHex, normalizeHex, parsePalette, hexToRgb, rgbToHsl, rgbToHsb, rgbToCmyk, rgbToLab } from "lib/color"
 import {
   cssVariables, tailwindConfig, svgMarkup, shareUrl,
   scss, less, json, jsArray, embedHtml, aseFile
@@ -17,7 +17,8 @@ export default class extends Controller {
     "exportColumnsContainer", "exportTitle",
     "colorInfoDialog", "colorInfoValue", "colorInfoStatus", "colorInfoPreview",
     "contrastDialog", "contrastTable", "visionSelect",
-    "adjustDialog", "adjustSlider", "adjustValue"
+    "adjustDialog", "adjustSlider", "adjustValue",
+    "importDialog", "importText", "importStatus"
   ]
   static values = {
     method: { type: String, default: 'auto' },
@@ -30,6 +31,15 @@ export default class extends Controller {
     this.history = []
     this.pointer = -1
 
+    // The navigation wraps on phones; keep toolbar buttons below its full height.
+    const navigation = document.querySelector("body > nav")
+    if (navigation) {
+      const fitNavigation = () => { this.element.style.paddingTop = `${navigation.getBoundingClientRect().height}px` }
+      fitNavigation()
+      this.navigationObserver = new ResizeObserver(fitNavigation)
+      this.navigationObserver.observe(navigation)
+    }
+
     if (this.hasContainerTarget) {
       this.initSortable()
     }
@@ -40,6 +50,10 @@ export default class extends Controller {
       this.generate()
     }
     this.updateSaveButtonState()
+  }
+
+  disconnect() {
+    this.navigationObserver?.disconnect()
   }
 
   loadInitialColors() {
@@ -85,6 +99,7 @@ export default class extends Controller {
   }
 
   handleKeydown(event) {
+    if (this.hasImportDialogTarget && this.importDialogTarget.open) return
     if (this.hasColorInfoDialogTarget && this.colorInfoDialogTarget.open) return
     if (this.hasContrastDialogTarget && this.contrastDialogTarget.open) return
     if (this.hasAdjustDialogTarget && this.adjustDialogTarget.open) return
@@ -112,6 +127,34 @@ export default class extends Controller {
 
   changeMethod(event) {
     this.methodValue = event.target.value
+  }
+
+  openImport() {
+    this.importTextTarget.value = ""
+    this.clearImportError()
+    this.importDialogTarget.showModal()
+    this.importTextTarget.focus()
+  }
+
+  closeImport() {
+    this.importDialogTarget.close()
+  }
+
+  clearImportError() {
+    this.importTextTarget.removeAttribute("aria-invalid")
+    this.importStatusTarget.textContent = ""
+  }
+
+  importPalette(event) {
+    event.preventDefault()
+    const colors = parsePalette(this.importTextTarget.value)
+    if (colors.length < 2) {
+      this.importTextTarget.setAttribute("aria-invalid", "true")
+      this.importStatusTarget.textContent = "Enter at least two hex colors."
+      this.importTextTarget.focus()
+      return
+    }
+    window.location.assign(shareUrl(window.location.origin, colors))
   }
 
   methodValueChanged() {
