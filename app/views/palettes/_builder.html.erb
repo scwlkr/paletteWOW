@@ -177,20 +177,33 @@
   <%= render "palettes/import_dialog" %>
 
   <!-- Export Modal -->
-  <div data-palette-target="exportModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+  <dialog data-palette-target="exportModal" data-action="cancel->palette#closeExportModal" aria-labelledby="export-heading" class="fixed inset-0 m-0 h-full w-full max-h-none max-w-none bg-transparent hidden flex items-center justify-center p-4">
     <!-- Backdrop -->
     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" data-palette-target="exportBackdrop" data-action="click->palette#closeExportModal"></div>
 
     <!-- Modal Content -->
     <div class="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl p-6 sm:p-8 transform scale-95 opacity-0 transition-all duration-300" data-palette-target="exportContent">
       <div class="absolute top-4 right-4">
-        <button data-action="click->palette#closeExportModal" class="p-2 text-neutral-400 hover:text-black hover:bg-neutral-100 rounded-full transition-colors cursor-pointer">
+        <button aria-label="Close export" data-action="click->palette#closeExportModal" class="p-2 text-neutral-400 hover:text-black hover:bg-neutral-100 rounded-full transition-colors cursor-pointer">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       </div>
 
-      <h3 class="text-2xl font-black tracking-tight text-center mb-2">Export Palette</h3>
-      <p class="text-neutral-500 text-sm text-center mb-8">Download your colors or copy them for your next project.</p>
+      <h3 id="export-heading" class="text-2xl font-black tracking-tight text-center mb-6">Export Palette</h3>
+
+      <fieldset class="mb-6 space-y-4">
+        <legend class="text-sm font-bold mb-3">PNG &amp; PDF</legend>
+        <div>
+          <label for="export-title" class="block text-sm font-medium mb-1">Title</label>
+          <input id="export-title" data-palette-target="exportTitle" type="text" value="PALETTE WOW" maxlength="120" class="w-full min-w-0 border border-neutral-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-black focus:outline-none">
+        </div>
+        <div class="flex flex-wrap gap-x-5 gap-y-3">
+          <label class="flex items-center gap-2 text-sm"><input data-palette-target="exportNames" type="checkbox" class="accent-black w-4 h-4">Color names</label>
+          <% %w[HEX RGB HSL CMYK].each do |format| %>
+            <label class="flex items-center gap-2 text-sm"><input data-palette-target="exportFormat" type="checkbox" value="<%= format %>" <%= "checked" if format == "HEX" %> class="accent-black w-4 h-4"><%= format %></label>
+          <% end %>
+        </div>
+      </fieldset>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
         <!-- Export Actions -->
@@ -278,8 +291,9 @@
           <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">Embed<br>Code</span>
         </button>
 
-  </div>
-
+      </div>
+    </div>
+  </dialog>
 </div>
 
 <!-- Template for New Column -->

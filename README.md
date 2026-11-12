@@ -52,6 +52,10 @@ Named-color search, pagination and JavaScript-disabled navigation use the same s
 Palette visualizer recoloring, shuffle and generator handoff use the same setup:
 `BASE_URL=http://127.0.0.1:3000 node test/browser/visualizer.cjs`.
 
+PNG/PDF export options and downloaded file contents use the same setup, with
+`pngjs` and `pdfjs-dist` also available on `NODE_PATH`:
+`BASE_URL=http://127.0.0.1:3000 node test/browser/export.cjs`.
+
 ## Hosting
 
 Coolify runs the application and PostgreSQL on the Octal8 front door, builds on the workhorse, and serves public HTTPS directly. The database has no public port. Nightly database backups keep three copies on the other machine.
