@@ -1,0 +1,7 @@
+<li class="min-w-0">
+  <button type="button" data-action="swatch-copy#copy" data-hex="<%= hex %>" data-name="<%= name %>" aria-label="Copy <%= name %> <%= hex %>" class="block w-full h-20 sm:h-24 rounded-xl border border-black/10 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4" style="background-color: <%= hex %>"></button>
+  <%= link_to color_path(hex: hex.delete_prefix("#")), aria: { label: "#{name} color details #{hex}" }, class: "block py-2 rounded hover:underline focus-visible:outline-2 focus-visible:outline-offset-2" do %>
+    <span class="block text-sm font-bold"><%= label %></span>
+    <span class="block font-mono text-xs"><%= hex %></span>
+  <% end %>
+</li>

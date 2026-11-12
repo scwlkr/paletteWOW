@@ -1,4 +1,8 @@
 class ToolsController < ApplicationController
+  def tailwind
+    @scales = YAML.safe_load_file(Rails.root.join("config/tailwind_colors.yml"))
+  end
+
   def gradient_palette
   end
 
