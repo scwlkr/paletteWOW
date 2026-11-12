@@ -12,7 +12,7 @@ import {
 export default class extends Controller {
   static targets = [
     "container", "column", "hexCode", "colorName", "unlockedIcon", "lockedIcon",
-    "shadesModal", "shadesContainer", "methodSelect",
+    "shadesModal", "shadesContainer", "methodSelect", "status",
     "exportModal", "exportBackdrop", "exportContent",
     "exportTitle", "exportNames", "exportFormat",
     "colorInfoDialog", "colorInfoValue", "colorInfoStatus", "colorInfoPreview",
@@ -99,15 +99,8 @@ export default class extends Controller {
   }
 
   handleKeydown(event) {
-    if (this.hasExportModalTarget && this.exportModalTarget.open) {
-      if (event.key === "Tab") {
-        const controls = [...this.exportContentTarget.querySelectorAll("button, input")]
-        const next = event.shiftKey ? controls.at(-1) : controls[0]
-        const edge = event.shiftKey ? controls[0] : controls.at(-1)
-        if (document.activeElement === edge) { event.preventDefault(); next.focus() }
-      }
-      return
-    }
+    if (this.hasExportModalTarget && this.exportModalTarget.open) return
+    if (this.hasShadesModalTarget && this.shadesModalTargets.some(dialog => dialog.open)) return
     if (this.hasImportDialogTarget && this.importDialogTarget.open) return
     if (this.hasColorInfoDialogTarget && this.colorInfoDialogTarget.open) return
     if (this.hasContrastDialogTarget && this.contrastDialogTarget.open) return
@@ -132,6 +125,32 @@ export default class extends Controller {
       event.preventDefault()
       this.generate()
     }
+  }
+
+  trapDialogFocus(event) {
+    if (event.key !== "Tab") return
+    const controls = [...event.currentTarget.querySelectorAll('button, input, select, textarea, a[href], [tabindex="0"]')]
+      .filter(control => !control.disabled && control.checkVisibility())
+    const edge = event.shiftKey ? controls[0] : controls.at(-1)
+    if (document.activeElement === edge) {
+      event.preventDefault()
+      const next = event.shiftKey ? controls.at(-1) : controls[0]
+      next?.focus()
+    }
+  }
+
+  reorderColor(event) {
+    const direction = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }[event.key]
+    if (!direction) return
+    event.preventDefault()
+    const column = event.currentTarget.closest('[data-palette-target="column"]')
+    const sibling = direction < 0 ? column.previousElementSibling : column.nextElementSibling
+    if (!sibling) return
+    if (direction < 0) sibling.before(column)
+    else sibling.after(column)
+    event.currentTarget.focus()
+    this.saveCurrentStateToSnapshot()
+    this.statusTarget.textContent = `${column.ariaLabel} moved to position ${[...this.containerTarget.children].indexOf(column) + 1}.`
   }
 
   changeMethod(event) {
@@ -287,6 +306,7 @@ export default class extends Controller {
         this.setColorNameInColumn(column, colState.hex)
 
         column.dataset.locked = colState.locked
+        column.querySelector('[data-action="click->palette#toggleLock"]').ariaPressed = String(colState.locked)
 
         const unlocked = column.querySelector('[data-palette-target="unlockedIcon"]')
         const locked = column.querySelector('[data-palette-target="lockedIcon"]')
@@ -305,7 +325,6 @@ export default class extends Controller {
       return
     }
 
-    event.currentTarget.blur()
     const template = document.getElementById('column-template')
     const clone = template.content.cloneNode(true)
 
@@ -317,6 +336,7 @@ export default class extends Controller {
     this.setHexInColumn(newColumn, newHex)
     this.setColorNameInColumn(newColumn, newHex)
 
+    newColumn.querySelector('[data-palette-target="hexCode"]').focus()
     setTimeout(() => this.saveCurrentStateToSnapshot(), 10)
   }
 
@@ -326,9 +346,12 @@ export default class extends Controller {
       return
     }
 
-    event.currentTarget.blur()
     const column = event.currentTarget.closest('[data-palette-target="column"]')
+    const next = column.nextElementSibling || column.previousElementSibling
+    const action = event.currentTarget.dataset.action
     column.remove()
+    const nextButton = [...next.querySelectorAll("button")].find(button => button.dataset.action === action && button.checkVisibility())
+    nextButton?.focus()
 
     setTimeout(() => this.saveCurrentStateToSnapshot(), 10)
   }
@@ -356,11 +379,11 @@ export default class extends Controller {
   }
 
   toggleLock(event) {
-    event.currentTarget.blur()
     const column = event.currentTarget.closest('[data-palette-target="column"]')
 
     const currentlyLocked = column.dataset.locked === 'true'
     column.dataset.locked = !currentlyLocked
+    event.currentTarget.ariaPressed = String(!currentlyLocked)
 
     const unlocked = column.querySelector('[data-palette-target="unlockedIcon"]')
     const locked = column.querySelector('[data-palette-target="lockedIcon"]')
@@ -525,7 +548,6 @@ export default class extends Controller {
   }
 
   viewShades(event) {
-    event.currentTarget.blur()
     const column = event.currentTarget.closest('[data-palette-target="column"]')
     const hex = this.getHexFromColumn(column)
 
@@ -536,36 +558,42 @@ export default class extends Controller {
     shadesContainer.innerHTML = ''
 
     scale.forEach(shadeHex => {
-      const isLight = isLightColor(shadeHex)
+      const isLight = contrastRatio(shadeHex, '#000000') >= contrastRatio(shadeHex, '#ffffff')
       const textColor = isLight ? '#000000' : '#ffffff'
 
       const btn = document.createElement('button')
-      btn.className = 'flex-1 min-h-[40px] md:min-h-0 w-full flex items-center justify-center transition-transform hover:z-10 group/shade border-none m-0 p-0 shadow-none'
+      btn.className = 'flex-1 min-h-6 w-full flex items-center justify-center transition-transform hover:z-10 group/shade border-none m-0 p-0 shadow-none'
       btn.style.backgroundColor = shadeHex
       btn.style.color = textColor
       btn.dataset.action = 'click->palette#selectShade'
       btn.dataset.hex = shadeHex.toUpperCase()
+      btn.ariaLabel = `Select ${shadeHex.toUpperCase()}`
 
-      btn.innerHTML = `<span class="opacity-0 group-hover/shade:opacity-100 font-mono text-xs font-semibold tracking-wider pointer-events-none">${shadeHex.toUpperCase()}</span>`
+      btn.innerHTML = `<span class="opacity-0 group-hover/shade:opacity-100 group-focus-visible/shade:opacity-100 font-mono text-xs font-semibold tracking-wider pointer-events-none">${shadeHex.toUpperCase()}</span>`
 
       shadesContainer.appendChild(btn)
     })
 
     const modal = column.querySelector('[data-palette-target="shadesModal"]')
-    modal.classList.remove('hidden')
+    modal.showModal()
+    this.fitShades()
+  }
 
-    setTimeout(() => {
-      modal.classList.remove('opacity-0')
-    }, 10)
+  fitShades() {
+    this.shadesModalTargets.filter(dialog => dialog.open).forEach(dialog => {
+      const bounds = dialog.closest('[data-palette-target="column"]').getBoundingClientRect()
+      const width = Math.min(bounds.width, window.innerWidth)
+      const height = Math.min(bounds.height, window.innerHeight)
+      Object.assign(dialog.style, {
+        left: `${Math.max(0, Math.min(bounds.left, window.innerWidth - width))}px`,
+        top: `${Math.max(0, Math.min(bounds.top, window.innerHeight - height))}px`,
+        width: `${width}px`, height: `${height}px`
+      })
+    })
   }
 
   closeShades(event) {
-    if (event) event.currentTarget.blur()
-    const modal = event.currentTarget.closest('[data-palette-target="shadesModal"]')
-    modal.classList.add('opacity-0')
-    setTimeout(() => {
-      modal.classList.add('hidden')
-    }, 300)
+    event.currentTarget.closest('[data-palette-target="shadesModal"]').close()
   }
 
   selectShade(event) {
@@ -1021,7 +1049,7 @@ export default class extends Controller {
   paintColumn(column, hex) {
     const displayed = simulate(hex, this.visionValue)
     column.style.backgroundColor = displayed
-    column.style.color = isLightColor(displayed) ? '#000000' : '#FFFFFF'
+    column.style.color = contrastRatio(displayed, '#000000') >= contrastRatio(displayed, '#ffffff') ? '#000000' : '#FFFFFF'
   }
 
   setHexInColumn(column, hex) {
@@ -1051,6 +1079,10 @@ export default class extends Controller {
       const match = ntc.name(hex)
       nameNode.textContent = match ? match[1] : ''
       nameNode.href = `/color/${normalizeHex(hex).slice(1)}`
+      const label = `${normalizeHex(hex).toUpperCase()} ${nameNode.textContent}`
+      column.ariaLabel = label
+      column.querySelector('[data-palette-target="hexCode"]').ariaLabel = `Edit ${label}`
+      column.querySelector('input[type="color"]').ariaLabel = `Color picker ${label}`
     }
   }
 }
