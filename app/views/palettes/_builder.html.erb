@@ -97,7 +97,8 @@
                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded shadow opacity-0 group-[.copied]/hex:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Copied!</span>
                <input type="color" data-action="input->palette#updateColorFromPicker change->palette#saveColorFromPicker" class="absolute w-0 h-0 opacity-0 pointer-events-none" tabindex="-1">
              </h2>
-             <span class="block text-[10px] sm:text-[11px] font-medium opacity-50 capitalize tracking-wider mt-1 mix-blend-color-burn text-center" data-palette-target="colorName">Color Name</span>
+             <% color = ColorDetails.new((@colors&.[](i) || "#ffffff").delete_prefix("#")) %>
+             <a href="<%= color_path(hex: color.slug) %>" class="block text-[10px] sm:text-[11px] font-medium opacity-50 hover:opacity-100 hover:underline capitalize tracking-wider mt-1 text-center rounded focus-visible:outline-2 focus-visible:outline-offset-4" data-palette-target="colorName"><%= color.name %></a>
            </div>
         </div>
 
@@ -318,7 +319,7 @@
            <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded shadow opacity-0 group-[.copied]/hex:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Copied!</span>
            <input type="color" data-action="input->palette#updateColorFromPicker change->palette#saveColorFromPicker" class="absolute w-0 h-0 opacity-0 pointer-events-none" tabindex="-1">
          </h2>
-         <span class="block text-[10px] sm:text-[11px] font-medium opacity-50 capitalize tracking-wider mt-1 mix-blend-color-burn text-center" data-palette-target="colorName">Color Name</span>
+         <a href="<%= color_path(hex: 'ffffff') %>" class="block text-[10px] sm:text-[11px] font-medium opacity-50 hover:opacity-100 hover:underline capitalize tracking-wider mt-1 text-center rounded focus-visible:outline-2 focus-visible:outline-offset-4" data-palette-target="colorName">White</a>
        </div>
     </div>
 
