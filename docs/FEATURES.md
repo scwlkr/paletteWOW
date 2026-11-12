@@ -66,6 +66,10 @@ links render all four previews even without JavaScript.
 | **Tailwind Export** | Code String | Builds customized theme structure ready to securely format a tailwind config. |
 | **SVG Layout** | Graphic File | Compiles mathematically flawless vector maps of the specific layout colors. |
 
+PNG and PDF share an optional title, color names and independently selectable HEX,
+RGB, HSL and CMYK labels. Defaults keep the original title and HEX-only output.
+Clear the title and all checkboxes for unlabeled swatches.
+
 ## Accounts and the saved library
 
 Google sign-in has been removed. Accounts, profile/dashboard pages, and saved-library API routes are disabled for the current release. The existing library source is retained for a possible future WorkOS AuthKit integration, which has not been implemented.

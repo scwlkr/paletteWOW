@@ -14,7 +14,7 @@ export default class extends Controller {
     "container", "column", "hexCode", "colorName", "unlockedIcon", "lockedIcon",
     "shadesModal", "shadesContainer", "methodSelect",
     "exportModal", "exportBackdrop", "exportContent",
-    "exportColumnsContainer", "exportTitle",
+    "exportTitle", "exportNames", "exportFormat",
     "colorInfoDialog", "colorInfoValue", "colorInfoStatus", "colorInfoPreview",
     "contrastDialog", "contrastTable", "visionSelect",
     "adjustDialog", "adjustSlider", "adjustValue",
@@ -99,6 +99,15 @@ export default class extends Controller {
   }
 
   handleKeydown(event) {
+    if (this.hasExportModalTarget && this.exportModalTarget.open) {
+      if (event.key === "Tab") {
+        const controls = [...this.exportContentTarget.querySelectorAll("button, input")]
+        const next = event.shiftKey ? controls.at(-1) : controls[0]
+        const edge = event.shiftKey ? controls[0] : controls.at(-1)
+        if (document.activeElement === edge) { event.preventDefault(); next.focus() }
+      }
+      return
+    }
     if (this.hasImportDialogTarget && this.importDialogTarget.open) return
     if (this.hasColorInfoDialogTarget && this.colorInfoDialogTarget.open) return
     if (this.hasContrastDialogTarget && this.contrastDialogTarget.open) return
@@ -660,12 +669,14 @@ export default class extends Controller {
   // --- Export UI ---
 
   openExportModal(event) {
+    this.exportTrigger = event?.currentTarget
     if (event) event.currentTarget.blur()
     const modal = this.exportModalTarget
     const backdrop = this.exportBackdropTarget
     const content = this.exportContentTarget
 
     modal.classList.remove('hidden')
+    modal.showModal()
 
     // Force a reflow
     void modal.offsetWidth
@@ -675,9 +686,11 @@ export default class extends Controller {
 
     content.classList.remove('opacity-0', 'scale-95')
     content.classList.add('opacity-100', 'scale-100')
+    this.exportTitleTarget.focus()
   }
 
   closeExportModal(event) {
+    event?.preventDefault()
     if (event) event.currentTarget.blur()
     const modal = this.exportModalTarget
     const backdrop = this.exportBackdropTarget
@@ -690,7 +703,9 @@ export default class extends Controller {
     content.classList.add('opacity-0', 'scale-95')
 
     setTimeout(() => {
+      modal.close()
       modal.classList.add('hidden')
+      this.exportTrigger?.focus()
     }, 300)
   }
 
@@ -752,23 +767,48 @@ export default class extends Controller {
     ctx.fillStyle = '#a3a3a3'
     ctx.font = 'bold 20px sans-serif'
     ctx.textAlign = 'right'
-    ctx.fillText('PALETTE WOW', 1152, 48)
+    const title = this.exportTitleTarget.value.trim()
+    let titleSize = 20
+    while (ctx.measureText(title).width > 760 && titleSize > 10) {
+      ctx.font = `bold ${--titleSize}px sans-serif`
+    }
+    ctx.fillText(title, 1152, 48, 760)
 
     // Draw columns
     const hexes = this.getExportHexes()
     const colWidth = 1200 / hexes.length
+    const names = this.getExportNames()
+    const formats = new Set(this.exportFormatTargets.filter(input => input.checked).map(input => input.value))
 
     hexes.forEach((hex, i) => {
       // Column background
       ctx.fillStyle = hex
       ctx.fillRect(i * colWidth, 96, colWidth, 704)
 
-      // Hex text
+      const lines = []
+      if (this.exportNamesTarget.checked && names[i]) lines.push(names[i])
+      const { r, g, b } = hexToRgb(hex)
+      if (formats.has("HEX")) lines.push(hex.toUpperCase())
+      if (formats.has("RGB")) lines.push(`RGB ${r}, ${g}, ${b}`)
+      if (formats.has("HSL")) {
+        const { h, s, l } = rgbToHsl(r, g, b)
+        lines.push(`HSL ${h}°, ${s}%, ${l}%`)
+      }
+      if (formats.has("CMYK")) {
+        const { c, m, y, k } = rgbToCmyk(r, g, b)
+        lines.push(`CMYK ${c}%, ${m}%, ${y}%, ${k}%`)
+      }
       ctx.fillStyle = isLightColor(hex) ? '#000000' : '#ffffff'
-      ctx.font = 'bold 24px sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'bottom'
-      ctx.fillText(hex.toUpperCase(), i * colWidth + (colWidth / 2), 752)
+      lines.forEach((line, index) => {
+        let size = 24
+        ctx.font = `bold ${size}px sans-serif`
+        while (ctx.measureText(line).width > colWidth - 20 && size > 9) {
+          ctx.font = `bold ${--size}px sans-serif`
+        }
+        ctx.fillText(line, i * colWidth + colWidth / 2, 752 - (lines.length - 1 - index) * 30, colWidth - 20)
+      })
     })
 
     return canvas
