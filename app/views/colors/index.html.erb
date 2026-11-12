@@ -1,0 +1,39 @@
+<% content_for :title, "Named colors · paletteWOW" %>
+
+<article class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+  <header class="flex flex-wrap items-center justify-between gap-4">
+    <h1 class="text-3xl sm:text-4xl font-black tracking-tight">Named colors</h1>
+    <%= link_to "Generator", root_path, class: "text-sm font-medium underline underline-offset-4 rounded focus-visible:outline-2 focus-visible:outline-offset-4" %>
+  </header>
+
+  <%= form_with url: colors_path, method: :get, class: "flex flex-wrap items-end gap-3", html: { role: "search" } do |form| %>
+    <div class="flex-1 min-w-0">
+      <%= form.label :q, "Name or hex", class: "block text-sm font-medium mb-2" %>
+      <%= form.search_field :q, value: @query, class: "w-full rounded-xl border border-neutral-300 px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-4", spellcheck: false %>
+    </div>
+    <%= form.submit "Search", class: "rounded-xl bg-black text-white px-5 py-3 font-medium cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4" %>
+    <% if @query.present? %>
+      <%= link_to "Clear", colors_path, class: "py-3 text-sm font-medium underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" %>
+    <% end %>
+  <% end %>
+
+  <% if @colors.empty? %>
+    <p role="status">No colors found.</p>
+  <% else %>
+    <ul aria-label="Named colors" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      <% @colors.each do |hex, name| %>
+        <li class="min-w-0"><%= render "swatch", hex: "##{hex}", name: name %></li>
+      <% end %>
+    </ul>
+
+    <nav aria-label="Color pages" class="flex flex-wrap items-center justify-center gap-6">
+      <% if @page > 1 %>
+        <%= link_to "Previous", colors_path(q: @query.presence, page: @page - 1), rel: "prev", class: "font-medium underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" %>
+      <% end %>
+      <span aria-current="page">Page <%= @page %> of <%= @pages %></span>
+      <% if @page < @pages %>
+        <%= link_to "Next", colors_path(q: @query.presence, page: @page + 1), rel: "next", class: "font-medium underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" %>
+      <% end %>
+    </nav>
+  <% end %>
+</article>

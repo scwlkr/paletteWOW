@@ -47,6 +47,8 @@ Palette import validation and keyboard flow use the same setup:
 `BASE_URL=http://127.0.0.1:3000 node test/browser/import.cjs`.
 Tailwind swatches, clipboard feedback and generator handoff use the same setup:
 `BASE_URL=http://127.0.0.1:3000 node test/browser/tailwind.cjs`.
+Named-color search, pagination and JavaScript-disabled navigation use the same setup:
+`BASE_URL=http://127.0.0.1:3000 node test/browser/named_colors.cjs`.
 
 ## Hosting
 
