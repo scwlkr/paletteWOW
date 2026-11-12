@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get "gradient", to: "tools#gradient"
   get "gradient-palette", to: "tools#gradient_palette"
   get "tailwind", to: "tools#tailwind"
+  get "colors", to: "colors#index"
   get "color/:hex", to: "colors#show", constraints: { hex: /[a-fA-F0-9]{6}/ }, as: :color
   # Accounts and the saved library are paused until a new provider is adopted.
   resources :palettes, only: [ :index ]

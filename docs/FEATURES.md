@@ -24,6 +24,14 @@ browser and never uploaded. PNG, JPEG, WebP, GIF, AVIF and BMP images up to 20 M
 are supported when the browser can decode them. Images with fewer distinct
 colors return fewer swatches; a solid image opens as two matching swatches.
 
+## Named colors
+
+At `/colors`, browse the 1,567 names from the vendored Name that Color list,
+200 per page. Search by a name fragment or by hex (three or six digits, with
+or without `#`). Hex searches put the nearest named colors first, using the
+same calculation as the generator and color pages. Each swatch links to its
+color page. Search, pagination and links work without JavaScript.
+
 ## Gradients
 
 At `/gradient`, build linear or radial gradients with two to ten color stops.

@@ -81,6 +81,26 @@ class ColorDetails
     luminance > 0.179 ? "#000000" : "#ffffff"
   end
 
+  def self.search_names(query)
+    hex = query.delete_prefix("#")
+    hex = hex.chars.map { |digit| digit * 2 }.join if hex.match?(/\A[0-9a-fA-F]{3}\z/)
+    return new(hex).nearest_names if hex.match?(/\A[0-9a-fA-F]{6}\z/)
+
+    named_colors.filter_map { |color, name, _| [ color.downcase, name ] if name.downcase.include?(query.downcase) }
+      .sort_by { |_, name| name.downcase }
+  end
+
+  def nearest_names
+    @nearest_names ||= begin
+      exact, others = self.class.named_colors.partition { |color, _, _| color.casecmp?(slug) }
+      vector = ntc_vector
+      sorted = others.sort_by do |_, _, candidate|
+        vector.zip(candidate).each_with_index.sum { |(a, b), index| (a - b)**2 * (index < 3 ? 1 : 2) }
+      end
+      (exact + sorted).map { |color, name, _| [ color.downcase, name ] }
+    end
+  end
+
   private
 
   def linear(channel)
@@ -131,17 +151,6 @@ class ColorDetails
       h /= 6
     end
     rgb + [ (255 * h).to_i, (255 * sat).to_i, (255 * light).to_i ]
-  end
-
-  def nearest_names
-    @nearest_names ||= begin
-      exact, others = self.class.named_colors.partition { |color, _, _| color.casecmp?(slug) }
-      vector = ntc_vector
-      sorted = others.sort_by do |_, _, candidate|
-        vector.zip(candidate).each_with_index.sum { |(a, b), index| (a - b)**2 * (index < 3 ? 1 : 2) }
-      end
-      (exact + sorted).map { |color, name, _| [ color.downcase, name ] }
-    end
   end
 
   def self.named_colors
