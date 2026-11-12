@@ -11,7 +11,8 @@ async function main() {
     const errors = []
     page.on("pageerror", error => errors.push(error.message))
     await page.goto(base + "/")
-    await page.getByRole("link", { name: "Gradient palette", exact: true }).click()
+    await page.locator("summary").click()
+    await page.getByRole("navigation", { name: "Tools", exact: true }).getByRole("link", { name: "Gradient palette", exact: true }).click()
     const swatches = page.locator('[data-gradient-palette-target="swatches"] li')
     const start = page.getByRole("textbox", { name: "Start", exact: true })
     const end = page.getByRole("textbox", { name: "End", exact: true })

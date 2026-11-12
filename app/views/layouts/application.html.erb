@@ -43,12 +43,15 @@
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 hidden dark:block"><circle cx="12" cy="12" r="4" /><path stroke-linecap="round" d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></svg>
             </button>
           </div>
-          <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
-            <%= link_to "Colors", colors_path, class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
-            <%= link_to "Tailwind", tailwind_path, class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
-            <%= link_to "Gradient palette", gradient_palette_path, class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
-            <%= link_to "Gradient", gradient_path, class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
-            <%= link_to "Image", image_path, class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
+          <div class="ml-auto flex flex-wrap items-center gap-x-6 gap-y-3">
+            <details class="relative" data-controller="tools" data-action="keydown->tools#keydown click@window->tools#closeOutside focusout->tools#focusout turbo:before-cache@document->tools#reset">
+              <summary class="text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors cursor-pointer py-2 rounded focus-visible:outline-2 focus-visible:outline-offset-4">Tools</summary>
+              <nav aria-label="Tools" class="absolute right-0 top-full mt-2 w-52 max-h-[70dvh] overflow-y-auto rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-lg p-2">
+                <% tool_navigation_links.each do |label, path| %>
+                  <%= link_to label, path, class: "block px-3 py-3 text-sm font-medium rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 focus-visible:outline-2 focus-visible:-outline-offset-2" %>
+                <% end %>
+              </nav>
+            </details>
             <%= link_to "GitHub", "https://github.com/scwlkr/paletteWOW", class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors" %>
           </div>
         </div>
@@ -66,14 +69,17 @@
       </div>
     <% end %>
 
-    <main class="flex-grow w-full py-8 flex flex-col">
+    <main class="<%= content_for(:main_class) || 'flex-grow w-full py-8 flex flex-col' %>">
       <%= yield %>
     </main>
 
     <footer class="mt-auto border-t border-neutral-200 dark:border-neutral-700 py-6">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center">
-        <%= link_to "Privacy Policy", privacy_path, class: "text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors" %>
-      </div>
+      <nav aria-label="Footer" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+        <% tool_navigation_links.each do |label, path| %>
+          <%= link_to label, path, class: "py-2 text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors rounded focus-visible:outline-2 focus-visible:outline-offset-4" %>
+        <% end %>
+        <%= link_to "Privacy Policy", privacy_path, class: "py-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors rounded focus-visible:outline-2 focus-visible:outline-offset-4" %>
+      </nav>
     </footer>
   </body>
 </html>

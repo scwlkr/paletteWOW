@@ -33,7 +33,7 @@ async function main() {
         assert.notDeepEqual(after[index], before[index])
         assert.ok(after[index].flat().every(color => allowed.has(color)))
       }
-      assert.equal(await page.getByRole("link", { name: "Generator", exact: true }).getAttribute("href"), `/${colors.join("-")}`)
+      assert.equal(await page.locator("main").getByRole("link", { name: "Generator", exact: true }).getAttribute("href"), `/${colors.join("-")}`)
     }
     for (const width of [1440, 768, 390, 320]) {
       await page.setViewportSize({ width, height: width === 1440 ? 1000 : 844 })
@@ -46,7 +46,7 @@ async function main() {
         await mkdir(process.env.SCREENSHOTS, { recursive: true })
         await page.screenshot({ path: `${process.env.SCREENSHOTS}/visualizer-${width}.png`, fullPage: true })
       }
-      await page.getByRole("link", { name: "Generator", exact: true }).click()
+      await page.locator("main").getByRole("link", { name: "Generator", exact: true }).click()
       await page.waitForURL(`${base}/${palette.join("-")}`)
       await page.waitForFunction(() => document.querySelectorAll('[data-palette-target="column"]').length === 10)
       await page.waitForFunction(() => document.querySelectorAll('[data-palette-target="hexCode"] span.inline-block')[9]?.textContent.toLowerCase().includes("ffafcc"))
@@ -66,7 +66,7 @@ async function main() {
     await page.getByLabel("Color vision").filter({ visible: true }).selectOption("protanopia")
     await page.getByRole("button", { name: "Visualize", exact: true }).filter({ visible: true }).click()
     await page.waitForURL(`${base}/visualize/123abc-${palette[1]}-${palette[2]}`)
-    await page.getByRole("link", { name: "Generator", exact: true }).click()
+    await page.locator("main").getByRole("link", { name: "Generator", exact: true }).click()
     await page.waitForURL(`${base}/123abc-${palette[1]}-${palette[2]}`)
     await page.getByRole("button", { name: "Visualize", exact: true }).filter({ visible: true }).click()
     await page.waitForURL(`${base}/visualize/123abc-${palette[1]}-${palette[2]}`)
@@ -81,7 +81,7 @@ async function main() {
       const staticPage = await noJs.newPage()
       await staticPage.goto(`${base}/visualize/${palette.join("-")}`)
       assert.ok((await fills(staticPage)).flat(2).every(color => ["none", ...palette.map(rgb)].includes(color)))
-      await staticPage.getByRole("link", { name: "Generator", exact: true }).click()
+      await staticPage.locator("main").getByRole("link", { name: "Generator", exact: true }).click()
       await staticPage.waitForURL(`${base}/${palette.join("-")}`)
     } finally {
       await noJs.close()

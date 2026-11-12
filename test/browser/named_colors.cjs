@@ -5,7 +5,8 @@ const { mkdir } = require("node:fs/promises")
 
 async function check(page, base) {
   await page.goto(base)
-  await page.getByRole("link", { name: "Colors", exact: true }).click()
+  await page.locator("summary").click()
+  await page.getByRole("navigation", { name: "Tools", exact: true }).getByRole("link", { name: "Colors", exact: true }).click()
   await page.waitForURL(base + "/colors")
   const colors = page.getByRole("list", { name: "Named colors", exact: true }).getByRole("link")
   assert.equal(await colors.count(), 200)
