@@ -1,0 +1,98 @@
+<% content_for :title, "#{@color.hex.upcase} · #{@color.name} · paletteWOW" %>
+<% content_for :head do %>
+  <meta name="description" content="<%= @color.hex.upcase %> (<%= @color.name %>): RGB, HSL, HSB, CMYK and LAB values, tints, shades, color harmonies and contrast against white and black.">
+<% end %>
+
+<article class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+  <header class="rounded-2xl border border-neutral-200 p-6 sm:p-10 flex flex-wrap justify-between items-center gap-6" style="background-color: <%= @color.hex %>; color: <%= @color.text_color %>">
+    <div>
+      <h1 class="text-4xl sm:text-6xl font-black tracking-tight"><%= @color.hex.upcase %></h1>
+      <p class="text-xl font-medium mt-2"><%= @color.name %></p>
+    </div>
+    <%= link_to "Generator", root_path, class: "text-sm font-medium underline underline-offset-4 rounded focus-visible:outline-2 focus-visible:outline-offset-4" %>
+  </header>
+
+  <section aria-labelledby="formats-title">
+    <h2 id="formats-title" class="text-2xl font-bold mb-4">Formats</h2>
+    <dl class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <% @color.formats.each do |label, value| %>
+        <div class="border border-neutral-200 rounded-xl p-4 min-w-0">
+          <dt class="text-sm font-bold mb-2"><%= label %></dt>
+          <dd class="font-mono text-sm break-words"><%= value %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </section>
+
+  <% { "Tints" => @color.tints, "Shades" => @color.shades }.each do |label, colors| %>
+    <section aria-label="<%= label %>">
+      <h2 class="text-2xl font-bold mb-4"><%= label %></h2>
+      <ul class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+        <% colors.each do |hex| %>
+          <li><%= render "swatch", hex: hex %></li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
+  <section aria-labelledby="harmonies-title">
+    <h2 id="harmonies-title" class="text-2xl font-bold mb-4">Harmonies</h2>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <% @color.harmonies.each do |label, colors| %>
+        <%= link_to shared_palette_path(colors: colors.map { |hex| hex.delete_prefix("#") }.join("-")), class: "block border border-neutral-200 rounded-xl overflow-hidden hover:border-neutral-500 focus-visible:outline-2 focus-visible:outline-offset-4" do %>
+          <h3 class="font-bold p-4"><%= label %></h3>
+          <ul class="flex">
+            <% colors.each do |hex| %>
+              <li class="flex-1 min-w-0 h-20 flex items-end justify-center pb-3 text-xs font-mono" style="background-color: <%= hex %>; color: <%= ColorDetails.new(hex.delete_prefix('#')).text_color %>"><%= hex.upcase %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+
+  <section aria-labelledby="contrast-title">
+    <h2 id="contrast-title" class="text-2xl font-bold mb-4">Contrast</h2>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <% { "White" => "ffffff", "Black" => "000000" }.each do |label, hex| %>
+        <% background = ColorDetails.new(hex); result = @color.contrast(background) %>
+        <section aria-label="On <%= label.downcase %>" class="rounded-xl border border-neutral-200 overflow-hidden">
+          <div class="p-6" style="background-color: <%= background.hex %>; color: <%= @color.hex %>" aria-hidden="true">
+            <span class="text-4xl font-bold">Aa</span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold">On <%= label.downcase %> · <%= format('%.2f', result[:ratio]) %>:1</h3>
+            <table class="w-full text-sm text-left mt-4">
+              <caption class="sr-only">WCAG 2.2 text contrast on <%= label.downcase %></caption>
+              <thead><tr><th scope="col">Text size</th><th scope="col">AA</th><th scope="col">AAA</th></tr></thead>
+              <tbody>
+                <tr><th scope="row" class="font-medium py-2">Normal</th><td><%= result[:aa] ? "Pass" : "Fail" %></td><td><%= result[:aaa] ? "Pass" : "Fail" %></td></tr>
+                <tr><th scope="row" class="font-medium py-2">Large</th><td><%= result[:aa_large] ? "Pass" : "Fail" %></td><td><%= result[:aaa_large] ? "Pass" : "Fail" %></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      <% end %>
+    </div>
+  </section>
+
+  <section aria-labelledby="css-title">
+    <h2 id="css-title" class="text-2xl font-bold mb-4">CSS</h2>
+    <pre class="rounded-xl bg-neutral-100 p-4 overflow-x-auto text-sm"><code>:root {
+  --color: <%= @color.hex %>;
+}
+
+.color {
+  color: var(--color);
+}</code></pre>
+  </section>
+
+  <section aria-labelledby="similar-title">
+    <h2 id="similar-title" class="text-2xl font-bold mb-4">Similar named colors</h2>
+    <ul class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <% @color.similar.each do |hex, name| %>
+        <li><%= render "swatch", hex: "##{hex}", name: name %></li>
+      <% end %>
+    </ul>
+  </section>
+</article>

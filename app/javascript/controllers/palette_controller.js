@@ -102,7 +102,7 @@ export default class extends Controller {
       return
     }
 
-    if (event.target?.closest("input, select, textarea, button, [contenteditable]")) return
+    if (event.target?.closest("input, select, textarea, button, a, [contenteditable]")) return
 
     if (event.code === "Space") {
       event.preventDefault()
@@ -963,6 +963,7 @@ export default class extends Controller {
     if (nameNode) {
       const match = ntc.name(hex)
       nameNode.textContent = match ? match[1] : ''
+      nameNode.href = `/color/${normalizeHex(hex).slice(1)}`
     }
   }
 }

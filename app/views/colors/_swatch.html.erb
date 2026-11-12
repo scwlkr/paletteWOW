@@ -1,0 +1,4 @@
+<%= link_to color_path(hex: hex.delete_prefix("#")), class: "flex flex-col justify-end min-h-24 p-3 rounded-xl border border-black/10 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4", style: "background-color: #{hex}; color: #{ColorDetails.new(hex.delete_prefix('#')).text_color}" do %>
+  <% if local_assigns[:name] %><span class="text-sm font-medium break-words"><%= name %></span><% end %>
+  <span class="text-xs font-mono"><%= hex.upcase %></span>
+<% end %>
