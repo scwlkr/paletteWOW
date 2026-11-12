@@ -1,0 +1,15 @@
+<rect width="600" height="420" fill="var(--c1)" />
+<circle cx="124" cy="114" r="64" fill="var(--c3)" />
+<circle cx="492" cy="316" r="80" fill="var(--c5)" />
+<rect x="190" y="18" width="220" height="384" rx="30" fill="var(--c4)" />
+<rect x="200" y="28" width="200" height="364" rx="22" fill="var(--c2)" />
+<rect x="267" y="38" width="66" height="8" rx="4" fill="var(--c4)" />
+<path d="M220 78h72" stroke="var(--c4)" stroke-width="10" stroke-linecap="round" />
+<circle cx="372" cy="78" r="12" fill="var(--c3)" />
+<rect x="218" y="108" width="164" height="110" rx="14" fill="var(--c3)" />
+<path d="M236 188l32-37 28 18 29-35 39 25" fill="none" stroke="var(--c5)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+<% 3.times do |index| %>
+  <rect x="218" y="<%= 234 + index * 36 %>" width="26" height="26" rx="8" fill="var(--c<%= index + 1 %>)" />
+  <path d="M258 <%= 243 + index * 36 %>h112m-112 9h70" stroke="var(--c4)" stroke-width="4" stroke-linecap="round" />
+<% end %>
+<rect x="218" y="350" width="164" height="24" rx="12" fill="var(--c5)" />
