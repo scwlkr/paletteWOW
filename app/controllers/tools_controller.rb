@@ -1,4 +1,8 @@
 class ToolsController < ApplicationController
+  def visualize
+    @colors = params[:colors].split("-").map { |hex| "##{hex.downcase}" }
+  end
+
   def tailwind
     @scales = YAML.safe_load_file(Rails.root.join("config/tailwind_colors.yml"))
   end

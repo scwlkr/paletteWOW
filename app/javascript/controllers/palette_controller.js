@@ -625,6 +625,10 @@ export default class extends Controller {
     if (this.adjustDialogTarget.open) this.adjustDialogTarget.close()
   }
 
+  visualize() {
+    window.location.assign(`/visualize/${this.getExportHexes().map(hex => normalizeHex(hex).slice(1)).join("-")}`)
+  }
+
   openContrast() {
     const colors = this.getExportHexes().map(normalizeHex)
     const headers = colors.map(color => `

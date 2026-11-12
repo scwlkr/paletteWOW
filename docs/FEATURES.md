@@ -45,6 +45,15 @@ At `/gradient-palette`, choose two endpoint colors and three to ten swatches.
 Colors are evenly spaced in LAB, with the exact chosen endpoints preserved.
 Open the resulting palette in the generator for editing, sharing and exports.
 
+## Palette visualizer
+
+Use Visualize in the generator to preview the current two-to-ten-color palette
+on four original designs: a website, a phone app, a poster and a pattern.
+Shuffle roles changes which colors fill the five design roles; smaller palettes
+repeat colors and larger palettes can bring other colors into those roles.
+The Generator link retains the original palette order. Shared `/visualize/:colors`
+links render all four previews even without JavaScript.
+
 ## Export Integrations
 
 

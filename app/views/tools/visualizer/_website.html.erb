@@ -1,0 +1,14 @@
+<rect width="600" height="420" fill="var(--c1)" />
+<rect x="24" y="24" width="552" height="372" rx="14" fill="var(--c2)" />
+<circle cx="56" cy="54" r="10" fill="var(--c3)" />
+<path d="M408 54h40m24 0h40m24 0h16" stroke="var(--c4)" stroke-width="6" stroke-linecap="round" />
+<rect x="52" y="113" width="198" height="20" rx="5" fill="var(--c4)" />
+<rect x="52" y="145" width="152" height="20" rx="5" fill="var(--c4)" />
+<path d="M52 191h180M52 207h150" stroke="var(--c1)" stroke-width="6" stroke-linecap="round" />
+<rect x="52" y="241" width="110" height="34" rx="17" fill="var(--c3)" />
+<rect x="314" y="104" width="234" height="176" rx="12" fill="var(--c1)" />
+<circle cx="426" cy="168" r="46" fill="var(--c5)" />
+<path d="M332 262l65-74 49 47 39-35 49 62Z" fill="var(--c3)" />
+<% 3.times do |index| %>
+  <rect x="<%= 52 + index * 170 %>" y="312" width="156" height="56" rx="8" fill="var(--c<%= index + 3 %>)" />
+<% end %>

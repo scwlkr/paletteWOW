@@ -1,0 +1,31 @@
+<% content_for :title, "Palette visualizer · paletteWOW" %>
+
+<section class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" data-controller="visualizer" data-visualizer-colors-value="<%= @colors.to_json %>" style="<%= (0...5).map { |index| "--c#{index + 1}: #{@colors[index % @colors.length]}" }.join('; ') %>">
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <h1 class="text-3xl sm:text-4xl font-black tracking-tight">Palette visualizer</h1>
+    <%= link_to "Generator", shared_palette_path(colors: @colors.map { |hex| hex.delete_prefix('#') }.join('-')), class: "text-sm font-medium underline underline-offset-4 rounded focus-visible:outline-2 focus-visible:outline-offset-4" %>
+  </div>
+
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+    <ul aria-label="Palette colors" class="flex flex-wrap gap-2">
+      <% @colors.each do |color| %>
+        <li class="flex items-center gap-2 rounded-full border border-neutral-200 px-3 py-2 text-xs font-mono">
+          <span aria-hidden="true" class="w-4 h-4 rounded-full border border-black/10" style="background-color: <%= color %>"></span><%= color.upcase %>
+        </li>
+      <% end %>
+    </ul>
+    <button type="button" data-action="visualizer#shuffle" class="bg-black text-white font-bold py-3 px-6 rounded-full hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4">Shuffle roles</button>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    <% [ ["website", "Website"], ["phone", "Phone app"], ["poster", "Poster"], ["pattern", "Pattern"] ].each do |template, label| %>
+      <figure class="min-w-0">
+        <figcaption class="font-bold mb-3"><%= label %></figcaption>
+        <svg role="img" aria-label="<%= label %> palette preview" viewBox="0 0 600 420" fill="none" class="block w-full h-auto rounded-2xl border border-neutral-200">
+          <%= render "tools/visualizer/#{template}" %>
+        </svg>
+      </figure>
+    <% end %>
+  </div>
+  <p role="status" aria-live="polite" aria-atomic="true" data-visualizer-target="status" class="sr-only"></p>
+</section>
