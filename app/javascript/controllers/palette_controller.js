@@ -645,14 +645,14 @@ export default class extends Controller {
         <span aria-hidden="true" class="inline-block w-3 h-3 rounded-full border border-neutral-200 mr-1" style="background-color: ${color}"></span>${color.toUpperCase()}
       </th>`).join('')
     const rows = colors.map(text => `<tr>
-      <th scope="row" class="sticky left-0 bg-white p-3 font-mono text-xs whitespace-nowrap border-t border-neutral-200">
+      <th scope="row" class="sticky left-0 bg-white dark:bg-neutral-900 p-3 font-mono text-xs whitespace-nowrap border-t border-neutral-200 dark:border-neutral-700">
         <span aria-hidden="true" class="inline-block w-3 h-3 rounded-full border border-neutral-200 mr-1" style="background-color: ${text}"></span>${text.toUpperCase()}
       </th>
       ${colors.map(background => {
         const ratio = contrastRatio(text, background)
         const levels = wcagLevels(ratio)
         const level = levels.aaa ? '✓ AAA' : levels.aa ? '✓ AA' : '× Fail'
-        return `<td class="p-3 text-center border-t border-neutral-200 min-w-28">
+        return `<td class="p-3 text-center border-t border-neutral-200 dark:border-neutral-700 min-w-28">
           <div aria-hidden="true" class="rounded-lg p-3 text-xl font-bold mb-2" style="color: ${text}; background-color: ${background}">Aa</div>
           <div class="font-mono text-sm">${ratio.toFixed(2)}:1</div>
           <div class="text-xs font-bold mt-1 whitespace-nowrap">${level}</div>
@@ -661,7 +661,7 @@ export default class extends Controller {
     </tr>`).join('')
     this.contrastTableTarget.innerHTML = `
       <caption class="sr-only">WCAG levels for normal text. Rows are text colors; columns are backgrounds.</caption>
-      <thead><tr><th class="sticky left-0 bg-white p-3 text-xs whitespace-nowrap">Text ↓ / Background →</th>${headers}</tr></thead>
+      <thead><tr><th class="sticky left-0 bg-white dark:bg-neutral-900 p-3 text-xs whitespace-nowrap">Text ↓ / Background →</th>${headers}</tr></thead>
       <tbody>${rows}</tbody>`
     this.contrastDialogTarget.showModal()
   }

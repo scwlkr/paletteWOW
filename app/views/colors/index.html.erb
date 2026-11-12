@@ -9,9 +9,9 @@
   <%= form_with url: colors_path, method: :get, class: "flex flex-wrap items-end gap-3", html: { role: "search" } do |form| %>
     <div class="flex-1 min-w-0">
       <%= form.label :q, "Name or hex", class: "block text-sm font-medium mb-2" %>
-      <%= form.search_field :q, value: @query, class: "w-full rounded-xl border border-neutral-300 px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-4", spellcheck: false %>
+      <%= form.search_field :q, value: @query, class: "bg-white dark:bg-neutral-800 w-full rounded-xl border border-neutral-300 dark:border-neutral-700 px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-4", spellcheck: false %>
     </div>
-    <%= form.submit "Search", class: "rounded-xl bg-black text-white px-5 py-3 font-medium cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4" %>
+    <%= form.submit "Search", class: "rounded-xl bg-black dark:bg-white text-white dark:text-neutral-900 px-5 py-3 font-medium cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4" %>
     <% if @query.present? %>
       <%= link_to "Clear", colors_path, class: "py-3 text-sm font-medium underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" %>
     <% end %>

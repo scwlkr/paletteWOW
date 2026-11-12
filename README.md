@@ -56,6 +56,9 @@ PNG/PDF export options and downloaded file contents use the same setup, with
 `pngjs` and `pdfjs-dist` also available on `NODE_PATH`:
 `BASE_URL=http://127.0.0.1:3000 node test/browser/export.cjs`.
 
+Dark mode, device preferences, saved choices and theme-safe color previews use
+the same browser setup: `BASE_URL=http://127.0.0.1:3000 node test/browser/theme.cjs`.
+
 ## Hosting
 
 Coolify runs the application and PostgreSQL on the Octal8 front door, builds on the workhorse, and serves public HTTPS directly. The database has no public port. Nightly database backups keep three copies on the other machine.

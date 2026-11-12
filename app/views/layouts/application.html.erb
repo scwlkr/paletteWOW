@@ -9,6 +9,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%= javascript_include_tag "theme", "data-turbo-track": "reload" %>
+
     <%= yield :head %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
@@ -28,34 +30,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   </head>
 
-  <body class="bg-white text-neutral-900 border-none min-h-screen flex flex-col" style="font-family: 'Outfit', sans-serif;">
-    <nav class="border-b border-neutral-200 relative z-50 bg-white">
+  <body class="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border-none min-h-screen flex flex-col" style="font-family: 'Outfit', sans-serif;">
+    <nav class="border-b border-neutral-200 dark:border-neutral-700 relative z-50 bg-white dark:bg-neutral-900">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-wrap items-center justify-between gap-3 min-h-16 py-3">
-          <div class="flex items-center">
+          <div class="flex items-center gap-4">
             <%= link_to root_path, class: "font-outfit text-2xl font-bold tracking-tight inline-block", aria: { label: "paletteWOW Home" } do %>
               palette<span class="gradient-text font-bold">WOW</span>
             <% end %>
+            <button type="button" role="switch" aria-label="Dark mode" aria-checked="false" data-theme-toggle hidden class="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 dark:hidden"><path stroke-linecap="round" stroke-linejoin="round" d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z" /></svg>
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 hidden dark:block"><circle cx="12" cy="12" r="4" /><path stroke-linecap="round" d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></svg>
+            </button>
           </div>
           <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
-            <%= link_to "Colors", colors_path, class: "text-sm font-medium hover:text-neutral-500 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
-            <%= link_to "Tailwind", tailwind_path, class: "text-sm font-medium hover:text-neutral-500 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
-            <%= link_to "Gradient palette", gradient_palette_path, class: "text-sm font-medium hover:text-neutral-500 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
-            <%= link_to "Gradient", gradient_path, class: "text-sm font-medium hover:text-neutral-500 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
-            <%= link_to "Image", image_path, class: "text-sm font-medium hover:text-neutral-500 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
-            <%= link_to "GitHub", "https://github.com/scwlkr/paletteWOW", class: "text-sm font-medium hover:text-neutral-500 transition-colors" %>
+            <%= link_to "Colors", colors_path, class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
+            <%= link_to "Tailwind", tailwind_path, class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
+            <%= link_to "Gradient palette", gradient_palette_path, class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
+            <%= link_to "Gradient", gradient_path, class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
+            <%= link_to "Image", image_path, class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4" %>
+            <%= link_to "GitHub", "https://github.com/scwlkr/paletteWOW", class: "text-sm font-medium hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors" %>
           </div>
         </div>
       </div>
     </nav>
 
     <% if notice %>
-      <div class="bg-black text-white px-4 py-3 text-center text-sm font-medium" role="alert">
+      <div class="bg-black dark:bg-white text-white dark:text-neutral-900 px-4 py-3 text-center text-sm font-medium" role="alert">
         <%= notice %>
       </div>
     <% end %>
     <% if alert %>
-      <div class="bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3 text-center text-sm font-medium" role="alert">
+      <div class="bg-red-100 dark:bg-red-950 border-l-4 border-red-500 text-red-700 dark:text-red-300 px-4 py-3 text-center text-sm font-medium" role="alert">
         <%= alert %>
       </div>
     <% end %>
@@ -64,9 +70,9 @@
       <%= yield %>
     </main>
 
-    <footer class="mt-auto border-t border-neutral-200 py-6">
+    <footer class="mt-auto border-t border-neutral-200 dark:border-neutral-700 py-6">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center">
-        <%= link_to "Privacy Policy", privacy_path, class: "text-xs text-neutral-400 hover:text-neutral-600 transition-colors" %>
+        <%= link_to "Privacy Policy", privacy_path, class: "text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors" %>
       </div>
     </footer>
   </body>

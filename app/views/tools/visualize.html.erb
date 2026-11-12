@@ -9,19 +9,19 @@
   <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
     <ul aria-label="Palette colors" class="flex flex-wrap gap-2">
       <% @colors.each do |color| %>
-        <li class="flex items-center gap-2 rounded-full border border-neutral-200 px-3 py-2 text-xs font-mono">
-          <span aria-hidden="true" class="w-4 h-4 rounded-full border border-black/10" style="background-color: <%= color %>"></span><%= color.upcase %>
+        <li class="flex items-center gap-2 rounded-full border border-neutral-200 dark:border-neutral-700 px-3 py-2 text-xs font-mono">
+          <span aria-hidden="true" class="w-4 h-4 rounded-full border border-black/10 dark:border-white/20" style="background-color: <%= color %>"></span><%= color.upcase %>
         </li>
       <% end %>
     </ul>
-    <button type="button" data-action="visualizer#shuffle" class="bg-black text-white font-bold py-3 px-6 rounded-full hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4">Shuffle roles</button>
+    <button type="button" data-action="visualizer#shuffle" class="bg-black dark:bg-white text-white dark:text-neutral-900 font-bold py-3 px-6 rounded-full hover:bg-neutral-800 dark:hover:bg-neutral-200 focus-visible:outline-2 focus-visible:outline-offset-4">Shuffle roles</button>
   </div>
 
   <div class="grid md:grid-cols-2 gap-6">
     <% [ ["website", "Website"], ["phone", "Phone app"], ["poster", "Poster"], ["pattern", "Pattern"] ].each do |template, label| %>
       <figure class="min-w-0">
         <figcaption class="font-bold mb-3"><%= label %></figcaption>
-        <svg role="img" aria-label="<%= label %> palette preview" viewBox="0 0 600 420" fill="none" class="block w-full h-auto rounded-2xl border border-neutral-200">
+        <svg role="img" aria-label="<%= label %> palette preview" viewBox="0 0 600 420" fill="none" class="block w-full h-auto rounded-2xl border border-neutral-200 dark:border-neutral-700">
           <%= render "tools/visualizer/#{template}" %>
         </svg>
       </figure>
