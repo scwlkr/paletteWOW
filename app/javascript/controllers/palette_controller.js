@@ -31,10 +31,10 @@ export default class extends Controller {
     this.history = []
     this.pointer = -1
 
-    // The navigation wraps on phones; keep toolbar buttons below its full height.
+    // Preserve a screen-height generator while allowing the footer below it.
     const navigation = document.querySelector("body > nav")
     if (navigation) {
-      const fitNavigation = () => { this.element.style.paddingTop = `${navigation.getBoundingClientRect().height}px` }
+      const fitNavigation = () => { this.element.style.setProperty("--navigation-height", `${navigation.getBoundingClientRect().height}px`) }
       fitNavigation()
       this.navigationObserver = new ResizeObserver(fitNavigation)
       this.navigationObserver.observe(navigation)

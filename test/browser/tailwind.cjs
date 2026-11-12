@@ -12,7 +12,8 @@ async function main() {
     const errors = []
     page.on("pageerror", error => errors.push(error.message))
     await page.goto(base)
-    await page.getByRole("link", { name: "Tailwind", exact: true }).click()
+    await page.locator("summary").click()
+    await page.getByRole("navigation", { name: "Tools", exact: true }).getByRole("link", { name: "Tailwind", exact: true }).click()
     await page.waitForURL(base + "/tailwind")
     const swatches = page.locator("article button[data-hex]")
     assert.equal(await swatches.count(), 288)

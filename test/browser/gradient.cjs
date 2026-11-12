@@ -121,7 +121,7 @@ async function main() {
     while (await stops.count() > 2) await stops.last().getByRole("button").click()
     assert.equal(await stops.first().getByRole("button").isDisabled(), true)
     const returnCSS = await css.inputValue()
-    await page.getByRole("link", { name: "Generator", exact: true }).click()
+    await page.locator("main").getByRole("link", { name: "Generator", exact: true }).click()
     await page.waitForURL(base + "/")
     await page.goBack()
     await page.waitForFunction(() => document.querySelector("#gradient-css")?.value.startsWith("background:"))
