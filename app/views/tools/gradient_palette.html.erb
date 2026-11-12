@@ -12,7 +12,7 @@
         <label for="blend-<%= endpoint %>" class="block text-sm font-bold mb-2"><%= label %></label>
         <div class="flex items-center gap-3">
           <input type="color" value="<%= color %>" aria-label="<%= label %> color picker" data-gradient-palette-target="picker" data-endpoint="<%= endpoint %>" data-action="input->gradient-palette#pick" class="w-12 h-12 shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4">
-          <input id="blend-<%= endpoint %>" type="text" value="<%= color %>" spellcheck="false" autocomplete="off" required data-gradient-palette-target="hex" data-endpoint="<%= endpoint %>" data-action="input->gradient-palette#update" class="w-full min-w-0 rounded-lg border border-neutral-300 px-4 py-3 font-mono focus-visible:outline-2 focus-visible:outline-offset-4 aria-invalid:border-red-600">
+          <input id="blend-<%= endpoint %>" type="text" value="<%= color %>" spellcheck="false" autocomplete="off" required data-gradient-palette-target="hex" data-endpoint="<%= endpoint %>" data-action="input->gradient-palette#update" class="bg-white dark:bg-neutral-800 w-full min-w-0 rounded-lg border border-neutral-300 dark:border-neutral-700 px-4 py-3 font-mono focus-visible:outline-2 focus-visible:outline-offset-4 aria-invalid:border-red-600">
         </div>
       </div>
     <% end %>
@@ -20,7 +20,7 @@
 
   <div class="flex items-center gap-3 mb-6">
     <label for="blend-count" class="text-sm font-bold">Colors</label>
-    <select id="blend-count" data-gradient-palette-target="count" data-action="change->gradient-palette#update" class="rounded-lg border border-neutral-300 px-4 py-2 focus-visible:outline-2 focus-visible:outline-offset-4">
+    <select id="blend-count" data-gradient-palette-target="count" data-action="change->gradient-palette#update" class="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-300 dark:border-neutral-700 px-4 py-2 focus-visible:outline-2 focus-visible:outline-offset-4">
       <% (3..10).each do |count| %>
         <option value="<%= count %>" <%= "selected" if count == 5 %>><%= count %></option>
       <% end %>
@@ -28,6 +28,6 @@
   </div>
 
   <ul aria-label="Gradient palette colors" data-gradient-palette-target="swatches" class="grid grid-cols-2 sm:flex overflow-hidden rounded-2xl mb-6"></ul>
-  <a role="link" data-gradient-palette-target="generator" class="inline-block bg-black text-white font-bold py-3 px-6 rounded-full hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 aria-disabled:opacity-40">Open in generator</a>
+  <a role="link" data-gradient-palette-target="generator" class="inline-block bg-black dark:bg-white text-white dark:text-neutral-900 font-bold py-3 px-6 rounded-full hover:bg-neutral-800 dark:hover:bg-neutral-200 focus-visible:outline-2 focus-visible:outline-offset-4 aria-disabled:opacity-40">Open in generator</a>
   <p role="status" aria-live="polite" aria-atomic="true" data-gradient-palette-target="status" class="text-sm mt-3"></p>
 </section>

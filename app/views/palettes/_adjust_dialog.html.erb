@@ -1,4 +1,4 @@
-<dialog data-palette-target="adjustDialog" data-action="cancel->palette#cancelAdjust close->palette#cancelAdjust" aria-labelledby="palette-adjust-title" class="m-auto w-[calc(100%_-_2rem)] max-w-md max-h-[90dvh] overflow-y-auto bg-white text-neutral-900 rounded-2xl shadow-2xl p-6 sm:p-8 backdrop:bg-black/20">
+<dialog data-palette-target="adjustDialog" data-action="cancel->palette#cancelAdjust close->palette#cancelAdjust" aria-labelledby="palette-adjust-title" class="m-auto w-[calc(100%_-_2rem)] max-w-md max-h-[90dvh] overflow-y-auto bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-2xl shadow-2xl p-6 sm:p-8 backdrop:bg-black/20">
   <h2 id="palette-adjust-title" class="text-xl sm:text-2xl font-black tracking-tight mb-6">Adjust palette</h2>
   <div class="space-y-6">
     <% [ ["hue", "Hue", 180], ["saturation", "Saturation", 100], ["brightness", "Brightness", 100], ["temperature", "Temperature", 100] ].each do |name, label, limit| %>
@@ -7,12 +7,12 @@
           <label for="palette-adjust-<%= name %>" class="text-sm font-bold"><%= label %></label>
           <output for="palette-adjust-<%= name %>" data-palette-target="adjustValue" data-adjustment="<%= name %>" class="font-mono text-sm tabular-nums">0<%= "°" if name == "hue" %></output>
         </div>
-        <input id="palette-adjust-<%= name %>" type="range" min="<%= -limit %>" max="<%= limit %>" step="1" value="0" data-palette-target="adjustSlider" data-adjustment="<%= name %>" data-action="input->palette#previewAdjust" class="w-full h-6 accent-black cursor-pointer focus-visible:outline-black">
+        <input id="palette-adjust-<%= name %>" type="range" min="<%= -limit %>" max="<%= limit %>" step="1" value="0" data-palette-target="adjustSlider" data-adjustment="<%= name %>" data-action="input->palette#previewAdjust" class="w-full h-6 accent-black dark:accent-white cursor-pointer focus-visible:outline-black dark:focus-visible:outline-white">
       </div>
     <% end %>
   </div>
   <div class="flex justify-end gap-3 mt-8">
-    <button type="button" data-action="click->palette#cancelAdjust" class="px-5 py-2.5 rounded-full text-sm font-bold border border-neutral-300 hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-black focus:outline-none">Cancel</button>
-    <button type="button" data-action="click->palette#applyAdjust" class="px-5 py-2.5 rounded-full text-sm font-bold bg-black text-white hover:bg-neutral-800 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus:outline-none">Apply</button>
+    <button type="button" data-action="click->palette#cancelAdjust" class="px-5 py-2.5 rounded-full text-sm font-bold border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus:outline-none">Cancel</button>
+    <button type="button" data-action="click->palette#applyAdjust" class="px-5 py-2.5 rounded-full text-sm font-bold bg-black dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-200 focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-2 focus:outline-none dark:focus-visible:ring-offset-neutral-900">Apply</button>
   </div>
 </dialog>

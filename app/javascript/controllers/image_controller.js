@@ -28,11 +28,11 @@ export default class extends Controller {
 
   drag(event) {
     event.preventDefault()
-    this.dropzoneTarget.classList.add("border-black")
+    this.dropzoneTarget.dataset.dragging = "true"
   }
 
   leave() {
-    this.dropzoneTarget.classList.remove("border-black")
+    delete this.dropzoneTarget.dataset.dragging
   }
 
   drop(event) {

@@ -1,25 +1,25 @@
 <div class="fixed inset-0 pt-16 flex flex-col" data-controller="palette" data-palette-saved-patterns-value="<%= @saved_hex_patterns.to_json %>" data-action="keydown@window->palette#handleKeydown" <%= "data-palette-initial-colors-value=\"#{CGI.escapeHTML(@colors.to_json)}\"".html_safe if defined?(@colors) && @colors.present? %>>
 
   <!-- Top Bar: Actions (Desktop Only) -->
-  <div class="hidden md:flex flex-wrap gap-3 min-h-16 w-full bg-white border-b border-neutral-200 px-6 py-3 items-center justify-between shrink-0 z-10">
+  <div class="hidden md:flex flex-wrap gap-3 min-h-16 w-full bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700 px-6 py-3 items-center justify-between shrink-0 z-10">
     <!-- Left: Undo / Redo / Generation Method -->
     <div class="flex flex-wrap items-center gap-3">
       <div class="flex items-center space-x-1">
-        <button aria-label="Undo" data-action="click->palette#undo" class="p-1.5 text-neutral-400 hover:text-black transition-colors rounded-full hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none" title="Undo (Cmd+Z)">
+        <button aria-label="Undo" data-action="click->palette#undo" class="p-1.5 text-neutral-400 hover:text-black dark:hover:text-neutral-100 transition-colors rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-1 focus:outline-none dark:focus-visible:ring-offset-neutral-900" title="Undo (Cmd+Z)">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" /></svg>
         </button>
-        <button aria-label="Redo" data-action="click->palette#redo" class="p-1.5 text-neutral-400 hover:text-black transition-colors rounded-full hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none" title="Redo (Cmd+Shift+Z)">
+        <button aria-label="Redo" data-action="click->palette#redo" class="p-1.5 text-neutral-400 hover:text-black dark:hover:text-neutral-100 transition-colors rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-1 focus:outline-none dark:focus-visible:ring-offset-neutral-900" title="Redo (Cmd+Shift+Z)">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3" /></svg>
         </button>
       </div>
 
-      <div class="h-4 w-px bg-neutral-200"></div>
+      <div class="h-4 w-px bg-neutral-200 dark:bg-neutral-700"></div>
 
       <div class="relative flex items-center group cursor-pointer" title="Generation Method">
-        <div class="p-1.5 text-neutral-400 bg-transparent transition-colors rounded-full group-hover:text-black group-hover:bg-neutral-100 flex items-center justify-center">
+        <div class="p-1.5 text-neutral-400 bg-transparent transition-colors rounded-full group-hover:text-black dark:group-hover:text-neutral-100 group-hover:bg-neutral-100 dark:group-hover:bg-neutral-800 flex items-center justify-center">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
         </div>
-        <select data-action="change->palette#changeMethod" data-palette-target="methodSelect" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+        <select data-action="change->palette#changeMethod" data-palette-target="methodSelect" class="bg-white dark:bg-neutral-800 absolute inset-0 w-full h-full opacity-0 cursor-pointer">
           <option value="auto">Random</option>
           <option value="monochromatic">Monochromatic</option>
           <option value="analogous">Analogous</option>
@@ -38,8 +38,8 @@
       <%= render "palettes/import_button" %>
       <%= render "palettes/adjust_button" %>
       <%= render "palettes/vision_select" %>
-      <button type="button" data-action="click->palette#openContrast" aria-haspopup="dialog" class="text-[12px] font-bold tracking-widest uppercase text-black px-4 py-2.5 rounded-full bg-white hover:bg-neutral-50 border border-neutral-300 shadow-sm cursor-pointer focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none">Contrast</button>
-      <button aria-label="Export Palette" data-action="click->palette#openExportModal" class="flex items-center space-x-2 text-[12px] font-bold tracking-widest uppercase text-black px-4 py-2.5 rounded-full transition-colors bg-white hover:bg-neutral-50 border border-neutral-300 shadow-sm cursor-pointer hover:border-neutral-400 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none">
+      <button type="button" data-action="click->palette#openContrast" aria-haspopup="dialog" class="text-[12px] font-bold tracking-widest uppercase text-black dark:text-neutral-100 px-4 py-2.5 rounded-full bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 shadow-sm cursor-pointer focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-1 focus:outline-none dark:focus-visible:ring-offset-neutral-900">Contrast</button>
+      <button aria-label="Export Palette" data-action="click->palette#openExportModal" class="flex items-center space-x-2 text-[12px] font-bold tracking-widest uppercase text-black dark:text-neutral-100 px-4 py-2.5 rounded-full transition-colors bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 shadow-sm cursor-pointer hover:border-neutral-400 dark:hover:border-neutral-500 focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-1 focus:outline-none dark:focus-visible:ring-offset-neutral-900">
         <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
         <span>Export</span>
       </button>
@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  <div class="md:hidden bg-white border-b border-neutral-200 px-4 py-2 flex flex-wrap items-center justify-between gap-3 shrink-0">
+  <div class="md:hidden bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700 px-4 py-2 flex flex-wrap items-center justify-between gap-3 shrink-0">
     <%= render "palettes/visualize_button" %>
     <%= render "palettes/import_button" %>
     <%= render "palettes/adjust_button" %>
@@ -123,36 +123,36 @@
   </div>
 
   <!-- Mobile Fixed Action Bar (Bottom) -->
-  <div class="fixed bottom-0 left-0 right-0 md:hidden z-20 bg-white border-t border-neutral-100 shadow-[0_-2px_10px_rgba(0,0,0,0.02)] pb-[env(safe-area-inset-bottom)]">
-    <div class="h-[72px] flex items-center justify-between px-6">
+  <div class="fixed bottom-0 left-0 right-0 md:hidden z-20 bg-white dark:bg-neutral-900 border-t border-neutral-100 dark:border-neutral-800 shadow-[0_-2px_10px_rgba(0,0,0,0.02)] pb-[env(safe-area-inset-bottom)]">
+    <div class="h-[72px] flex items-center justify-between px-3 sm:px-6">
 
       <!-- Left Tools: Undo / Redo -->
-      <div class="flex items-center space-x-3 sm:space-x-5 text-neutral-800">
-        <button data-action="click->palette#undo" class="p-1 text-neutral-600 active:opacity-50 transition-opacity" title="Undo">
+      <div class="flex items-center space-x-2 sm:space-x-5 text-neutral-800 dark:text-neutral-200">
+        <button data-action="click->palette#undo" class="p-1 text-neutral-600 dark:text-neutral-300 active:opacity-50 transition-opacity" title="Undo">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" /></svg>
         </button>
-        <button data-action="click->palette#redo" class="p-1 text-neutral-600 active:opacity-50 transition-opacity" title="Redo">
+        <button data-action="click->palette#redo" class="p-1 text-neutral-600 dark:text-neutral-300 active:opacity-50 transition-opacity" title="Redo">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3" /></svg>
         </button>
       </div>
 
       <!-- Center: Generate Text Button -->
       <div class="absolute left-1/2 -translate-x-1/2 flex flex-row items-center">
-        <button aria-label="Generate Palette" data-action="click->palette#generate" class="text-base sm:text-lg font-bold tracking-wide active:opacity-50 transition-colors border border-transparent bg-black text-white hover:bg-neutral-800 rounded-full px-6 sm:px-8 py-2.5 shadow-md focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none">
+        <button aria-label="Generate Palette" data-action="click->palette#generate" class="text-base sm:text-lg font-bold tracking-wide active:opacity-50 transition-colors border border-transparent bg-black dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-200 rounded-full px-3 sm:px-8 py-2.5 shadow-md focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-1 focus:outline-none dark:focus-visible:ring-offset-neutral-900">
           Generate
         </button>
       </div>
 
       <!-- Right Tools: Options / Menu -->
-      <div class="flex items-center space-x-3 sm:space-x-5 text-neutral-800">
-        <button type="button" aria-label="Contrast" data-action="click->palette#openContrast" aria-haspopup="dialog" class="p-1 rounded-full hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-black focus:outline-none">
+      <div class="flex items-center space-x-2 sm:space-x-5 text-neutral-800 dark:text-neutral-200">
+        <button type="button" aria-label="Contrast" data-action="click->palette#openContrast" aria-haspopup="dialog" class="p-1 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus:outline-none">
           <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18V4a8 8 0 0 1 0 16Z" /></svg>
         </button>
 
 
         <div class="relative flex items-center group cursor-pointer active:opacity-50 transition-opacity" title="Generation Method">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
-          <select data-action="change->palette#changeMethod" data-palette-target="methodSelect" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+          <select data-action="change->palette#changeMethod" data-palette-target="methodSelect" class="bg-white dark:bg-neutral-800 absolute inset-0 w-full h-full opacity-0 cursor-pointer">
             <option value="auto">Random</option>
             <option value="monochromatic">Monochromatic</option>
             <option value="analogous">Analogous</option>
@@ -163,7 +163,7 @@
             <option value="square">Square</option>
           </select>
         </div>
-        <button aria-label="Export Palette" data-action="click->palette#openExportModal" class="p-1 active:opacity-50 transition-opacity rounded-full hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 focus:outline-none">
+        <button aria-label="Export Palette" data-action="click->palette#openExportModal" class="p-1 active:opacity-50 transition-opacity rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-1 focus:outline-none dark:focus-visible:ring-offset-neutral-900">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
         </button>
       </div>
@@ -177,14 +177,14 @@
   <%= render "palettes/import_dialog" %>
 
   <!-- Export Modal -->
-  <dialog data-palette-target="exportModal" data-action="cancel->palette#closeExportModal" aria-labelledby="export-heading" class="fixed inset-0 m-0 h-full w-full max-h-none max-w-none bg-transparent hidden flex items-center justify-center p-4">
+  <dialog data-palette-target="exportModal" data-action="cancel->palette#closeExportModal" aria-labelledby="export-heading" class="fixed inset-0 m-0 h-full w-full max-h-none max-w-none bg-transparent text-neutral-900 dark:text-neutral-100 hidden flex items-center justify-center p-4">
     <!-- Backdrop -->
     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" data-palette-target="exportBackdrop" data-action="click->palette#closeExportModal"></div>
 
     <!-- Modal Content -->
-    <div class="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl p-6 sm:p-8 transform scale-95 opacity-0 transition-all duration-300" data-palette-target="exportContent">
+    <div class="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl p-6 sm:p-8 transform scale-95 opacity-0 transition-all duration-300" data-palette-target="exportContent">
       <div class="absolute top-4 right-4">
-        <button aria-label="Close export" data-action="click->palette#closeExportModal" class="p-2 text-neutral-400 hover:text-black hover:bg-neutral-100 rounded-full transition-colors cursor-pointer">
+        <button aria-label="Close export" data-action="click->palette#closeExportModal" class="p-2 text-neutral-400 hover:text-black dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-colors cursor-pointer">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       </div>
@@ -195,97 +195,97 @@
         <legend class="text-sm font-bold mb-3">PNG &amp; PDF</legend>
         <div>
           <label for="export-title" class="block text-sm font-medium mb-1">Title</label>
-          <input id="export-title" data-palette-target="exportTitle" type="text" value="PALETTE WOW" maxlength="120" class="w-full min-w-0 border border-neutral-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-black focus:outline-none">
+          <input id="export-title" data-palette-target="exportTitle" type="text" value="PALETTE WOW" maxlength="120" class="bg-white dark:bg-neutral-800 w-full min-w-0 border border-neutral-300 dark:border-neutral-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-black dark:focus:ring-white focus:outline-none">
         </div>
         <div class="flex flex-wrap gap-x-5 gap-y-3">
-          <label class="flex items-center gap-2 text-sm"><input data-palette-target="exportNames" type="checkbox" class="accent-black w-4 h-4">Color names</label>
+          <label class="flex items-center gap-2 text-sm"><input data-palette-target="exportNames" type="checkbox" class="accent-black dark:accent-white w-4 h-4">Color names</label>
           <% %w[HEX RGB HSL CMYK].each do |format| %>
-            <label class="flex items-center gap-2 text-sm"><input data-palette-target="exportFormat" type="checkbox" value="<%= format %>" <%= "checked" if format == "HEX" %> class="accent-black w-4 h-4"><%= format %></label>
+            <label class="flex items-center gap-2 text-sm"><input data-palette-target="exportFormat" type="checkbox" value="<%= format %>" <%= "checked" if format == "HEX" %> class="accent-black dark:accent-white w-4 h-4"><%= format %></label>
           <% end %>
         </div>
       </fieldset>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
         <!-- Export Actions -->
-        <button data-action="click->palette#exportImage" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
-          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform">
+        <button data-action="click->palette#exportImage" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black dark:bg-white text-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform">
             <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Image (PNG)</span>
         </button>
 
-        <button data-action="click->palette#exportPdf" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
-          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform">
+        <button data-action="click->palette#exportPdf" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black dark:bg-white text-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform">
             <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">PDF</span>
         </button>
 
-        <button data-action="click->palette#copyUrl" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
-          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform">
+        <button data-action="click->palette#copyUrl" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black dark:bg-white text-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform">
             <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Copy URL</span>
         </button>
 
-        <button data-action="click->palette#copySvg" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
-          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
+        <button data-action="click->palette#copySvg" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black dark:bg-white text-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             SVG
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Copy SVG</span>
         </button>
 
-        <button data-action="click->palette#copyCss" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
-          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
+        <button data-action="click->palette#copyCss" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black dark:bg-white text-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             CSS
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Copy CSS</span>
         </button>
 
-        <button data-action="click->palette#copyTailwind" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
-          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs tracking-tighter">
+        <button data-action="click->palette#copyTailwind" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black dark:bg-white text-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs tracking-tighter">
             .TW
           </div>
           <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">Tailwind<br>Config</span>
         </button>
 
-        <button data-action="click->palette#exportAse" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
-          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
+        <button data-action="click->palette#exportAse" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black dark:bg-white text-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             ASE
           </div>
           <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">Adobe<br>Swatch</span>
         </button>
 
-        <button data-action="click->palette#copyScss" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
-          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
+        <button data-action="click->palette#copyScss" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black dark:bg-white text-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             SCSS
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Copy SCSS</span>
         </button>
 
-        <button data-action="click->palette#copyLess" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
-          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
+        <button data-action="click->palette#copyLess" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black dark:bg-white text-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             LESS
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Copy LESS</span>
         </button>
 
-        <button data-action="click->palette#copyJson" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
-          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
+        <button data-action="click->palette#copyJson" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black dark:bg-white text-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             JSON
           </div>
           <span class="text-sm font-bold tracking-wide uppercase">Copy JSON</span>
         </button>
 
-        <button data-action="click->palette#copyJsArray" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
-          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
+        <button data-action="click->palette#copyJsArray" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black dark:bg-white text-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs">
             JS
           </div>
           <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">JavaScript<br>Array</span>
         </button>
 
-        <button data-action="click->palette#copyEmbedHtml" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 rounded-xl hover:border-black hover:bg-neutral-50 transition-all cursor-pointer">
-          <div class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs tracking-tighter">
+        <button data-action="click->palette#copyEmbedHtml" class="group flex flex-col items-center justify-center p-4 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-black dark:hover:border-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all cursor-pointer">
+          <div class="w-12 h-12 flex items-center justify-center bg-black dark:bg-white text-white dark:text-neutral-900 rounded-full mb-3 group-hover:scale-110 transition-transform font-black text-xs tracking-tighter">
             &lt;/&gt;
           </div>
           <span class="text-sm font-bold tracking-wide uppercase text-center leading-tight">Embed<br>Code</span>

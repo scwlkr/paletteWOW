@@ -6,7 +6,7 @@
     <%= link_to "Generator", root_path, class: "text-sm font-medium underline underline-offset-4 rounded focus-visible:outline-2 focus-visible:outline-offset-4" %>
   </header>
 
-  <p role="status" aria-live="polite" aria-atomic="true" data-swatch-copy-target="status" class="fixed bottom-4 left-4 right-4 z-50 mx-auto w-fit max-w-full rounded-xl bg-black text-white text-sm shadow-lg empty:hidden p-3 pointer-events-none"></p>
+  <p role="status" aria-live="polite" aria-atomic="true" data-swatch-copy-target="status" class="fixed bottom-4 left-4 right-4 z-50 mx-auto w-fit max-w-full rounded-xl bg-black dark:bg-white text-white dark:text-neutral-900 text-sm shadow-lg empty:hidden p-3 pointer-events-none"></p>
 
   <% @scales.each do |name, shades| %>
     <section aria-labelledby="<%= name %>-title">

@@ -1,12 +1,12 @@
-<dialog data-palette-target="importDialog" aria-labelledby="palette-import-title" class="m-auto w-[calc(100%_-_2rem)] max-w-md max-h-[90dvh] overflow-y-auto bg-white text-neutral-900 rounded-2xl shadow-2xl p-6 sm:p-8 backdrop:bg-black/20">
+<dialog data-palette-target="importDialog" aria-labelledby="palette-import-title" class="m-auto w-[calc(100%_-_2rem)] max-w-md max-h-[90dvh] overflow-y-auto bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-2xl shadow-2xl p-6 sm:p-8 backdrop:bg-black/20">
   <h2 id="palette-import-title" class="text-xl sm:text-2xl font-black tracking-tight mb-6">Import palette</h2>
   <form data-action="submit->palette#importPalette">
     <label for="palette-import-text" class="block text-sm font-bold mb-2">Colors</label>
-    <textarea id="palette-import-text" data-palette-target="importText" data-action="input->palette#clearImportError" aria-describedby="palette-import-status" rows="5" placeholder="#ff0000, #00ff00, #0000ff" class="block w-full border border-neutral-300 rounded-xl p-3 font-mono text-sm resize-y focus-visible:outline-2 focus-visible:outline-black"></textarea>
-    <p id="palette-import-status" data-palette-target="importStatus" role="status" class="text-sm text-red-700 mt-2"></p>
+    <textarea id="palette-import-text" data-palette-target="importText" data-action="input->palette#clearImportError" aria-describedby="palette-import-status" rows="5" placeholder="#ff0000, #00ff00, #0000ff" class="bg-white dark:bg-neutral-800 block w-full border border-neutral-300 dark:border-neutral-700 rounded-xl p-3 font-mono text-sm resize-y focus-visible:outline-2 focus-visible:outline-black dark:focus-visible:outline-white"></textarea>
+    <p id="palette-import-status" data-palette-target="importStatus" role="status" class="text-sm text-red-700 dark:text-red-300 mt-2"></p>
     <div class="flex justify-end gap-3 mt-6">
-      <button type="button" data-action="click->palette#closeImport" class="px-5 py-2.5 rounded-full text-sm font-bold border border-neutral-300 hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-black focus:outline-none">Cancel</button>
-      <button type="submit" class="px-5 py-2.5 rounded-full text-sm font-bold bg-black text-white hover:bg-neutral-800 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus:outline-none">Import</button>
+      <button type="button" data-action="click->palette#closeImport" class="px-5 py-2.5 rounded-full text-sm font-bold border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus:outline-none">Cancel</button>
+      <button type="submit" class="px-5 py-2.5 rounded-full text-sm font-bold bg-black dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-200 focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-2 focus:outline-none dark:focus-visible:ring-offset-neutral-900">Import</button>
     </div>
   </form>
 </dialog>

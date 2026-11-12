@@ -75,3 +75,7 @@ Clear the title and all checkboxes for unlabeled swatches.
 Google sign-in has been removed. Accounts, profile/dashboard pages, and saved-library API routes are disabled for the current release. The existing library source is retained for a possible future WorkOS AuthKit integration, which has not been implemented.
 
 Generation, color manipulation, share links, and exports remain public and require no account.
+
+## Theme
+
+- Light and dark appearance across all public tools and dialogs. The header switch remembers the choice in this browser; otherwise the device setting applies. Palette colors, contrast samples, visualizations and exports keep their original colors.

@@ -4,7 +4,7 @@
 <% end %>
 
 <article class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-  <header class="rounded-2xl border border-neutral-200 p-6 sm:p-10 flex flex-wrap justify-between items-center gap-6" style="background-color: <%= @color.hex %>; color: <%= @color.text_color %>">
+  <header class="rounded-2xl border border-neutral-200 dark:border-neutral-700 p-6 sm:p-10 flex flex-wrap justify-between items-center gap-6" style="background-color: <%= @color.hex %>; color: <%= @color.text_color %>">
     <div>
       <h1 class="text-4xl sm:text-6xl font-black tracking-tight"><%= @color.hex.upcase %></h1>
       <p class="text-xl font-medium mt-2"><%= @color.name %></p>
@@ -16,7 +16,7 @@
     <h2 id="formats-title" class="text-2xl font-bold mb-4">Formats</h2>
     <dl class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <% @color.formats.each do |label, value| %>
-        <div class="border border-neutral-200 rounded-xl p-4 min-w-0">
+        <div class="border border-neutral-200 dark:border-neutral-700 rounded-xl p-4 min-w-0">
           <dt class="text-sm font-bold mb-2"><%= label %></dt>
           <dd class="font-mono text-sm break-words"><%= value %></dd>
         </div>
@@ -39,7 +39,7 @@
     <h2 id="harmonies-title" class="text-2xl font-bold mb-4">Harmonies</h2>
     <div class="grid sm:grid-cols-2 gap-4">
       <% @color.harmonies.each do |label, colors| %>
-        <%= link_to shared_palette_path(colors: colors.map { |hex| hex.delete_prefix("#") }.join("-")), class: "block border border-neutral-200 rounded-xl overflow-hidden hover:border-neutral-500 focus-visible:outline-2 focus-visible:outline-offset-4" do %>
+        <%= link_to shared_palette_path(colors: colors.map { |hex| hex.delete_prefix("#") }.join("-")), class: "block border border-neutral-200 dark:border-neutral-700 rounded-xl overflow-hidden hover:border-neutral-500 dark:hover:border-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4" do %>
           <h3 class="font-bold p-4"><%= label %></h3>
           <ul class="flex">
             <% colors.each do |hex| %>
@@ -56,7 +56,7 @@
     <div class="grid sm:grid-cols-2 gap-4">
       <% { "White" => "ffffff", "Black" => "000000" }.each do |label, hex| %>
         <% background = ColorDetails.new(hex); result = @color.contrast(background) %>
-        <section aria-label="On <%= label.downcase %>" class="rounded-xl border border-neutral-200 overflow-hidden">
+        <section aria-label="On <%= label.downcase %>" class="rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden">
           <div class="p-6" style="background-color: <%= background.hex %>; color: <%= @color.hex %>" aria-hidden="true">
             <span class="text-4xl font-bold">Aa</span>
           </div>
@@ -78,7 +78,7 @@
 
   <section aria-labelledby="css-title">
     <h2 id="css-title" class="text-2xl font-bold mb-4">CSS</h2>
-    <pre class="rounded-xl bg-neutral-100 p-4 overflow-x-auto text-sm"><code>:root {
+    <pre class="rounded-xl bg-neutral-100 dark:bg-neutral-800 p-4 overflow-x-auto text-sm"><code>:root {
   --color: <%= @color.hex %>;
 }
 

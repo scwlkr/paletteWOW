@@ -8,34 +8,34 @@
 
   <div class="grid sm:grid-cols-2 gap-6 items-start">
     <div class="space-y-6">
-      <div class="border border-neutral-200 rounded-2xl p-5 sm:p-6 space-y-5">
+      <div class="border border-neutral-200 dark:border-neutral-700 rounded-2xl p-5 sm:p-6 space-y-5">
         <% [["text", "Text color", @text_color], ["bg", "Background color", @background_color]].each do |key, label, color| %>
           <div>
             <label for="contrast-<%= key %>" class="block text-sm font-bold mb-2"><%= label %></label>
             <div class="flex items-center gap-3">
               <input type="color" value="<%= color %>" aria-label="<%= label %> picker" data-contrast-target="picker" data-color="<%= key %>" data-action="input->contrast#pick change->contrast#pick" class="w-12 h-12 shrink-0 rounded-lg cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4">
-              <input type="text" id="contrast-<%= key %>" value="<%= color %>" data-contrast-target="hex" data-color="<%= key %>" data-action="input->contrast#update change->contrast#normalize" aria-describedby="contrast-<%= key %>-error" spellcheck="false" autocomplete="off" autocapitalize="off" class="w-full min-w-0 rounded-lg border border-neutral-300 px-4 py-3 font-mono focus:border-black focus:outline-2 focus:outline-offset-2 aria-invalid:border-red-600">
+              <input type="text" id="contrast-<%= key %>" value="<%= color %>" data-contrast-target="hex" data-color="<%= key %>" data-action="input->contrast#update change->contrast#normalize" aria-describedby="contrast-<%= key %>-error" spellcheck="false" autocomplete="off" autocapitalize="off" class="bg-white dark:bg-neutral-800 w-full min-w-0 rounded-lg border border-neutral-300 dark:border-neutral-700 px-4 py-3 font-mono focus:border-black dark:focus:border-white focus:outline-2 focus:outline-offset-2 aria-invalid:border-red-600">
             </div>
-            <p id="contrast-<%= key %>-error" data-contrast-target="error" data-color="<%= key %>" class="text-sm text-red-700 mt-2" hidden>Enter a 3- or 6-digit hex color.</p>
+            <p id="contrast-<%= key %>-error" data-contrast-target="error" data-color="<%= key %>" class="text-sm text-red-700 dark:text-red-300 mt-2" hidden>Enter a 3- or 6-digit hex color.</p>
           </div>
         <% end %>
-        <button type="button" data-action="contrast#swap" class="w-full bg-black text-white font-bold py-3 px-5 rounded-full cursor-pointer hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4">Swap colors</button>
+        <button type="button" data-action="contrast#swap" class="w-full bg-black dark:bg-white text-white dark:text-neutral-900 font-bold py-3 px-5 rounded-full cursor-pointer hover:bg-neutral-800 dark:hover:bg-neutral-200 focus-visible:outline-2 focus-visible:outline-offset-4">Swap colors</button>
       </div>
 
-      <div class="border border-neutral-200 rounded-2xl p-5 sm:p-6" role="status" aria-live="polite" aria-atomic="true">
+      <div class="border border-neutral-200 dark:border-neutral-700 rounded-2xl p-5 sm:p-6" role="status" aria-live="polite" aria-atomic="true">
         <p class="text-sm font-bold mb-2">Contrast ratio</p>
         <p data-contrast-target="ratio" class="text-5xl font-black tracking-tight tabular-nums">—</p>
         <table class="w-full mt-6 text-sm text-left">
           <caption class="sr-only">WCAG 2.2 text contrast results</caption>
           <thead>
-            <tr class="border-b border-neutral-200">
+            <tr class="border-b border-neutral-200 dark:border-neutral-700">
               <th scope="col" class="pb-3 font-medium">Text size</th>
               <th scope="col" class="pb-3 font-bold">AA</th>
               <th scope="col" class="pb-3 font-bold">AAA</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="border-b border-neutral-200">
+            <tr class="border-b border-neutral-200 dark:border-neutral-700">
               <th scope="row" class="py-3 font-medium">Normal</th>
               <td class="py-3"><span data-contrast-target="badge" data-level="aa" class="inline-block rounded-full px-2 py-1 font-bold">—</span></td>
               <td class="py-3"><span data-contrast-target="badge" data-level="aaa" class="inline-block rounded-full px-2 py-1 font-bold">—</span></td>
@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <div data-contrast-target="preview" style="color: <%= @text_color %>; background-color: <%= @background_color %>;" class="rounded-2xl border border-neutral-200 p-8 sm:p-10 min-h-80 flex flex-col justify-center gap-6 break-words">
+    <div data-contrast-target="preview" style="color: <%= @text_color %>; background-color: <%= @background_color %>;" class="rounded-2xl border border-neutral-200 dark:border-neutral-700 p-8 sm:p-10 min-h-80 flex flex-col justify-center gap-6 break-words">
       <p class="text-4xl font-bold leading-tight">Color in context.</p>
       <p class="text-2xl leading-relaxed">A large text sample.</p>
       <p class="text-base leading-relaxed">Good contrast makes everyday reading easier. Compare this normal text with the larger samples above.</p>
